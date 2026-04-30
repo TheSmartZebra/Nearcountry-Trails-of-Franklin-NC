@@ -214,6 +214,26 @@
             background-color: rgba(27, 94, 32, 0.9);
             transform: scale(0.98);
         }
+
+        /* Footer credits */
+        .credits {
+            margin-top: 22px;
+            margin-bottom: 10px;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.08);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+            color: rgba(255, 255, 255, 0.92);
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        .credits strong {
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
@@ -245,6 +265,12 @@
         <div class="grid" id="trail-grid">
             <!-- Cards dynamically injected here -->
         </div>
+
+        <footer class="credits" aria-label="Credits">
+            <div><strong>Credits</strong></div>
+            <div>Created for <strong>PED-171 Nature Hiking</strong></div>
+            <div>Instructor: <strong>Dr. Mark Ellison</strong></div>
+        </footer>
     </div>
 
     <script>
@@ -253,33 +279,33 @@
            Images have been removed for now. When ready, add an `img: "filename.jpg"` property to any trail to make the image appear!
         */
         let trails = [
-            { id: 1, name: "1. Bessie's Loop", category: "Bartram Trail", catColor: "rgba(139, 155, 66, 0.8)", lat: 35.18025, lng: -83.43328, length: "1.1 mi", elevation: "250 ft", typeText: "Loop", typeIcon: "loop", desc: "Short loop with native flora." },
-            { id: 2, name: "2. William’s Pulpit", category: "Bartram Trail", catColor: "rgba(139, 155, 66, 0.8)", lat: 35.18025, lng: -83.43328, length: "4.2 mi", elevation: "1,080 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Scenic overlook." },
-            { id: 3, name: "3. Hickory Knoll Rd. to The Pinnacle", category: "Bartram Trail", catColor: "rgba(139, 155, 66, 0.8)", lat: 35.07975, lng: -83.37694, length: "4.5 mi", elevation: "1,340 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Highest elevation trail here." },
-            { id: 4, name: "4. Mud Creek", category: "Old Road Bed", catColor: "rgba(161, 106, 56, 0.8)", lat: 34.99242, lng: -83.34756, length: "2.3 mi", elevation: "240 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Follows an old road bed." },
-            { id: 5, name: "5. Queen’s Branch", category: "Mainspring", catColor: "rgba(163, 38, 42, 0.8)", lat: 35.28364, lng: -83.46750, length: "0.6 mi", elevation: "50 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Short, flat walk." },
-            { id: 6, name: "6. Gibson Bottoms", category: "Mainspring", catColor: "rgba(163, 38, 42, 0.8)", lat: 35.23272, lng: -83.39133, length: "1.7 mi", elevation: "40-170 ft", typeText: "Network", typeIcon: "hub", desc: "Intersecting trails in bottoms." },
-            { id: 7, name: "7. Onion Mtn. North", category: "Mainspring", catColor: "rgba(163, 38, 42, 0.8)", lat: 35.21131, lng: -83.29542, length: "2-5 mi", elevation: "490-1.6k ft", typeText: "Network", typeIcon: "hub", desc: "Steeper trail network." },
-            { id: 8, name: "8. Onion Mtn. South", category: "Mainspring", catColor: "rgba(163, 38, 42, 0.8)", lat: 35.19019, lng: -83.28244, length: "2-5 mi", elevation: "600-1.6k ft", typeText: "Network", typeIcon: "hub", desc: "Connects with Onion Mtn North." },
-            { id: 9, name: "9. Tessentee Bottomland", category: "Mainspring", catColor: "rgba(163, 38, 42, 0.8)", lat: 35.06889, lng: -83.37997, length: "1-3 mi", elevation: "120 ft", typeText: "Network", typeIcon: "hub", desc: "Rich ecological bottomlands." },
-            { id: 10, name: "10. Winding Stair Gap to Siler Bald", category: "Appalachian Trail", catColor: "rgba(39, 107, 142, 0.8)", lat: 35.12067, lng: -83.54708, length: "9 mi", elevation: "1,450 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Beautiful balds." },
-            { id: 11, name: "11. Winding Stair Gap South", category: "Appalachian Trail", catColor: "rgba(39, 107, 142, 0.8)", lat: 35.11986, lng: -83.54797, length: "Varies", elevation: "Varies", typeText: "Out & Back", typeIcon: "timeline", desc: "Hike as far as you want." },
-            { id: 12, name: "12. Parker Meadows", category: "Park", catColor: "rgba(122, 62, 138, 0.8)", lat: 35.15472, lng: -83.45669, length: "1.1 mi", elevation: "250 ft", typeText: "Loop", typeIcon: "loop", desc: "Great family walking loop." },
+            { id: 1, name: "1. Bessie's Loop", category: "Bartram Trail", catColor: "rgba(139, 155, 66, 0.8)", lat: 35.18025, lng: -83.43328, length: "1.1 mi", elevation: "250 ft", typeText: "Loo[...]
+            { id: 2, name: "2. William’s Pulpit", category: "Bartram Trail", catColor: "rgba(139, 155, 66, 0.8)", lat: 35.18025, lng: -83.43328, length: "4.2 mi", elevation: "1,080 ft", typeTex[...]
+            { id: 3, name: "3. Hickory Knoll Rd. to The Pinnacle", category: "Bartram Trail", catColor: "rgba(139, 155, 66, 0.8)", lat: 35.07975, lng: -83.37694, length: "4.5 mi", elevation: "1,3[...]
+            { id: 4, name: "4. Mud Creek", category: "Old Road Bed", catColor: "rgba(161, 106, 56, 0.8)", lat: 34.99242, lng: -83.34756, length: "2.3 mi", elevation: "240 ft", typeText: "Out & Ba[...]
+            { id: 5, name: "5. Queen’s Branch", category: "Mainspring", catColor: "rgba(163, 38, 42, 0.8)", lat: 35.28364, lng: -83.46750, length: "0.6 mi", elevation: "50 ft", typeText: "Out &[...]
+            { id: 6, name: "6. Gibson Bottoms", category: "Mainspring", catColor: "rgba(163, 38, 42, 0.8)", lat: 35.23272, lng: -83.39133, length: "1.7 mi", elevation: "40-170 ft", typeText: "Net[...]
+            { id: 7, name: "7. Onion Mtn. North", category: "Mainspring", catColor: "rgba(163, 38, 42, 0.8)", lat: 35.21131, lng: -83.29542, length: "2-5 mi", elevation: "490-1.6k ft", typeText: [...]
+            { id: 8, name: "8. Onion Mtn. South", category: "Mainspring", catColor: "rgba(163, 38, 42, 0.8)", lat: 35.19019, lng: -83.28244, length: "2-5 mi", elevation: "600-1.6k ft", typeText: [...]
+            { id: 9, name: "9. Tessentee Bottomland", category: "Mainspring", catColor: "rgba(163, 38, 42, 0.8)", lat: 35.06889, lng: -83.37997, length: "1-3 mi", elevation: "120 ft", typeText: "[...]
+            { id: 10, name: "10. Winding Stair Gap to Siler Bald", category: "Appalachian Trail", catColor: "rgba(39, 107, 142, 0.8)", lat: 35.12067, lng: -83.54708, length: "9 mi", elevation: "1[...]
+            { id: 11, name: "11. Winding Stair Gap South", category: "Appalachian Trail", catColor: "rgba(39, 107, 142, 0.8)", lat: 35.11986, lng: -83.54797, length: "Varies", elevation: "Varies"[...]
+            { id: 12, name: "12. Parker Meadows", category: "Park", catColor: "rgba(122, 62, 138, 0.8)", lat: 35.15472, lng: -83.45669, length: "1.1 mi", elevation: "250 ft", typeText: "Loop", ty[...]
             
             // Greenways using generic pamphlet stats
-            { id: 13, name: "13. Suli Marsh", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.19675, lng: -83.38714, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Paved greenway along river." },
-            { id: 14, name: "14. Big Bear Park", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.18686, lng: -83.37392, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Paved greenway along river." },
-            { id: 15, name: "15. Riverwalk", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.18533, lng: -83.37094, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Paved greenway along river." },
-            { id: 16, name: "16. Salali Ln", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.17558, lng: -83.36992, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Paved greenway along river." },
-            { id: 17, name: "17. Tassee Park", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.17356, lng: -83.37217, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Paved greenway along river." },
-            { id: 18, name: "18. Southwestern CC", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.15967, lng: -83.37922, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Paved greenway along river." },
-            { id: 19, name: "19. Library", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.15856, lng: -83.38178, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Paved greenway along river." },
+            { id: 13, name: "13. Suli Marsh", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.19675, lng: -83.38714, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Bac[...]
+            { id: 14, name: "14. Big Bear Park", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.18686, lng: -83.37392, length: "1-5 mi", elevation: "190 ft", typeText: "Out & [...]
+            { id: 15, name: "15. Riverwalk", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.18533, lng: -83.37094, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back[...]
+            { id: 16, name: "16. Salali Ln", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.17558, lng: -83.36992, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back[...]
+            { id: 17, name: "17. Tassee Park", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.17356, lng: -83.37217, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Ba[...]
+            { id: 18, name: "18. Southwestern CC", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.15967, lng: -83.37922, length: "1-5 mi", elevation: "190 ft", typeText: "Out [...]
+            { id: 19, name: "19. Library", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.15856, lng: -83.38178, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back"[...]
             
             // Schools
-            { id: 20, name: "20. Cartoogechaye Loop", category: "Schools", catColor: "rgba(46, 51, 140, 0.8)", lat: 35.16733, lng: -83.43583, length: "0.25 mi", elevation: "0 ft", typeText: "Loop", typeIcon: "loop", desc: "Track at local school." },
-            { id: 21, name: "21. Cove Branch (MVI)", category: "Schools", catColor: "rgba(46, 51, 140, 0.8)", lat: 35.16383, lng: -83.36111, length: "0.3 mi", elevation: "0 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "School walking path." },
-            { id: 22, name: "22. Macon Middle Loop", category: "Schools", catColor: "rgba(46, 51, 140, 0.8)", lat: 35.16136, lng: -83.35739, length: "0.5 mi", elevation: "20 ft", typeText: "Loop", typeIcon: "loop", desc: "School walking path." },
-            { id: 23, name: "23. South Macon Loop", category: "Schools", catColor: "rgba(46, 51, 140, 0.8)", lat: 35.11281, lng: -83.40003, length: "0.5 mi", elevation: "20 ft", typeText: "Loop", typeIcon: "loop", desc: "School walking path." },
+            { id: 20, name: "20. Cartoogechaye Loop", category: "Schools", catColor: "rgba(46, 51, 140, 0.8)", lat: 35.16733, lng: -83.43583, length: "0.25 mi", elevation: "0 ft", typeText: "Loop"[...]
+            { id: 21, name: "21. Cove Branch (MVI)", category: "Schools", catColor: "rgba(46, 51, 140, 0.8)", lat: 35.16383, lng: -83.36111, length: "0.3 mi", elevation: "0 ft", typeText: "Out & [...] 
+            { id: 22, name: "22. Macon Middle Loop", category: "Schools", catColor: "rgba(46, 51, 140, 0.8)", lat: 35.16136, lng: -83.35739, length: "0.5 mi", elevation: "20 ft", typeText: "Loop"[...]
+            { id: 23, name: "23. South Macon Loop", category: "Schools", catColor: "rgba(46, 51, 140, 0.8)", lat: 35.11281, lng: -83.40003, length: "0.5 mi", elevation: "20 ft", typeText: "Loop"[...]
         ];
 
         // Device routing logic
@@ -299,7 +325,7 @@
 
             trails.forEach(trail => {
                 let distHtml = trail.driveTimeText 
-                    ? `<span class="card-dist" title="Drive time from you"><span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle;">directions_car</span> ${trail.driveTimeText}</span>`
+                    ? `<span class="card-dist" title="Drive time from you"><span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle;">directions_car</span> ${trail.dri[...]
                     : ``;
                 
                 let imgHtml = trail.img ? `<img src="${trail.img}" alt="Trail Photo" loading="lazy">` : ``;
