@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nearcountry Trails of Franklin, NC</title>
     
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2E7D32">
+    <link rel="apple-touch-icon" href="background.jpg">
+
     <!-- Material Symbols (Icons) matching your screenshot -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0" />
 
@@ -249,33 +253,33 @@
            Images have been removed for now. When ready, add an `img: "filename.jpg"` property to any trail to make the image appear!
         */
         let trails = [
-            { id: 1, name: "1. Bessie's Loop", category: "Bartram Trail", catColor: "rgba(139, 155, 66, 0.8)", lat: 35.18025, lng: -83.43328, length: "1.1 mi", elevation: "250 ft", typeText: "Loop", typeIcon: "loop", desc: "Start at the Wallace Branch Bartram Trail entrance at the end of Ray Cove Rd. This loop follows the trail to a Forest Service Road, then turns left to return toward the parking area. Along the way, you'll pass Ray Cove Falls and make several creek crossings." },
-            { id: 2, name: "2. William’s Pulpit", category: "Bartram Trail", catColor: "rgba(139, 155, 66, 0.8)", lat: 35.18025, lng: -83.43328, length: "4.2 mi", elevation: "1,080 ft", typeText: "Out & Back", typeIcon: "sync_alt", desc: "Start at the Wallace Branch Bartram Trail entrance at the end of Ray Cove Rd. The trail climbs to the ridgeline and continues to William's Pulpit, a steep rock outcropping with long-range mountain views, better in winter and early spring." },
-            { id: 3, name: "3. Hickory Knoll Rd. to The Pinnacle", category: "Bartram Trail", catColor: "rgba(139, 155, 66, 0.8)", lat: 35.07975, lng: -83.37694, length: "4.5 mi", elevation: "1,340 ft", typeText: "Out & Back", typeIcon: "sync_alt", desc: "Start at Hickory Knoll Rd on the Bartram Trail for a steady uphill hike through Nantahala National Forest. The route passes rocky, wooded terrain and ends at The Pinnacle, where a broad mountain view rewards the climb." },
-            { id: 4, name: "4. Mud Creek", category: "Old Road Bed", catColor: "rgba(161, 106, 56, 0.8)", lat: 34.99242, lng: -83.34756, length: "2.3 mi", elevation: "240 ft", typeText: "Out & Back", typeIcon: "sync_alt", desc: "After admiring the view at Sky Valley Overlook, walk east behind the guard rail, passing the remnants of a bridge above Estatoah Falls before reaching an old road bed that leads into the woods. Follow the easy creekside walk to the cascading 100-foot Mud Creek Falls. Be mindful of private property." },
-            { id: 5, name: "5. Queen’s Branch", category: "Mainspring", catColor: "rgba(163, 38, 42, 0.8)", lat: 35.28364, lng: -83.46750, length: "0.6 mi", elevation: "50 ft", typeText: "Out & Back", typeIcon: "sync_alt", desc: "A beautiful trail off US-28 along the Little Tennessee River, popular for swimming." },
-            { id: 6, name: "6. Gibson Bottoms", category: "Mainspring", catColor: "rgba(163, 38, 42, 0.8)", lat: 35.23272, lng: -83.39133, length: "1.7 mi", elevation: "40-170 ft", typeText: "Network", typeIcon: "route", desc: "Just off Sanderstown, down Rain Ridge Rd, this trail network hugs the Little Tennessee River, passes by cow pastures, and winds through wooded slopes." },
-            { id: 7, name: "7. Onion Mtn. North", category: "Mainspring", catColor: "rgba(163, 38, 42, 0.8)", lat: 35.21131, lng: -83.29542, length: "2-5 mi", elevation: "490-1.6k ft", typeText: "Network", typeIcon: "route", desc: "This entrance offers access to the higher northern side of the preserve by way of Onion Mtn. Rd. Don't miss the views from both sides of the ridge as you approach the peak by way of Jordan's Journey." },
-            { id: 8, name: "8. Onion Mtn. South", category: "Mainspring", catColor: "rgba(163, 38, 42, 0.8)", lat: 35.19019, lng: -83.28244, length: "2-5 mi", elevation: "600-1.6k ft", typeText: "Network", typeIcon: "route", desc: "Access from Elijay Rd begins with Kelder's Climb, which starts at a comfortable grade before rising steeply to the property's peak. A gentler spur, Sarah's Sojourn, turns around at a modest waterfall." },
-            { id: 9, name: "9. Tessentee Bottomland", category: "Mainspring", catColor: "rgba(163, 38, 42, 0.8)", lat: 35.06889, lng: -83.37997, length: "1-3 mi", elevation: "120 ft", typeText: "Network", typeIcon: "route", desc: "Just south of the Bartram Trail on Hickory Knoll Rd, this trail network winds through bottomland forest, creekside pastures, and 100-year old farm buildings." },
-            { id: 10, name: "10. Winding Stair Gap to Siler Bald", category: "Appalachian Trail", catColor: "rgba(39, 107, 142, 0.8)", lat: 35.12067, lng: -83.54708, length: "9 mi", elevation: "1,790 ft", typeText: "Out & Back", typeIcon: "sync_alt", desc: "This trailhead doubles the hiking time to Siler Bald, but cuts the driving time in half. If you are looking for an uphill hike with spectacular views. This is it." },
-            { id: 11, name: "11. Winding Stair Gap South", category: "Appalachian Trail", catColor: "rgba(39, 107, 142, 0.8)", lat: 35.11986, lng: -83.54797, length: "Varies", elevation: "Varies", typeText: "Out & Back", typeIcon: "sync_alt", desc: "Less majestic than its northern counterpart this trail still offers wildflower, and some creek crossings." },
-            { id: 12, name: "12. Parker Meadows", category: "Park", catColor: "rgba(122, 62, 138, 0.8)", lat: 35.15472, lng: -83.45669, length: "1.1 mi", elevation: "250 ft", typeText: "Loop", typeIcon: "loop", desc: "Community park with a partially shaded walking loop that borders Cartoogechaye Creek." },
+            { id: 1, name: "1. Bessie's Loop", category: "Bartram Trail", catColor: "rgba(139, 155, 66, 0.8)", lat: 35.18025, lng: -83.43328, length: "1.1 mi", elevation: "250 ft", typeText: "Loop", typeIcon: "loop", desc: "Short loop with native flora." },
+            { id: 2, name: "2. William’s Pulpit", category: "Bartram Trail", catColor: "rgba(139, 155, 66, 0.8)", lat: 35.18025, lng: -83.43328, length: "4.2 mi", elevation: "1,080 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Scenic overlook." },
+            { id: 3, name: "3. Hickory Knoll Rd. to The Pinnacle", category: "Bartram Trail", catColor: "rgba(139, 155, 66, 0.8)", lat: 35.07975, lng: -83.37694, length: "4.5 mi", elevation: "1,340 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Highest elevation trail here." },
+            { id: 4, name: "4. Mud Creek", category: "Old Road Bed", catColor: "rgba(161, 106, 56, 0.8)", lat: 34.99242, lng: -83.34756, length: "2.3 mi", elevation: "240 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Follows an old road bed." },
+            { id: 5, name: "5. Queen’s Branch", category: "Mainspring", catColor: "rgba(163, 38, 42, 0.8)", lat: 35.28364, lng: -83.46750, length: "0.6 mi", elevation: "50 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Short, flat walk." },
+            { id: 6, name: "6. Gibson Bottoms", category: "Mainspring", catColor: "rgba(163, 38, 42, 0.8)", lat: 35.23272, lng: -83.39133, length: "1.7 mi", elevation: "40-170 ft", typeText: "Network", typeIcon: "hub", desc: "Intersecting trails in bottoms." },
+            { id: 7, name: "7. Onion Mtn. North", category: "Mainspring", catColor: "rgba(163, 38, 42, 0.8)", lat: 35.21131, lng: -83.29542, length: "2-5 mi", elevation: "490-1.6k ft", typeText: "Network", typeIcon: "hub", desc: "Steeper trail network." },
+            { id: 8, name: "8. Onion Mtn. South", category: "Mainspring", catColor: "rgba(163, 38, 42, 0.8)", lat: 35.19019, lng: -83.28244, length: "2-5 mi", elevation: "600-1.6k ft", typeText: "Network", typeIcon: "hub", desc: "Connects with Onion Mtn North." },
+            { id: 9, name: "9. Tessentee Bottomland", category: "Mainspring", catColor: "rgba(163, 38, 42, 0.8)", lat: 35.06889, lng: -83.37997, length: "1-3 mi", elevation: "120 ft", typeText: "Network", typeIcon: "hub", desc: "Rich ecological bottomlands." },
+            { id: 10, name: "10. Winding Stair Gap to Siler Bald", category: "Appalachian Trail", catColor: "rgba(39, 107, 142, 0.8)", lat: 35.12067, lng: -83.54708, length: "9 mi", elevation: "1,450 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Beautiful balds." },
+            { id: 11, name: "11. Winding Stair Gap South", category: "Appalachian Trail", catColor: "rgba(39, 107, 142, 0.8)", lat: 35.11986, lng: -83.54797, length: "Varies", elevation: "Varies", typeText: "Out & Back", typeIcon: "timeline", desc: "Hike as far as you want." },
+            { id: 12, name: "12. Parker Meadows", category: "Park", catColor: "rgba(122, 62, 138, 0.8)", lat: 35.15472, lng: -83.45669, length: "1.1 mi", elevation: "250 ft", typeText: "Loop", typeIcon: "loop", desc: "Great family walking loop." },
             
             // Greenways using generic pamphlet stats
-            { id: 13, name: "13. Suli Marsh", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.19675, lng: -83.38714, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "sync_alt", desc: "Path through swamp land featuring an old metal bridge and boardwalks. Access off US-28" },
-            { id: 14, name: "14. Big Bear Park", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.18686, lng: -83.37392, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "sync_alt", desc: "Park on Main St. with playground, dog park, and trails providing access to old beaver dam area." },
-            { id: 15, name: "15. Riverwalk", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.18533, lng: -83.37094, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "sync_alt", desc: "Entrance behind The Shops at Riverwalk with a shelter, butterfly garden and 0.25-mile exercise loop." },
-            { id: 16, name: "16. Salali Ln", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.17558, lng: -83.36992, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "sync_alt", desc: "Entrance point off Fox Ridge Rd with soccer fields a pavilion and swings." },
-            { id: 17, name: "17. Tassee Park", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.17356, lng: -83.37217, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "sync_alt", desc: "Features a pavilion and a boat put-in area off of Ulco Dr. There is a unique geocache in this area." },
-            { id: 18, name: "18. Southwestern CC", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.15967, lng: -83.37922, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "sync_alt", desc: "Trail connecting SCC to the greenway, alongside community garden plots near Old Siler Rd." },
-            { id: 19, name: "19. Library", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.15856, lng: -83.38178, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "sync_alt", desc: "Dirt road access down to the greenway and bottomland loop from the library on Siler Farm Rd." },
+            { id: 13, name: "13. Suli Marsh", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.19675, lng: -83.38714, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Paved greenway along river." },
+            { id: 14, name: "14. Big Bear Park", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.18686, lng: -83.37392, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Paved greenway along river." },
+            { id: 15, name: "15. Riverwalk", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.18533, lng: -83.37094, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Paved greenway along river." },
+            { id: 16, name: "16. Salali Ln", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.17558, lng: -83.36992, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Paved greenway along river." },
+            { id: 17, name: "17. Tassee Park", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.17356, lng: -83.37217, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Paved greenway along river." },
+            { id: 18, name: "18. Southwestern CC", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.15967, lng: -83.37922, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Paved greenway along river." },
+            { id: 19, name: "19. Library", category: "Greenway", catColor: "rgba(35, 158, 136, 0.8)", lat: 35.15856, lng: -83.38178, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Paved greenway along river." },
             
             // Schools
-            { id: 20, name: "20. Cartoogechaye Loop", category: "Schools", catColor: "rgba(46, 51, 140, 0.8)", lat: 35.16733, lng: -83.43583, length: "0.25 mi", elevation: "0 ft", typeText: "Loop", typeIcon: "loop", desc: "<b>Note:</b> Reserve for outside school hours.<br/>A partially shaded loop with a pavilion uphill from Gibson Cove Branch." },
-            { id: 21, name: "21. Cove Branch (MVI)", category: "Schools", catColor: "rgba(46, 51, 140, 0.8)", lat: 35.16383, lng: -83.36111, length: "0.3 mi", elevation: "0 ft", typeText: "Out & Back", typeIcon: "sync_alt", desc: "<b>Note:</b> Reserve for outside school hours.<br/>A trail and restoration project at Macon Valley Intermediate School." },
-            { id: 22, name: "22. Macon Middle Loop", category: "Schools", catColor: "rgba(46, 51, 140, 0.8)", lat: 35.16136, lng: -83.35739, length: "0.5 mi", elevation: "20 ft", typeText: "Loop", typeIcon: "loop", desc: "<b>Note:</b> Reserve for outside school hours.<br/>A cross country trail circling the school's fields. Perfect area for flying kites." },
-            { id: 23, name: "23. South Macon Loop", category: "Schools", catColor: "rgba(46, 51, 140, 0.8)", lat: 35.11281, lng: -83.40003, length: "0.5 mi", elevation: "20 ft", typeText: "Loop", typeIcon: "loop", desc: "<b>Note:</b> Reserve for outside school hours.<br/>A paved loop with a spur trail with nice creek access, and opportunities for bird and butterfly viewing." }
+            { id: 20, name: "20. Cartoogechaye Loop", category: "Schools", catColor: "rgba(46, 51, 140, 0.8)", lat: 35.16733, lng: -83.43583, length: "0.25 mi", elevation: "0 ft", typeText: "Loop", typeIcon: "loop", desc: "Track at local school." },
+            { id: 21, name: "21. Cove Branch (MVI)", category: "Schools", catColor: "rgba(46, 51, 140, 0.8)", lat: 35.16383, lng: -83.36111, length: "0.3 mi", elevation: "0 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "School walking path." },
+            { id: 22, name: "22. Macon Middle Loop", category: "Schools", catColor: "rgba(46, 51, 140, 0.8)", lat: 35.16136, lng: -83.35739, length: "0.5 mi", elevation: "20 ft", typeText: "Loop", typeIcon: "loop", desc: "School walking path." },
+            { id: 23, name: "23. South Macon Loop", category: "Schools", catColor: "rgba(46, 51, 140, 0.8)", lat: 35.11281, lng: -83.40003, length: "0.5 mi", elevation: "20 ft", typeText: "Loop", typeIcon: "loop", desc: "School walking path." },
         ];
 
         // Device routing logic
@@ -295,7 +299,7 @@
 
             trails.forEach(trail => {
                 let distHtml = trail.driveTimeText 
-                    ? `<span class="card-dist" title="Drive time from you"><span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle;">directions_car</span> ${trail.driveTimeText}</span>` 
+                    ? `<span class="card-dist" title="Drive time from you"><span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle;">directions_car</span> ${trail.driveTimeText}</span>`
                     : ``;
                 
                 let imgHtml = trail.img ? `<img src="${trail.img}" alt="Trail Photo" loading="lazy">` : ``;
@@ -467,6 +471,17 @@
         }
 
         window.onload = renderTrails;
+
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js').then(registration => {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
     </script>
 </body>
 </html>
