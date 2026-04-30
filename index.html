@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nearcountry Trails of Franklin, NC</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            text-align: center;
+            padding: 20px 10px;
+            margin: 0;
+        }
+        .header {
+            margin-bottom: 25px;
+        }
+        h1 {
+            font-size: 26px;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        p {
+            font-size: 15px;
+            color: #666;
+            margin-top: 0;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        @media(min-width: 600px) {
+            .grid { grid-template-columns: 1fr 1fr; max-width: 800px; }
+        }
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            overflow: hidden;
+            text-align: left;
+        }
+        .card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            display: block;
+        }
+        .card-content {
+            padding: 16px;
+        }
+        .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0 0 12px 0;
+            color: #222;
+        }
+        .map-btn {
+            background-color: #2e7d32;
+            color: white;
+            border: none;
+            padding: 14px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .map-btn:active {
+            background-color: #1b5e20;
+            transform: scale(0.98);
+        }
+    </style>
+    <script>
+        function openMap(lat, lng) {
+            var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+            if (isIOS) {
+                window.location.href = "https://maps.apple.com/?q=" + lat + "," + lng;
+            } else {
+                window.location.href = "https://www.google.com/maps/search/?api=1&query=" + lat + "," + lng;
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Nearcountry Trails</h1>
+        <p>Franklin, NC • Select a trail to navigate</p>
+    </div>
+
+    <div class="grid">
+        <!-- Trail 1 & 2 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">1 & 2. Wallace Branch / William’s Pulpit</h2>
+                <button class="map-btn" onclick="openMap(35.18025, -83.43328)">Get Directions</button>
+            </div>
+        </div>
+
+        <!-- Trail 3 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">3. Hickory Knoll Rd.</h2>
+                <button class="map-btn" onclick="openMap(35.07975, -83.37694)">Get Directions</button>
+            </div>
+        </div>
+
+        <!-- Trail 4 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">4. Mud Creek</h2>
+                <button class="map-btn" onclick="openMap(34.99242, -83.34756)">Get Directions</button>
+            </div>
+        </div>
+
+        <!-- Trail 5 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">5. Queen’s Branch</h2>
+                <button class="map-btn" onclick="openMap(35.28364, -83.46750)">Get Directions</button>
+            </div>
+        </div>
+
+        <!-- Trail 6 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">6. Gibson Bottoms</h2>
+                <button class="map-btn" onclick="openMap(35.23272, -83.39133)">Get Directions</button>
+            </div>
+        </div>
+
+        <!-- Trail 7 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">7. Onion Mtn. North</h2>
+                <button class="map-btn" onclick="openMap(35.21131, -83.29542)">Get Directions</button>
+            </div>
+        </div>
+
+        <!-- Trail 8 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">8. Onion Mtn. South</h2>
+                <button class="map-btn" onclick="openMap(35.19019, -83.28244)">Get Directions</button>
+            </div>
+        </div>
+
+        <!-- Trail 9 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">9. Tessentee Bottomland</h2>
+                <button class="map-btn" onclick="openMap(35.06889, -83.37997)">Get Directions</button>
+            </div>
+        </div>
+
+        <!-- Trail 10 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">10. Winding Stair to Siler</h2>
+                <button class="map-btn" onclick="openMap(35.12067, -83.54708)">Get Directions</button>
+            </div>
+        </div>
+
+        <!-- Trail 11 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">11. Winding Stair South</h2>
+                <button class="map-btn" onclick="openMap(35.11986, -83.54797)">Get Directions</button>
+            </div>
+        </div>
+
+        <!-- Trail 12 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">12. Parker Meadows</h2>
+                <button class="map-btn" onclick="openMap(35.15472, -83.45669)">Get Directions</button>
+            </div>
+        </div>
+
+        <!-- Trail 13 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">13. Suli Marsh</h2>
+                <button class="map-btn" onclick="openMap(35.19675, -83.38714)">Get Directions</button>
+            </div>
+        </div>
+
+        <!-- Trail 14 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">14. Big Bear Park</h2>
+                <button class="map-btn" onclick="openMap(35.18686, -83.37392)">Get Directions</button>
+            </div>
+        </div>
+
+        <!-- Trail 15 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">15. Riverwalk</h2>
+                <button class="map-btn" onclick="openMap(35.18533, -83.37094)">Get Directions</button>
+            </div>
+        </div>
+
+        <!-- Trail 16 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">16. Salali Ln</h2>
+                <button class="map-btn" onclick="openMap(35.17558, -83.36992)">Get Directions</button>
+            </div>
+        </div>
+
+        <!-- Trail 17 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">17. Tassee Park</h2>
+                <button class="map-btn" onclick="openMap(35.17356, -83.37217)">Get Directions</button>
+            </div>
+        </div>
+
+        <!-- Trail 18 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">18. Southwestern CC</h2>
+                <button class="map-btn" onclick="openMap(35.15967, -83.37922)">Get Directions</button>
+            </div>
+        </div>
+
+        <!-- Trail 19 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">19. Library</h2>
+                <button class="map-btn" onclick="openMap(35.15856, -83.38178)">Get Directions</button>
+            </div>
+        </div>
+
+        <!-- Trail 20 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">20. Cartoogechaye Loop</h2>
+                <button class="map-btn" onclick="openMap(35.16733, -83.43583)">Get Directions</button>
+            </div>
+        </div>
+
+        <!-- Trail 21 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">21. Cove Branch (MVI)</h2>
+                <button class="map-btn" onclick="openMap(35.16383, -83.36111)">Get Directions</button>
+            </div>
+        </div>
+
+        <!-- Trail 22 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">22. Macon Middle Loop</h2>
+                <button class="map-btn" onclick="openMap(35.16136, -83.35739)">Get Directions</button>
+            </div>
+        </div>
+
+        <!-- Trail 23 -->
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80" alt="Trail Photo">
+            <div class="card-content">
+                <h2 class="card-title">23. South Macon Loop</h2>
+                <button class="map-btn" onclick="openMap(35.11281, -83.40003)">Get Directions</button>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
