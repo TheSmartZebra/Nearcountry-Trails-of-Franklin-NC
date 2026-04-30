@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nearcountry Trails of Franklin, NC</title>
+    
+    <!-- Material Symbols (Icons) matching your screenshot -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0" />
+
     <style>
         /* Liquid Glass / Glassmorphism Design */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            /* Beautiful smoky mountain background */
             background: url('background.jpg') no-repeat center center fixed;
             background-size: cover;
             color: #fff;
@@ -17,12 +20,12 @@
             margin: 0;
             min-height: 100vh;
         }
-        /* Dark overlay so the glass stands out and text is readable */
+        /* Dark overlay */
         body::before {
             content: '';
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.25);
+            background: rgba(0, 0, 0, 0.4); /* slightly darker to make icons pop */
             z-index: -1;
         }
         .container {
@@ -121,15 +124,40 @@
         .card-title {
             font-size: 18px;
             font-weight: 700;
-            margin: 0 0 6px 0;
+            margin: 0 0 8px 0;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .card-dist {
-            font-size: 14px;
+
+        /* Trail Stats (Icons & Info) */
+        .trail-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
             margin-bottom: 12px;
+        }
+        .stat-badge {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #e0f2f1;
+        }
+        .stat-badge .material-symbols-outlined {
+            font-size: 16px;
+            color: #a8e6cf;
+        }
+
+        .card-dist {
+            font-size: 13px;
             color: #a8e6cf;
             font-weight: 600;
-            min-height: 16px;
         }
         .map-btn {
             background-color: rgba(46, 125, 50, 0.8);
@@ -144,6 +172,11 @@
             transition: all 0.2s;
             -webkit-tap-highlight-color: transparent;
             backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 5px;
         }
         .map-btn:active {
             background-color: rgba(27, 94, 32, 0.9);
@@ -158,41 +191,52 @@
             <h1>Nearcountry Trails</h1>
             <p>Franklin, NC • Select a trail to navigate</p>
             <div class="controls">
-                <button class="btn-glass" onclick="sortByDistance()">📍 Sort by Nearest</button>
+                <button class="btn-glass" onclick="sortByDistance()">
+                    <span class="material-symbols-outlined" style="font-size:18px; vertical-align:text-bottom;">near_me</span> Sort by Nearest
+                </button>
             </div>
             <div id="status-msg"></div>
         </div>
 
         <div class="grid" id="trail-grid">
-            <!-- Cards will be dynamically injected here by JavaScript -->
+            <!-- Cards dynamically injected here -->
         </div>
     </div>
 
     <script>
-        // Array of all trails for dynamic rendering and sorting
+        /* 
+           Trail Data
+           Note: I've added placeholder data (TBD) for length, elevation, and type. 
+           You can easily change "TBD mi" to "2.5 mi", etc. 
+           
+           Types of Icons used:
+           - "loop" = Loop
+           - "sync_alt" = Out and Back
+           - "route" = Trail Network
+        */
         let trails = [
-            { id: 1, name: "1 & 2. Wallace Branch / William’s Pulpit", lat: 35.18025, lng: -83.43328, img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80" },
-            { id: 2, name: "3. Hickory Knoll Rd.", lat: 35.07975, lng: -83.37694, img: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80" },
-            { id: 3, name: "4. Mud Creek", lat: 34.99242, lng: -83.34756, img: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&q=80" },
-            { id: 4, name: "5. Queen’s Branch", lat: 35.28364, lng: -83.46750, img: "https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?w=600&q=80" },
-            { id: 5, name: "6. Gibson Bottoms", lat: 35.23272, lng: -83.39133, img: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=600&q=80" },
-            { id: 6, name: "7. Onion Mtn. North", lat: 35.21131, lng: -83.29542, img: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80" },
-            { id: 7, name: "8. Onion Mtn. South", lat: 35.19019, lng: -83.28244, img: "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=600&q=80" },
-            { id: 8, name: "9. Tessentee Bottomland", lat: 35.06889, lng: -83.37997, img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80" },
-            { id: 9, name: "10. Winding Stair to Siler", lat: 35.12067, lng: -83.54708, img: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80" },
-            { id: 10, name: "11. Winding Stair South", lat: 35.11986, lng: -83.54797, img: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&q=80" },
-            { id: 11, name: "12. Parker Meadows", lat: 35.15472, lng: -83.45669, img: "https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?w=600&q=80" },
-            { id: 12, name: "13. Suli Marsh", lat: 35.19675, lng: -83.38714, img: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=600&q=80" },
-            { id: 13, name: "14. Big Bear Park", lat: 35.18686, lng: -83.37392, img: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80" },
-            { id: 14, name: "15. Riverwalk", lat: 35.18533, lng: -83.37094, img: "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=600&q=80" },
-            { id: 15, name: "16. Salali Ln", lat: 35.17558, lng: -83.36992, img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80" },
-            { id: 16, name: "17. Tassee Park", lat: 35.17356, lng: -83.37217, img: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80" },
-            { id: 17, name: "18. Southwestern CC", lat: 35.15967, lng: -83.37922, img: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&q=80" },
-            { id: 18, name: "19. Library", lat: 35.15856, lng: -83.38178, img: "https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?w=600&q=80" },
-            { id: 19, name: "20. Cartoogechaye Loop", lat: 35.16733, lng: -83.43583, img: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=600&q=80" },
-            { id: 20, name: "21. Cove Branch (MVI)", lat: 35.16383, lng: -83.36111, img: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80" },
-            { id: 21, name: "22. Macon Middle Loop", lat: 35.16136, lng: -83.35739, img: "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=600&q=80" },
-            { id: 22, name: "23. South Macon Loop", lat: 35.11281, lng: -83.40003, img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80" }
+            { id: 1, name: "1 & 2. Wallace Branch / William’s Pulpit", lat: 35.18025, lng: -83.43328, length: "TBD mi", elevation: "TBD ft", typeText: "Loop", typeIcon: "loop", img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80" },
+            { id: 2, name: "3. Hickory Knoll Rd.", lat: 35.07975, lng: -83.37694, length: "TBD mi", elevation: "TBD ft", typeText: "Out & Back", typeIcon: "sync_alt", img: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80" },
+            { id: 3, name: "4. Mud Creek", lat: 34.99242, lng: -83.34756, length: "TBD mi", elevation: "TBD ft", typeText: "Out & Back", typeIcon: "sync_alt", img: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&q=80" },
+            { id: 4, name: "5. Queen’s Branch", lat: 35.28364, lng: -83.46750, length: "TBD mi", elevation: "TBD ft", typeText: "Out & Back", typeIcon: "sync_alt", img: "https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?w=600&q=80" },
+            { id: 5, name: "6. Gibson Bottoms", lat: 35.23272, lng: -83.39133, length: "TBD mi", elevation: "TBD ft", typeText: "Loop", typeIcon: "loop", img: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=600&q=80" },
+            { id: 6, name: "7. Onion Mtn. North", lat: 35.21131, lng: -83.29542, length: "TBD mi", elevation: "TBD ft", typeText: "Out & Back", typeIcon: "sync_alt", img: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80" },
+            { id: 7, name: "8. Onion Mtn. South", lat: 35.19019, lng: -83.28244, length: "TBD mi", elevation: "TBD ft", typeText: "Out & Back", typeIcon: "sync_alt", img: "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=600&q=80" },
+            { id: 8, name: "9. Tessentee Bottomland", lat: 35.06889, lng: -83.37997, length: "TBD mi", elevation: "TBD ft", typeText: "Loop", typeIcon: "loop", img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80" },
+            { id: 9, name: "10. Winding Stair to Siler", lat: 35.12067, lng: -83.54708, length: "TBD mi", elevation: "TBD ft", typeText: "Network", typeIcon: "route", img: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80" },
+            { id: 10, name: "11. Winding Stair South", lat: 35.11986, lng: -83.54797, length: "TBD mi", elevation: "TBD ft", typeText: "Network", typeIcon: "route", img: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&q=80" },
+            { id: 11, name: "12. Parker Meadows", lat: 35.15472, lng: -83.45669, length: "TBD mi", elevation: "TBD ft", typeText: "Network", typeIcon: "route", img: "https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?w=600&q=80" },
+            { id: 12, name: "13. Suli Marsh", lat: 35.19675, lng: -83.38714, length: "TBD mi", elevation: "TBD ft", typeText: "Out & Back", typeIcon: "sync_alt", img: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=600&q=80" },
+            { id: 13, name: "14. Big Bear Park", lat: 35.18686, lng: -83.37392, length: "TBD mi", elevation: "TBD ft", typeText: "Network", typeIcon: "route", img: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80" },
+            { id: 14, name: "15. Riverwalk", lat: 35.18533, lng: -83.37094, length: "TBD mi", elevation: "TBD ft", typeText: "Out & Back", typeIcon: "sync_alt", img: "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=600&q=80" },
+            { id: 15, name: "16. Salali Ln", lat: 35.17558, lng: -83.36992, length: "TBD mi", elevation: "TBD ft", typeText: "Out & Back", typeIcon: "sync_alt", img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80" },
+            { id: 16, name: "17. Tassee Park", lat: 35.17356, lng: -83.37217, length: "TBD mi", elevation: "TBD ft", typeText: "Network", typeIcon: "route", img: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80" },
+            { id: 17, name: "18. Southwestern CC", lat: 35.15967, lng: -83.37922, length: "TBD mi", elevation: "TBD ft", typeText: "Network", typeIcon: "route", img: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&q=80" },
+            { id: 18, name: "19. Library", lat: 35.15856, lng: -83.38178, length: "TBD mi", elevation: "TBD ft", typeText: "Out & Back", typeIcon: "sync_alt", img: "https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?w=600&q=80" },
+            { id: 19, name: "20. Cartoogechaye Loop", lat: 35.16733, lng: -83.43583, length: "TBD mi", elevation: "TBD ft", typeText: "Loop", typeIcon: "loop", img: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=600&q=80" },
+            { id: 20, name: "21. Cove Branch (MVI)", lat: 35.16383, lng: -83.36111, length: "TBD mi", elevation: "TBD ft", typeText: "Out & Back", typeIcon: "sync_alt", img: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80" },
+            { id: 21, name: "22. Macon Middle Loop", lat: 35.16136, lng: -83.35739, length: "TBD mi", elevation: "TBD ft", typeText: "Loop", typeIcon: "loop", img: "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=600&q=80" },
+            { id: 22, name: "23. South Macon Loop", lat: 35.11281, lng: -83.40003, length: "TBD mi", elevation: "TBD ft", typeText: "Loop", typeIcon: "loop", img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80" }
         ];
 
         // Device routing logic
@@ -208,27 +252,43 @@
         // Render the trail cards to the DOM
         function renderTrails() {
             const grid = document.getElementById('trail-grid');
-            grid.innerHTML = ''; // Clear grid
+            grid.innerHTML = ''; 
 
             trails.forEach(trail => {
-                // If distance is calculated, display it
-                let distHtml = trail.distance ? `<div class="card-dist">📍 ${trail.distance.toFixed(1)} miles away</div>` : `<div class="card-dist"></div>`;
+                let distHtml = trail.distance 
+                    ? `<span class="card-dist" title="Distance from you"><span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle;">near_me</span> ${trail.distance.toFixed(1)} mi away</span>` 
+                    : ``;
 
                 let cardHtml = `
                     <div class="card">
                         <img src="${trail.img}" alt="Trail Photo" loading="lazy">
                         <div class="card-content">
-                            <h2 class="card-title">${trail.name}</h2>
-                            ${distHtml}
-                            <button class="map-btn" onclick="openMap(${trail.lat}, ${trail.lng})">Get Directions</button>
+                            <h2 class="card-title">
+                                <span>${trail.name}</span>
+                                ${distHtml}
+                            </h2>
+                            
+                            <div class="trail-stats">
+                                <div class="stat-badge" title="Hike Length">
+                                    <span class="material-symbols-outlined">hiking</span> ${trail.length}
+                                </div>
+                                <div class="stat-badge" title="Elevation Change">
+                                    <span class="material-symbols-outlined">landscape</span> ${trail.elevation}
+                                </div>
+                                <div class="stat-badge" title="Trail Type">
+                                    <span class="material-symbols-outlined">${trail.typeIcon}</span> ${trail.typeText}
+                                </div>
+                            </div>
+
+                            <button class="map-btn" onclick="openMap(${trail.lat}, ${trail.lng})">
+                                <span class="material-symbols-outlined">directions_car</span> Get Directions
+                            </button>
                         </div>
                     </div>
                 `;
                 grid.innerHTML += cardHtml;
             });
         }
-
-        // --- Geolocation & Sorting Logic ---
 
         // Haversine formula to calculate distance in miles
         function calculateDistance(lat1, lon1, lat2, lon2) {
@@ -261,15 +321,12 @@
                     const userLat = position.coords.latitude;
                     const userLng = position.coords.longitude;
                     
-                    // Calculate distance for each trail
                     trails.forEach(trail => {
                         trail.distance = calculateDistance(userLat, userLng, trail.lat, trail.lng);
                     });
 
-                    // Sort array by distance
                     trails.sort((a, b) => a.distance - b.distance);
 
-                    // Re-render and update status
                     renderTrails();
                     statusMsg.textContent = "Sorted by nearest to you!";
                 },
@@ -280,9 +337,7 @@
             );
         }
 
-        // Initial render on page load
         window.onload = renderTrails;
-
     </script>
 </body>
 </html>
