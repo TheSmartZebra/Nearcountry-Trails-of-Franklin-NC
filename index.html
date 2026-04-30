@@ -5,49 +5,115 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nearcountry Trails of Franklin, NC</title>
     <style>
+        /* Liquid Glass / Glassmorphism Design */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f4f7f6;
-            color: #333;
+            /* Beautiful smoky mountain background */
+            background: url('https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
             text-align: center;
             padding: 20px 10px;
             margin: 0;
+            min-height: 100vh;
         }
+        /* Dark overlay so the glass stands out and text is readable */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.25);
+            z-index: -1;
+        }
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Glass Header */
         .header {
             margin-bottom: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
         }
         h1 {
             font-size: 26px;
-            color: #2c3e50;
-            margin-bottom: 5px;
+            margin: 0 0 5px 0;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.5);
         }
         p {
             font-size: 15px;
-            color: #666;
             margin-top: 0;
+            opacity: 0.9;
         }
+
+        /* Controls */
+        .controls {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        .btn-glass {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 20px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .btn-glass:hover, .btn-glass:active {
+            background: rgba(255, 255, 255, 0.35);
+            transform: translateY(-2px);
+        }
+        #status-msg {
+            font-size: 14px;
+            margin-top: 10px;
+            color: #a8e6cf;
+            height: 20px;
+            font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+
+        /* Grid & Glass Cards */
         .grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 20px;
-            max-width: 500px;
-            margin: 0 auto;
         }
         @media(min-width: 600px) {
-            .grid { grid-template-columns: 1fr 1fr; max-width: 800px; }
+            .grid { grid-template-columns: 1fr 1fr; }
         }
         .card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
             overflow: hidden;
             text-align: left;
+            transition: transform 0.3s ease;
         }
         .card img {
             width: 100%;
             height: 160px;
             object-fit: cover;
             display: block;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
         }
         .card-content {
             padding: 16px;
@@ -55,28 +121,81 @@
         .card-title {
             font-size: 18px;
             font-weight: 700;
-            margin: 0 0 12px 0;
-            color: #222;
+            margin: 0 0 6px 0;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+        }
+        .card-dist {
+            font-size: 14px;
+            margin-bottom: 12px;
+            color: #a8e6cf;
+            font-weight: 600;
+            min-height: 16px;
         }
         .map-btn {
-            background-color: #2e7d32;
+            background-color: rgba(46, 125, 50, 0.8);
             color: white;
-            border: none;
-            padding: 14px;
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 12px;
             width: 100%;
             font-size: 16px;
             font-weight: 600;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: all 0.2s;
             -webkit-tap-highlight-color: transparent;
+            backdrop-filter: blur(5px);
         }
         .map-btn:active {
-            background-color: #1b5e20;
+            background-color: rgba(27, 94, 32, 0.9);
             transform: scale(0.98);
         }
     </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>Nearcountry Trails</h1>
+            <p>Franklin, NC • Select a trail to navigate</p>
+            <div class="controls">
+                <button class="btn-glass" onclick="sortByDistance()">📍 Sort by Nearest</button>
+            </div>
+            <div id="status-msg"></div>
+        </div>
+
+        <div class="grid" id="trail-grid">
+            <!-- Cards will be dynamically injected here by JavaScript -->
+        </div>
+    </div>
+
     <script>
+        // Array of all trails for dynamic rendering and sorting
+        let trails = [
+            { id: 1, name: "1 & 2. Wallace Branch / William’s Pulpit", lat: 35.18025, lng: -83.43328, img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80" },
+            { id: 2, name: "3. Hickory Knoll Rd.", lat: 35.07975, lng: -83.37694, img: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80" },
+            { id: 3, name: "4. Mud Creek", lat: 34.99242, lng: -83.34756, img: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&q=80" },
+            { id: 4, name: "5. Queen’s Branch", lat: 35.28364, lng: -83.46750, img: "https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?w=600&q=80" },
+            { id: 5, name: "6. Gibson Bottoms", lat: 35.23272, lng: -83.39133, img: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=600&q=80" },
+            { id: 6, name: "7. Onion Mtn. North", lat: 35.21131, lng: -83.29542, img: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80" },
+            { id: 7, name: "8. Onion Mtn. South", lat: 35.19019, lng: -83.28244, img: "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=600&q=80" },
+            { id: 8, name: "9. Tessentee Bottomland", lat: 35.06889, lng: -83.37997, img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80" },
+            { id: 9, name: "10. Winding Stair to Siler", lat: 35.12067, lng: -83.54708, img: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80" },
+            { id: 10, name: "11. Winding Stair South", lat: 35.11986, lng: -83.54797, img: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&q=80" },
+            { id: 11, name: "12. Parker Meadows", lat: 35.15472, lng: -83.45669, img: "https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?w=600&q=80" },
+            { id: 12, name: "13. Suli Marsh", lat: 35.19675, lng: -83.38714, img: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=600&q=80" },
+            { id: 13, name: "14. Big Bear Park", lat: 35.18686, lng: -83.37392, img: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80" },
+            { id: 14, name: "15. Riverwalk", lat: 35.18533, lng: -83.37094, img: "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=600&q=80" },
+            { id: 15, name: "16. Salali Ln", lat: 35.17558, lng: -83.36992, img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80" },
+            { id: 16, name: "17. Tassee Park", lat: 35.17356, lng: -83.37217, img: "https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80" },
+            { id: 17, name: "18. Southwestern CC", lat: 35.15967, lng: -83.37922, img: "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&q=80" },
+            { id: 18, name: "19. Library", lat: 35.15856, lng: -83.38178, img: "https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?w=600&q=80" },
+            { id: 19, name: "20. Cartoogechaye Loop", lat: 35.16733, lng: -83.43583, img: "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=600&q=80" },
+            { id: 20, name: "21. Cove Branch (MVI)", lat: 35.16383, lng: -83.36111, img: "https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80" },
+            { id: 21, name: "22. Macon Middle Loop", lat: 35.16136, lng: -83.35739, img: "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=600&q=80" },
+            { id: 22, name: "23. South Macon Loop", lat: 35.11281, lng: -83.40003, img: "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80" }
+        ];
+
+        // Device routing logic
         function openMap(lat, lng) {
             var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
             if (isIOS) {
@@ -85,214 +204,85 @@
                 window.location.href = "https://www.google.com/maps/search/?api=1&query=" + lat + "," + lng;
             }
         }
+
+        // Render the trail cards to the DOM
+        function renderTrails() {
+            const grid = document.getElementById('trail-grid');
+            grid.innerHTML = ''; // Clear grid
+
+            trails.forEach(trail => {
+                // If distance is calculated, display it
+                let distHtml = trail.distance ? `<div class="card-dist">📍 ${trail.distance.toFixed(1)} miles away</div>` : `<div class="card-dist"></div>`;
+
+                let cardHtml = `
+                    <div class="card">
+                        <img src="${trail.img}" alt="Trail Photo" loading="lazy">
+                        <div class="card-content">
+                            <h2 class="card-title">${trail.name}</h2>
+                            ${distHtml}
+                            <button class="map-btn" onclick="openMap(${trail.lat}, ${trail.lng})">Get Directions</button>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += cardHtml;
+            });
+        }
+
+        // --- Geolocation & Sorting Logic ---
+
+        // Haversine formula to calculate distance in miles
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 3958.8; // Radius of the earth in miles
+            const dLat = deg2rad(lat2 - lat1);
+            const dLon = deg2rad(lon2 - lon1);
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+                      Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c; 
+        }
+
+        function deg2rad(deg) {
+            return deg * (Math.PI/180);
+        }
+
+        function sortByDistance() {
+            const statusMsg = document.getElementById('status-msg');
+            
+            if (!navigator.geolocation) {
+                statusMsg.textContent = "Geolocation is not supported by your browser.";
+                return;
+            }
+
+            statusMsg.textContent = "Locating you... (Please allow access)";
+            
+            navigator.geolocation.getCurrentPosition(
+                function(position) {
+                    const userLat = position.coords.latitude;
+                    const userLng = position.coords.longitude;
+                    
+                    // Calculate distance for each trail
+                    trails.forEach(trail => {
+                        trail.distance = calculateDistance(userLat, userLng, trail.lat, trail.lng);
+                    });
+
+                    // Sort array by distance
+                    trails.sort((a, b) => a.distance - b.distance);
+
+                    // Re-render and update status
+                    renderTrails();
+                    statusMsg.textContent = "Sorted by nearest to you!";
+                },
+                function(error) {
+                    statusMsg.textContent = "Unable to get your location. Please check permissions.";
+                },
+                { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            );
+        }
+
+        // Initial render on page load
+        window.onload = renderTrails;
+
     </script>
-</head>
-<body>
-
-    <div class="header">
-        <h1>Nearcountry Trails</h1>
-        <p>Franklin, NC • Select a trail to navigate</p>
-    </div>
-
-    <div class="grid">
-        <!-- Trail 1 & 2 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">1 & 2. Wallace Branch / William’s Pulpit</h2>
-                <button class="map-btn" onclick="openMap(35.18025, -83.43328)">Get Directions</button>
-            </div>
-        </div>
-
-        <!-- Trail 3 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">3. Hickory Knoll Rd.</h2>
-                <button class="map-btn" onclick="openMap(35.07975, -83.37694)">Get Directions</button>
-            </div>
-        </div>
-
-        <!-- Trail 4 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">4. Mud Creek</h2>
-                <button class="map-btn" onclick="openMap(34.99242, -83.34756)">Get Directions</button>
-            </div>
-        </div>
-
-        <!-- Trail 5 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">5. Queen’s Branch</h2>
-                <button class="map-btn" onclick="openMap(35.28364, -83.46750)">Get Directions</button>
-            </div>
-        </div>
-
-        <!-- Trail 6 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">6. Gibson Bottoms</h2>
-                <button class="map-btn" onclick="openMap(35.23272, -83.39133)">Get Directions</button>
-            </div>
-        </div>
-
-        <!-- Trail 7 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">7. Onion Mtn. North</h2>
-                <button class="map-btn" onclick="openMap(35.21131, -83.29542)">Get Directions</button>
-            </div>
-        </div>
-
-        <!-- Trail 8 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">8. Onion Mtn. South</h2>
-                <button class="map-btn" onclick="openMap(35.19019, -83.28244)">Get Directions</button>
-            </div>
-        </div>
-
-        <!-- Trail 9 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">9. Tessentee Bottomland</h2>
-                <button class="map-btn" onclick="openMap(35.06889, -83.37997)">Get Directions</button>
-            </div>
-        </div>
-
-        <!-- Trail 10 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">10. Winding Stair to Siler</h2>
-                <button class="map-btn" onclick="openMap(35.12067, -83.54708)">Get Directions</button>
-            </div>
-        </div>
-
-        <!-- Trail 11 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">11. Winding Stair South</h2>
-                <button class="map-btn" onclick="openMap(35.11986, -83.54797)">Get Directions</button>
-            </div>
-        </div>
-
-        <!-- Trail 12 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">12. Parker Meadows</h2>
-                <button class="map-btn" onclick="openMap(35.15472, -83.45669)">Get Directions</button>
-            </div>
-        </div>
-
-        <!-- Trail 13 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">13. Suli Marsh</h2>
-                <button class="map-btn" onclick="openMap(35.19675, -83.38714)">Get Directions</button>
-            </div>
-        </div>
-
-        <!-- Trail 14 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">14. Big Bear Park</h2>
-                <button class="map-btn" onclick="openMap(35.18686, -83.37392)">Get Directions</button>
-            </div>
-        </div>
-
-        <!-- Trail 15 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">15. Riverwalk</h2>
-                <button class="map-btn" onclick="openMap(35.18533, -83.37094)">Get Directions</button>
-            </div>
-        </div>
-
-        <!-- Trail 16 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">16. Salali Ln</h2>
-                <button class="map-btn" onclick="openMap(35.17558, -83.36992)">Get Directions</button>
-            </div>
-        </div>
-
-        <!-- Trail 17 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">17. Tassee Park</h2>
-                <button class="map-btn" onclick="openMap(35.17356, -83.37217)">Get Directions</button>
-            </div>
-        </div>
-
-        <!-- Trail 18 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">18. Southwestern CC</h2>
-                <button class="map-btn" onclick="openMap(35.15967, -83.37922)">Get Directions</button>
-            </div>
-        </div>
-
-        <!-- Trail 19 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1508280756091-9bdd7ef1f463?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">19. Library</h2>
-                <button class="map-btn" onclick="openMap(35.15856, -83.38178)">Get Directions</button>
-            </div>
-        </div>
-
-        <!-- Trail 20 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">20. Cartoogechaye Loop</h2>
-                <button class="map-btn" onclick="openMap(35.16733, -83.43583)">Get Directions</button>
-            </div>
-        </div>
-
-        <!-- Trail 21 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1426604966848-d7adac402bff?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">21. Cove Branch (MVI)</h2>
-                <button class="map-btn" onclick="openMap(35.16383, -83.36111)">Get Directions</button>
-            </div>
-        </div>
-
-        <!-- Trail 22 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">22. Macon Middle Loop</h2>
-                <button class="map-btn" onclick="openMap(35.16136, -83.35739)">Get Directions</button>
-            </div>
-        </div>
-
-        <!-- Trail 23 -->
-        <div class="card">
-            <img src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80" alt="Trail Photo">
-            <div class="card-content">
-                <h2 class="card-title">23. South Macon Loop</h2>
-                <button class="map-btn" onclick="openMap(35.11281, -83.40003)">Get Directions</button>
-            </div>
-        </div>
-
-    </div>
 </body>
 </html>
