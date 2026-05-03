@@ -498,6 +498,19 @@
             );
         }
 
+        // Load admin-saved trail data from localStorage if available
+        (function() {
+            try {
+                const saved = localStorage.getItem('trailsData');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    if (Array.isArray(parsed) && parsed.length) {
+                        trails = parsed;
+                    }
+                }
+            } catch(e) { console.warn('Could not load saved trail data:', e); }
+        })();
+
         window.onload = renderTrails;
 
         // Register Service Worker

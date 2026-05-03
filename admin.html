@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin – Trails Editor</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0" />
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: url('background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            margin: 0;
+            padding: 20px 10px;
+            min-height: 100vh;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(20, 20, 20, 0.6);
+            z-index: -1;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Auth screen */
+        #auth-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            gap: 16px;
+        }
+        #auth-screen h1 { font-size: 24px; margin: 0; }
+        #auth-screen p { color: #ccc; margin: 0; }
+        #key-input {
+            padding: 12px 16px;
+            font-size: 16px;
+            border-radius: 10px;
+            border: 1px solid rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+            width: 260px;
+            backdrop-filter: blur(10px);
+            outline: none;
+        }
+        #key-input::placeholder { color: rgba(255,255,255,0.4); }
+        #auth-error { color: #ff6b6b; font-size: 14px; display: none; }
+
+        /* Admin panel */
+        #admin-panel { display: none; }
+
+        .panel-header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .panel-header h1 { margin: 0; font-size: 22px; }
+        .panel-header p { margin: 0; color: #ccc; font-size: 13px; }
+
+        .btn-group { display: flex; gap: 10px; flex-wrap: wrap; }
+
+        button {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+            backdrop-filter: blur(5px);
+        }
+        button:hover { background: rgba(255,255,255,0.25); }
+        button.btn-green {
+            background: rgba(46, 125, 50, 0.8);
+            border-color: rgba(255,255,255,0.4);
+        }
+        button.btn-green:hover { background: rgba(27, 94, 32, 0.9); }
+        button.btn-danger {
+            background: rgba(180, 30, 30, 0.7);
+            border-color: rgba(255,100,100,0.4);
+        }
+        button.btn-danger:hover { background: rgba(200, 20, 20, 0.9); }
+
+        #save-status {
+            font-size: 13px;
+            color: #a5d6a7;
+            min-height: 18px;
+            text-align: right;
+        }
+
+        /* Trail editor card */
+        .trail-card {
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 14px;
+            margin-bottom: 18px;
+            overflow: hidden;
+        }
+        .trail-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            cursor: pointer;
+            user-select: none;
+            gap: 10px;
+        }
+        .trail-card-header:hover { background: rgba(255,255,255,0.05); }
+        .trail-card-header .trail-num {
+            font-size: 13px;
+            opacity: 0.6;
+            min-width: 28px;
+        }
+        .trail-card-header .trail-name-preview {
+            font-weight: 600;
+            font-size: 15px;
+            flex: 1;
+        }
+        .trail-card-header .cat-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .trail-card-header .chevron {
+            transition: transform 0.2s;
+            opacity: 0.6;
+        }
+        .trail-card.open .chevron { transform: rotate(180deg); }
+
+        .trail-card-body {
+            display: none;
+            padding: 0 18px 18px;
+        }
+        .trail-card.open .trail-card-body { display: block; }
+
+        .field-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        .field-group {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .field-group label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            opacity: 0.6;
+        }
+        .field-group input, .field-group textarea, .field-group select {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 7px;
+            color: #fff;
+            padding: 8px 10px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .field-group input:focus,
+        .field-group textarea:focus,
+        .field-group select:focus {
+            border-color: rgba(255,255,255,0.5);
+        }
+        .field-group textarea { resize: vertical; min-height: 60px; }
+        .field-group select option { background: #333; color: #fff; }
+
+        /* Color picker row */
+        .color-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .color-row input[type="color"] {
+            width: 36px;
+            height: 34px;
+            padding: 2px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .color-row input[type="text"] { flex: 1; }
+
+        /* Photo section */
+        .photo-section {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 14px;
+            margin-top: 4px;
+        }
+        .photo-section h3 {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            opacity: 0.6;
+            margin: 0 0 10px;
+        }
+        .photo-controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+        .photo-controls .field-group { flex: 1; min-width: 180px; }
+        .photo-preview {
+            width: 100px;
+            height: 70px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 1px solid rgba(255,255,255,0.2);
+            display: none;
+        }
+        .photo-preview.visible { display: block; }
+        .photo-no-img {
+            width: 100px;
+            height: 70px;
+            border-radius: 8px;
+            border: 1px dashed rgba(255,255,255,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            opacity: 0.4;
+            text-align: center;
+        }
+        .upload-btn-label {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+        .upload-btn-label:hover { background: rgba(255,255,255,0.25); }
+        .upload-btn-label input[type="file"] { display: none; }
+        .clear-photo-btn {
+            padding: 10px 12px;
+            font-size: 12px;
+        }
+
+        /* Coords row */
+        .coords-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        /* Toast */
+        #toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: rgba(46, 125, 50, 0.95);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            transition: transform 0.3s ease;
+            z-index: 9999;
+        }
+        #toast.show { transform: translateX(-50%) translateY(0); }
+
+        /* Add trail button */
+        .add-trail-btn {
+            width: 100%;
+            justify-content: center;
+            padding: 14px;
+            margin-bottom: 24px;
+            font-size: 15px;
+            border-style: dashed;
+            opacity: 0.7;
+        }
+        .add-trail-btn:hover { opacity: 1; }
+    </style>
+</head>
+<body>
+
+<!-- Auth Screen -->
+<div id="auth-screen">
+    <span class="material-symbols-outlined" style="font-size:48px; opacity:0.6;">lock</span>
+    <h1>Trails Admin</h1>
+    <p>Enter the admin key to continue</p>
+    <input id="key-input" type="password" placeholder="Admin key…" autocomplete="off" />
+    <button onclick="checkKey()" class="btn-green">
+        <span class="material-symbols-outlined" style="font-size:16px;">login</span> Enter
+    </button>
+    <div id="auth-error">Incorrect key. Try again.</div>
+</div>
+
+<!-- Admin Panel -->
+<div id="admin-panel">
+    <div class="container">
+        <div class="panel-header">
+            <div>
+                <h1>🌿 Trails Admin</h1>
+                <p>Changes are saved in this browser. Reload <a href="index.html" style="color:#a5d6a7;">the main page</a> to see them.</p>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:10px;">
+                <div class="btn-group">
+                    <button class="btn-green" onclick="saveAll()">
+                        <span class="material-symbols-outlined" style="font-size:16px;">save</span> Save All
+                    </button>
+                    <button onclick="exportJSON()">
+                        <span class="material-symbols-outlined" style="font-size:16px;">download</span> Export JSON
+                    </button>
+                    <button onclick="importJSON()">
+                        <span class="material-symbols-outlined" style="font-size:16px;">upload</span> Import JSON
+                    </button>
+                    <button class="btn-danger" onclick="resetDefaults()">
+                        <span class="material-symbols-outlined" style="font-size:16px;">restart_alt</span> Reset
+                    </button>
+                </div>
+                <div id="save-status"></div>
+            </div>
+        </div>
+
+        <div id="trail-list"></div>
+
+        <button class="add-trail-btn" onclick="addNewTrail()">
+            <span class="material-symbols-outlined" style="font-size:18px;">add_circle</span> Add New Trail
+        </button>
+    </div>
+</div>
+
+<div id="toast"></div>
+
+<input type="file" id="json-import-file" accept=".json" style="display:none" onchange="handleImportFile(event)" />
+
+<script>
+    // =========================================================
+    // CONFIGURATION — Change ADMIN_KEY to your desired password.
+    // NOTE: This is a static site with no server-side auth. The key
+    // is stored here in plain text (security by obscurity). Keep the
+    // admin URL private and do not share this file publicly if you
+    // want to limit access.
+    // =========================================================
+    const ADMIN_KEY = 'franklin2024';
+    const LS_KEY = 'trailsData';
+
+    // Default trail data (mirrors index.html)
+    const DEFAULT_TRAILS = [
+        { id: 1, name: "1. Bessie's Loop", category: "Bartram Trail", catColor: "#7fa838", lat: 35.18025, lng: -83.43328, length: "1.1 mi", elevation: "250 ft", typeText: "Loop", typeIcon: "loop", desc: "Short loop with native flora." },
+        { id: 2, name: "2. William's Pulpit", category: "Bartram Trail", catColor: "#7fa838", lat: 35.18025, lng: -83.43328, length: "4.2 mi", elevation: "1,080 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Scenic overlook." },
+        { id: 3, name: "3. Hickory Knoll Rd. to The Pinnacle", category: "Bartram Trail", catColor: "#7fa838", lat: 35.07975, lng: -83.37694, length: "4.5 mi", elevation: "1,340 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Highest elevation trail here." },
+        { id: 4, name: "4. Mud Creek", category: "Old Road Bed", catColor: "#ab7d27", lat: 34.99242, lng: -83.34756, length: "2.3 mi", elevation: "240 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Follows an old road bed." },
+        { id: 5, name: "5. Queen's Branch", category: "Mainspring", catColor: "#ab2c3f", lat: 35.28364, lng: -83.46750, length: "0.6 mi", elevation: "50 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Short, flat walk." },
+        { id: 6, name: "6. Gibson Bottoms", category: "Mainspring", catColor: "#ab2c3f", lat: 35.23272, lng: -83.39133, length: "1.7 mi", elevation: "40-170 ft", typeText: "Network", typeIcon: "hub", desc: "Intersecting trails in bottoms." },
+        { id: 7, name: "7. Onion Mtn. North", category: "Mainspring", catColor: "#ab2c3f", lat: 35.21131, lng: -83.29542, length: "2-5 mi", elevation: "490-1.6k ft", typeText: "Network", typeIcon: "hub", desc: "Steeper trail network." },
+        { id: 8, name: "8. Onion Mtn. South", category: "Mainspring", catColor: "#ab2c3f", lat: 35.19019, lng: -83.28244, length: "2-5 mi", elevation: "600-1.6k ft", typeText: "Network", typeIcon: "hub", desc: "Connects with Onion Mtn North." },
+        { id: 9, name: "9. Tessentee Bottomland", category: "Mainspring", catColor: "#ab2c3f", lat: 35.06889, lng: -83.37997, length: "1-3 mi", elevation: "120 ft", typeText: "Network", typeIcon: "hub", desc: "Rich ecological bottomlands." },
+        { id: 10, name: "10. Winding Stair Gap to Siler Bald", category: "Appalachian Trail", catColor: "#2b6e8c", lat: 35.12067, lng: -83.54708, length: "9 mi", elevation: "1,450 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Beautiful balds." },
+        { id: 11, name: "11. Winding Stair Gap South", category: "Appalachian Trail", catColor: "#2b6e8c", lat: 35.11986, lng: -83.54797, length: "Varies", elevation: "Varies", typeText: "Out & Back", typeIcon: "timeline", desc: "Hike as far as you want." },
+        { id: 12, name: "12. Parker Meadows", category: "Park", catColor: "#914b96", lat: 35.15472, lng: -83.45669, length: "1.1 mi", elevation: "250 ft", typeText: "Loop", typeIcon: "loop", desc: "Great family walking loop." },
+        { id: 13, name: "13. Suli Marsh", category: "Greenway", catColor: "#24a688", lat: 35.19675, lng: -83.38714, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Paved greenway along river." },
+        { id: 14, name: "14. Big Bear Park", category: "Greenway", catColor: "#24a688", lat: 35.18686, lng: -83.37392, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Paved greenway along river." },
+        { id: 15, name: "15. Riverwalk", category: "Greenway", catColor: "#24a688", lat: 35.18533, lng: -83.37094, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Paved greenway along river." },
+        { id: 16, name: "16. Salali Ln", category: "Greenway", catColor: "#24a688", lat: 35.17558, lng: -83.36992, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Paved greenway along river." },
+        { id: 17, name: "17. Tassee Park", category: "Greenway", catColor: "#24a688", lat: 35.17356, lng: -83.37217, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Paved greenway along river." },
+        { id: 18, name: "18. Southwestern CC", category: "Greenway", catColor: "#24a688", lat: 35.15967, lng: -83.37922, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Paved greenway along river." },
+        { id: 19, name: "19. Library", category: "Greenway", catColor: "#24a688", lat: 35.15856, lng: -83.38178, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Paved greenway along river." },
+        { id: 20, name: "20. Cartoogechaye Loop", category: "Schools", catColor: "#2729ab", lat: 35.16733, lng: -83.43583, length: "0.25 mi", elevation: "0 ft", typeText: "Loop", typeIcon: "loop", desc: "Track at local school." },
+        { id: 21, name: "21. Cove Branch (MVI)", category: "Schools", catColor: "#2729ab", lat: 35.16383, lng: -83.36111, length: "0.3 mi", elevation: "0 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "School walking path." },
+        { id: 22, name: "22. Macon Middle Loop", category: "Schools", catColor: "#2729ab", lat: 35.16136, lng: -83.35739, length: "0.5 mi", elevation: "20 ft", typeText: "Loop", typeIcon: "loop", desc: "School walking path." },
+        { id: 23, name: "23. South Macon Loop", category: "Schools", catColor: "#2729ab", lat: 35.11281, lng: -83.40003, length: "0.5 mi", elevation: "20 ft", typeText: "Loop", typeIcon: "loop", desc: "School walking path." },
+    ];
+
+    let trails = [];
+    let nextId = 24;
+
+    // =========================================================
+    // Auth
+    // =========================================================
+    function checkKey() {
+        const input = document.getElementById('key-input').value.trim();
+        if (input === ADMIN_KEY) {
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('admin-panel').style.display = 'block';
+            initAdmin();
+        } else {
+            document.getElementById('auth-error').style.display = 'block';
+            document.getElementById('key-input').value = '';
+            document.getElementById('key-input').focus();
+        }
+    }
+
+    document.getElementById('key-input').addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') checkKey();
+    });
+
+    // Auto-unlock if key is in URL: admin.html?key=YOUR_KEY
+    (function() {
+        const params = new URLSearchParams(window.location.search);
+        const urlKey = params.get('key');
+        if (urlKey === ADMIN_KEY) {
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('admin-panel').style.display = 'block';
+            initAdmin();
+        }
+    })();
+
+    // =========================================================
+    // Admin Init
+    // =========================================================
+    function initAdmin() {
+        // Load saved trails or fall back to defaults
+        try {
+            const saved = localStorage.getItem(LS_KEY);
+            trails = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_TRAILS));
+        } catch(e) {
+            trails = JSON.parse(JSON.stringify(DEFAULT_TRAILS));
+        }
+        nextId = Math.max(...trails.map(t => t.id), 23) + 1;
+        renderEditor();
+    }
+
+    // =========================================================
+    // Render editor cards
+    // =========================================================
+    const TYPE_ICONS = ['loop', 'hub', 'timeline', 'hiking', 'landscape', 'route'];
+
+    function renderEditor() {
+        const list = document.getElementById('trail-list');
+        list.innerHTML = '';
+        trails.forEach((trail, idx) => {
+            list.appendChild(buildCard(trail, idx));
+        });
+        nextId = Math.max(...trails.map(t => t.id), 23) + 1;
+    }
+
+    function buildCard(trail, idx) {
+        const div = document.createElement('div');
+        div.className = 'trail-card';
+        div.dataset.idx = idx;
+
+        const hasImg = trail.img && trail.img.length > 0;
+        const previewStyle = hasImg ? 'display:block' : 'display:none';
+        const noImgStyle = hasImg ? 'display:none' : 'display:flex';
+
+        div.innerHTML = `
+            <div class="trail-card-header" onclick="toggleCard(this)">
+                <span class="trail-num">#${trail.id}</span>
+                <span class="trail-name-preview">${escHtml(trail.name)}</span>
+                <span class="cat-dot" style="background:${escHtml(trail.catColor)}"></span>
+                <span class="material-symbols-outlined chevron">expand_more</span>
+            </div>
+            <div class="trail-card-body">
+                <div class="field-grid">
+                    <div class="field-group" style="grid-column: span 2;">
+                        <label>Trail Name</label>
+                        <input type="text" class="f-name" value="${escHtml(trail.name)}" oninput="liveUpdateName(this)" />
+                    </div>
+                    <div class="field-group">
+                        <label>Category</label>
+                        <input type="text" class="f-category" value="${escHtml(trail.category)}" />
+                    </div>
+                    <div class="field-group">
+                        <label>Category Color</label>
+                        <div class="color-row">
+                            <input type="color" class="f-catColor-picker" value="${trail.catColor}" oninput="syncColorText(this)" />
+                            <input type="text" class="f-catColor" value="${escHtml(trail.catColor)}" oninput="syncColorPicker(this)" />
+                        </div>
+                    </div>
+                    <div class="field-group">
+                        <label>Length</label>
+                        <input type="text" class="f-length" value="${escHtml(trail.length)}" />
+                    </div>
+                    <div class="field-group">
+                        <label>Elevation</label>
+                        <input type="text" class="f-elevation" value="${escHtml(trail.elevation)}" />
+                    </div>
+                    <div class="field-group">
+                        <label>Trail Type Label</label>
+                        <input type="text" class="f-typeText" value="${escHtml(trail.typeText)}" />
+                    </div>
+                    <div class="field-group">
+                        <label>Trail Type Icon</label>
+                        <select class="f-typeIcon">
+                            ${TYPE_ICONS.map(ic => `<option value="${ic}" ${trail.typeIcon === ic ? 'selected' : ''}>${ic}</option>`).join('')}
+                        </select>
+                    </div>
+                    <div class="field-group">
+                        <label>Latitude</label>
+                        <input type="number" step="0.00001" class="f-lat" value="${trail.lat}" />
+                    </div>
+                    <div class="field-group">
+                        <label>Longitude</label>
+                        <input type="number" step="0.00001" class="f-lng" value="${trail.lng}" />
+                    </div>
+                    <div class="field-group" style="grid-column: span 2;">
+                        <label>Description</label>
+                        <textarea class="f-desc">${escHtml(trail.desc)}</textarea>
+                    </div>
+                </div>
+
+                <div class="photo-section">
+                    <h3><span class="material-symbols-outlined" style="font-size:14px;vertical-align:middle;">image</span> Photo</h3>
+                    <div class="photo-controls">
+                        <div style="display:flex;flex-direction:column;gap:8px;flex:1;min-width:180px;">
+                            <div class="field-group">
+                                <label>Photo URL (or paste a link)</label>
+                                <input type="text" class="f-img" value="${escHtml(trail.img || '')}" placeholder="https://… or leave blank" oninput="previewPhoto(this)" />
+                            </div>
+                            <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+                                <label class="upload-btn-label">
+                                    <span class="material-symbols-outlined" style="font-size:16px;">upload</span> Upload Photo
+                                    <input type="file" accept="image/*" onchange="handlePhotoUpload(this)" />
+                                </label>
+                                <button class="clear-photo-btn btn-danger" onclick="clearPhoto(this)" title="Remove photo">
+                                    <span class="material-symbols-outlined" style="font-size:15px;">delete</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <img class="photo-preview ${hasImg ? 'visible' : ''}" src="${hasImg ? escHtml(trail.img) : ''}" alt="Preview" style="${previewStyle}" />
+                            <div class="photo-no-img" style="${noImgStyle}">No photo</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top:16px;display:flex;justify-content:flex-end;gap:10px;">
+                    <button onclick="deleteTrail(this)" class="btn-danger" style="font-size:13px;padding:8px 14px;">
+                        <span class="material-symbols-outlined" style="font-size:15px;">delete</span> Remove Trail
+                    </button>
+                    <button onclick="saveCard(this)" class="btn-green" style="font-size:13px;padding:8px 14px;">
+                        <span class="material-symbols-outlined" style="font-size:15px;">check</span> Apply Changes
+                    </button>
+                </div>
+            </div>
+        `;
+        return div;
+    }
+
+    function escHtml(str) {
+        if (!str) return '';
+        return String(str)
+            .replace(/&/g,'&amp;')
+            .replace(/"/g,'&quot;')
+            .replace(/</g,'&lt;')
+            .replace(/>/g,'&gt;');
+    }
+
+    function toggleCard(header) {
+        header.closest('.trail-card').classList.toggle('open');
+    }
+
+    function liveUpdateName(input) {
+        const card = input.closest('.trail-card');
+        card.querySelector('.trail-name-preview').textContent = input.value;
+    }
+
+    function syncColorText(picker) {
+        const card = picker.closest('.trail-card');
+        card.querySelector('.f-catColor').value = picker.value;
+        card.querySelector('.cat-dot').style.background = picker.value;
+    }
+
+    function syncColorPicker(input) {
+        const card = input.closest('.trail-card');
+        const val = input.value.trim();
+        if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+            card.querySelector('.f-catColor-picker').value = val;
+            card.querySelector('.cat-dot').style.background = val;
+        }
+    }
+
+    // =========================================================
+    // Photo handling
+    // =========================================================
+    function previewPhoto(input) {
+        const card = input.closest('.trail-card');
+        const preview = card.querySelector('.photo-preview');
+        const noImg = card.querySelector('.photo-no-img');
+        const url = input.value.trim();
+        if (url) {
+            preview.src = url;
+            preview.style.display = 'block';
+            noImg.style.display = 'none';
+            preview.classList.add('visible');
+        } else {
+            preview.src = '';
+            preview.style.display = 'none';
+            noImg.style.display = 'flex';
+            preview.classList.remove('visible');
+        }
+    }
+
+    function handlePhotoUpload(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const card = input.closest('.trail-card');
+        const urlField = card.querySelector('.f-img');
+        const preview = card.querySelector('.photo-preview');
+        const noImg = card.querySelector('.photo-no-img');
+
+        // Resize + compress before storing.
+        // NOTE: Uploaded photos are stored as base64 data URLs in localStorage.
+        // Browser localStorage is typically limited to 5–10 MB total.
+        // For many large photos, prefer using a hosted image URL instead.
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.onload = function() {
+                const MAX_W = 1200;
+                const scale = img.width > MAX_W ? MAX_W / img.width : 1;
+                const canvas = document.createElement('canvas');
+                canvas.width = Math.round(img.width * scale);
+                canvas.height = Math.round(img.height * scale);
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+                urlField.value = dataUrl;
+                preview.src = dataUrl;
+                preview.style.display = 'block';
+                preview.classList.add('visible');
+                noImg.style.display = 'none';
+            };
+            img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+        // Clear file input so the same file can be re-selected
+        input.value = '';
+    }
+
+    function clearPhoto(btn) {
+        const card = btn.closest('.trail-card');
+        const urlField = card.querySelector('.f-img');
+        const preview = card.querySelector('.photo-preview');
+        const noImg = card.querySelector('.photo-no-img');
+        urlField.value = '';
+        preview.src = '';
+        preview.style.display = 'none';
+        preview.classList.remove('visible');
+        noImg.style.display = 'flex';
+    }
+
+    // =========================================================
+    // Read card fields back into a trail object
+    // =========================================================
+    function readCard(card) {
+        const idx = parseInt(card.dataset.idx, 10);
+        const existing = trails[idx];
+        return {
+            id: existing.id,
+            name: card.querySelector('.f-name').value.trim(),
+            category: card.querySelector('.f-category').value.trim(),
+            catColor: card.querySelector('.f-catColor').value.trim(),
+            lat: parseFloat(card.querySelector('.f-lat').value) || 0,
+            lng: parseFloat(card.querySelector('.f-lng').value) || 0,
+            length: card.querySelector('.f-length').value.trim(),
+            elevation: card.querySelector('.f-elevation').value.trim(),
+            typeText: card.querySelector('.f-typeText').value.trim(),
+            typeIcon: card.querySelector('.f-typeIcon').value,
+            desc: card.querySelector('.f-desc').value.trim(),
+            img: card.querySelector('.f-img').value.trim() || undefined,
+        };
+    }
+
+    function saveCard(btn) {
+        const card = btn.closest('.trail-card');
+        const idx = parseInt(card.dataset.idx, 10);
+        trails[idx] = readCard(card);
+        // Update header preview
+        card.querySelector('.trail-name-preview').textContent = trails[idx].name;
+        card.querySelector('.cat-dot').style.background = trails[idx].catColor;
+        persistTrails();
+        showToast('Trail saved!');
+    }
+
+    function deleteTrail(btn) {
+        if (!confirm('Remove this trail? This cannot be undone.')) return;
+        const card = btn.closest('.trail-card');
+        const idx = parseInt(card.dataset.idx, 10);
+        trails.splice(idx, 1);
+        persistTrails();
+        renderEditor();
+        showToast('Trail removed.');
+    }
+
+    function addNewTrail() {
+        trails.push({
+            id: nextId++,
+            name: `New Trail ${nextId - 1}`,
+            category: 'Uncategorized',
+            catColor: '#888888',
+            lat: 35.17,
+            lng: -83.38,
+            length: '?',
+            elevation: '?',
+            typeText: 'Out & Back',
+            typeIcon: 'timeline',
+            desc: 'Trail description.',
+        });
+        renderEditor();
+        // Scroll to and open the new card
+        const cards = document.querySelectorAll('.trail-card');
+        const last = cards[cards.length - 1];
+        last.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => last.classList.add('open'), 300);
+    }
+
+    // =========================================================
+    // Save / Export / Import / Reset
+    // =========================================================
+    function saveAll() {
+        // Read all open cards first so unsaved edits are captured
+        document.querySelectorAll('.trail-card').forEach((card, idx) => {
+            // Only read if the card is open (user may have edited it)
+            if (card.classList.contains('open')) {
+                trails[idx] = readCard(card);
+            }
+        });
+        persistTrails();
+        showToast('All changes saved!');
+    }
+
+    function persistTrails() {
+        try {
+            localStorage.setItem(LS_KEY, JSON.stringify(trails));
+            const now = new Date();
+            document.getElementById('save-status').textContent =
+                'Last saved: ' + now.toLocaleTimeString();
+        } catch(e) {
+            showToast('Save failed – storage may be full.', true);
+        }
+    }
+
+    function exportJSON() {
+        const blob = new Blob([JSON.stringify(trails, null, 2)], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'trails.json';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function importJSON() {
+        document.getElementById('json-import-file').click();
+    }
+
+    function handleImportFile(evt) {
+        const file = evt.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = JSON.parse(e.target.result);
+                if (!Array.isArray(data)) throw new Error('Expected an array');
+                trails = data;
+                persistTrails();
+                renderEditor();
+                showToast('Imported ' + trails.length + ' trails!');
+            } catch(err) {
+                showToast('Import failed: ' + err.message, true);
+            }
+        };
+        reader.readAsText(file);
+        evt.target.value = '';
+    }
+
+    function resetDefaults() {
+        if (!confirm('Reset ALL trails to their original defaults? Any changes will be lost.')) return;
+        localStorage.removeItem(LS_KEY);
+        trails = JSON.parse(JSON.stringify(DEFAULT_TRAILS));
+        renderEditor();
+        document.getElementById('save-status').textContent = '';
+        showToast('Reset to defaults.');
+    }
+
+    // =========================================================
+    // Toast helper
+    // =========================================================
+    let toastTimer;
+    function showToast(msg, isError = false) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.style.background = isError ? 'rgba(180,30,30,0.95)' : 'rgba(46,125,50,0.95)';
+        t.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+    }
+</script>
+</body>
+</html>
