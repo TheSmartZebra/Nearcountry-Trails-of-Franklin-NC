@@ -108,7 +108,36 @@
             text-align: right;
         }
 
-        /* Trail editor card */
+        /* Search bar */
+        .search-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        #trail-search {
+            flex: 1;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 10px;
+            color: #fff;
+            padding: 10px 14px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+            backdrop-filter: blur(8px);
+        }
+        #trail-search::placeholder { color: rgba(255,255,255,0.4); }
+        #trail-search:focus { border-color: rgba(255,255,255,0.55); }
+        #search-count {
+            font-size: 13px;
+            opacity: 0.55;
+            white-space: nowrap;
+        }
+        .trail-card.search-hidden { display: none; }
+
+
         .trail-card {
             background: rgba(255,255,255,0.08);
             backdrop-filter: blur(12px);
@@ -483,6 +512,12 @@
             </div>
         </div>
 
+        <div class="search-bar-row">
+            <span class="material-symbols-outlined" style="opacity:0.5;font-size:20px;">search</span>
+            <input id="trail-search" type="search" placeholder="Search trails by name or category…" oninput="filterTrails()" autocomplete="off" />
+            <span id="search-count"></span>
+        </div>
+
         <div id="trail-list"></div>
 
         <button class="add-trail-btn" onclick="addNewTrail()">
@@ -605,6 +640,38 @@
             list.appendChild(buildCard(trail, idx));
         });
         nextId = Math.max(...trails.map(t => t.id), 23) + 1;
+        // Set id attributes for hash deep-linking
+        document.querySelectorAll('.trail-card').forEach((card) => {
+            const trail = trails[parseInt(card.dataset.idx, 10)];
+            if (trail) card.id = 'trail-' + trail.id;
+        });
+        filterTrails();
+        // Handle URL hash deep-link: admin.html#trail-5
+        const hash = window.location.hash;
+        if (hash && hash.startsWith('#trail-')) {
+            const target = document.querySelector(hash);
+            if (target) {
+                target.classList.add('open');
+                setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 150);
+            }
+        }
+    }
+
+    function filterTrails() {
+        const q = (document.getElementById('trail-search').value || '').toLowerCase().trim();
+        const cards = document.querySelectorAll('.trail-card');
+        let visible = 0;
+        cards.forEach((card) => {
+            const trail = trails[parseInt(card.dataset.idx, 10)];
+            if (!trail) return;
+            const match = !q ||
+                trail.name.toLowerCase().includes(q) ||
+                trail.category.toLowerCase().includes(q);
+            card.classList.toggle('search-hidden', !match);
+            if (match) visible++;
+        });
+        const countEl = document.getElementById('search-count');
+        countEl.textContent = q ? `${visible} of ${trails.length}` : '';
     }
 
     function buildCard(trail, idx) {

@@ -229,6 +229,29 @@
             background-color: rgba(27, 94, 32, 0.9);
             transform: scale(0.98);
         }
+        .edit-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 8px;
+            padding: 7px 12px;
+            width: 100%;
+            box-sizing: border-box;
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.7);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+            backdrop-filter: blur(5px);
+        }
+        .edit-btn:hover {
+            background: rgba(255,255,255,0.2);
+            color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -359,6 +382,9 @@
                             <button class="map-btn" onclick="openMap(${trail.lat}, ${trail.lng})">
                                 <span class="material-symbols-outlined">map</span> Navigate
                             </button>
+                            <a class="edit-btn" href="admin.html#trail-${trail.id}" title="Edit this trail in admin">
+                                <span class="material-symbols-outlined" style="font-size:15px;">edit</span> Edit
+                            </a>
                         </div>
                     </div>
                 `;
