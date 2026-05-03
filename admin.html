@@ -108,7 +108,36 @@
             text-align: right;
         }
 
-        /* Trail editor card */
+        /* Search bar */
+        .search-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        #trail-search {
+            flex: 1;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 10px;
+            color: #fff;
+            padding: 10px 14px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+            backdrop-filter: blur(8px);
+        }
+        #trail-search::placeholder { color: rgba(255,255,255,0.4); }
+        #trail-search:focus { border-color: rgba(255,255,255,0.55); }
+        #search-count {
+            font-size: 13px;
+            opacity: 0.55;
+            white-space: nowrap;
+        }
+        .trail-card.search-hidden { display: none; }
+
+
         .trail-card {
             background: rgba(255,255,255,0.08);
             backdrop-filter: blur(12px);
@@ -295,6 +324,140 @@
         }
         #toast.show { transform: translateX(-50%) translateY(0); }
 
+        /* =========================================================
+           Preview Modal
+        ========================================================= */
+        #preview-modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: rgba(10, 10, 10, 0.75);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        #preview-modal.open { display: flex; }
+        #preview-modal-inner {
+            position: relative;
+            max-width: 380px;
+            width: 100%;
+        }
+        #preview-close {
+            position: absolute;
+            top: -14px;
+            right: -14px;
+            z-index: 1;
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.4);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 13px;
+            padding: 0;
+            transition: background 0.2s;
+        }
+        #preview-close:hover { background: rgba(255,255,255,0.35); }
+
+        /* Trail card preview — mirrors index.html .card styles */
+        .preview-card {
+            background: rgba(255, 255, 255, 0.1);
+            -webkit-backdrop-filter: blur(15px);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
+            box-shadow: 0 8px 32px 0 rgba(38, 38, 38, 0.5);
+            overflow: hidden;
+            text-align: left;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        .preview-card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            display: block;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .preview-card .card-content { padding: 16px; }
+        .preview-card .category-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #fff;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 4px rgba(38,38,38,0.3);
+        }
+        .preview-card .card-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            text-shadow: 1px 1px 3px rgba(38,38,38,0.6);
+        }
+        .preview-card .trail-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .preview-card .stat-badge {
+            background: rgba(38,38,38,0.3);
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #e0f2f1;
+        }
+        .preview-card .stat-badge .material-symbols-outlined {
+            font-size: 16px;
+            color: #a8e6cf;
+        }
+        .preview-card .trail-desc {
+            font-size: 14px;
+            color: #e0e0e0;
+            line-height: 1.4;
+            margin-bottom: 15px;
+            margin-top: 0;
+            padding-top: 10px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .preview-card .map-btn {
+            background-color: rgba(46, 125, 50, 0.8);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.4);
+            padding: 12px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: default;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 5px;
+        }
+        #preview-label {
+            text-align: center;
+            font-size: 12px;
+            opacity: 0.5;
+            margin-top: 10px;
+            letter-spacing: 0.04em;
+        }
+
         /* Add trail button */
         .add-trail-btn {
             width: 100%;
@@ -349,11 +512,28 @@
             </div>
         </div>
 
+        <div class="search-bar-row">
+            <span class="material-symbols-outlined" style="opacity:0.5;font-size:20px;">search</span>
+            <input id="trail-search" type="search" placeholder="Search trails by name or category…" oninput="filterTrails()" autocomplete="off" />
+            <span id="search-count"></span>
+        </div>
+
         <div id="trail-list"></div>
 
         <button class="add-trail-btn" onclick="addNewTrail()">
             <span class="material-symbols-outlined" style="font-size:18px;">add_circle</span> Add New Trail
         </button>
+    </div>
+</div>
+
+<!-- Preview Modal -->
+<div id="preview-modal" role="dialog" aria-modal="true" aria-label="Trail Preview">
+    <div id="preview-modal-inner">
+        <button id="preview-close" onclick="closePreview()" title="Close preview">
+            <span class="material-symbols-outlined" style="font-size:18px;">close</span>
+        </button>
+        <div id="preview-card-container"></div>
+        <p id="preview-label">Preview — as seen on the main page</p>
     </div>
 </div>
 
@@ -460,6 +640,38 @@
             list.appendChild(buildCard(trail, idx));
         });
         nextId = Math.max(...trails.map(t => t.id), 23) + 1;
+        // Set id attributes for hash deep-linking
+        document.querySelectorAll('.trail-card').forEach((card) => {
+            const trail = trails[parseInt(card.dataset.idx, 10)];
+            if (trail) card.id = 'trail-' + trail.id;
+        });
+        filterTrails();
+        // Handle URL hash deep-link: admin.html#trail-5
+        const hash = window.location.hash;
+        if (hash && hash.startsWith('#trail-')) {
+            const target = document.querySelector(hash);
+            if (target) {
+                target.classList.add('open');
+                setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 150);
+            }
+        }
+    }
+
+    function filterTrails() {
+        const q = (document.getElementById('trail-search').value || '').toLowerCase().trim();
+        const cards = document.querySelectorAll('.trail-card');
+        let visible = 0;
+        cards.forEach((card) => {
+            const trail = trails[parseInt(card.dataset.idx, 10)];
+            if (!trail) return;
+            const match = !q ||
+                trail.name.toLowerCase().includes(q) ||
+                trail.category.toLowerCase().includes(q);
+            card.classList.toggle('search-hidden', !match);
+            if (match) visible++;
+        });
+        const countEl = document.getElementById('search-count');
+        countEl.textContent = q ? `${visible} of ${trails.length}` : '';
     }
 
     function buildCard(trail, idx) {
@@ -553,6 +765,9 @@
                 </div>
 
                 <div style="margin-top:16px;display:flex;justify-content:flex-end;gap:10px;">
+                    <button onclick="previewCard(this)" style="font-size:13px;padding:8px 14px;">
+                        <span class="material-symbols-outlined" style="font-size:15px;">visibility</span> Preview
+                    </button>
                     <button onclick="deleteTrail(this)" class="btn-danger" style="font-size:13px;padding:8px 14px;">
                         <span class="material-symbols-outlined" style="font-size:15px;">delete</span> Remove Trail
                     </button>
@@ -801,6 +1016,68 @@
         document.getElementById('save-status').textContent = '';
         showToast('Reset to defaults.');
     }
+
+    // =========================================================
+    // Preview
+    // =========================================================
+    const VALID_MATERIAL_ICONS = ['hiking', 'landscape', 'timeline', 'map', 'directions_car',
+        'near_me', 'straighten', 'terrain', 'category', 'refresh', 'sync_alt', 'route'];
+
+    function getTypeIconHtml(typeIcon) {
+        if (typeIcon === 'loop') {
+            return `<svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor"><path d="m360-120-57-56 64-64h-7q-117 0-198.5-81.5T80-520q0-117 81.5-198.5T360-800h240q117 0 198.5 81.5T880-520q0 117-81.5 198.5T600-240v-80q83 0 141.5-58.5T800-520q0-83-58.5-141.5T600-720H360q-83 0-141.5 58.5T160-520q0 83 58.5 142.5T360-312h16l-72-72 56-56 160 160-160 160Z"/></svg>`;
+        } else if (typeIcon === 'hub') {
+            return `<svg xmlns="http://www.w3.org/2000/svg" height="16px" viewBox="0 -960 960 960" width="16px" fill="currentColor"><path d="M160-440v-80h304l200-200H560v-80h240v240h-80v-104L496-440H160Zm400 280v-80h104L536-366l58-58 126 128v-104h80v240H560Z"/></svg>`;
+        } else if (VALID_MATERIAL_ICONS.includes(typeIcon)) {
+            return `<span class="material-symbols-outlined" style="font-size:16px;">${typeIcon}</span>`;
+        }
+        return '';
+    }
+
+    function previewCard(btn) {
+        const card = btn.closest('.trail-card');
+        const trail = readCard(card);
+
+        const imgHtml = trail.img ? `<img src="${escHtml(trail.img)}" alt="Trail Photo">` : '';
+        const html = `
+            <div class="preview-card">
+                ${imgHtml}
+                <div class="card-content">
+                    <div class="category-badge" style="background-color:${escHtml(trail.catColor)}">${escHtml(trail.category)}</div>
+                    <h2 class="card-title">${escHtml(trail.name)}</h2>
+                    <div class="trail-stats">
+                        <div class="stat-badge" title="Hike Length">
+                            <span class="material-symbols-outlined">hiking</span> ${escHtml(trail.length)}
+                        </div>
+                        <div class="stat-badge" title="Elevation Change">
+                            <span class="material-symbols-outlined">landscape</span> ${escHtml(trail.elevation)}
+                        </div>
+                        <div class="stat-badge" title="Trail Type">
+                            ${getTypeIconHtml(trail.typeIcon)} ${escHtml(trail.typeText)}
+                        </div>
+                    </div>
+                    <p class="trail-desc">${escHtml(trail.desc)}</p>
+                    <div class="map-btn">
+                        <span class="material-symbols-outlined">map</span> Navigate
+                    </div>
+                </div>
+            </div>
+        `;
+        document.getElementById('preview-card-container').innerHTML = html;
+        document.getElementById('preview-modal').classList.add('open');
+    }
+
+    function closePreview() {
+        document.getElementById('preview-modal').classList.remove('open');
+    }
+
+    document.getElementById('preview-modal').addEventListener('click', function(e) {
+        if (e.target === this) closePreview();
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && document.getElementById('preview-modal').classList.contains('open')) closePreview();
+    });
 
     // =========================================================
     // Toast helper
