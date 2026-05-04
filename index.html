@@ -9,8 +9,11 @@
     <meta name="theme-color" content="#2E7D32">
     <link rel="apple-touch-icon" href="background.jpg">
 
-    <!-- Material Symbols (Icons) matching your screenshot -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0" />
+    <!-- Preconnect to Google Fonts to reduce latency on first visit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Material Symbols loaded non-blocking via display=swap -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&display=swap" />
 
     <style>
         /* Liquid Glass / Glassmorphism Design */
@@ -229,6 +232,79 @@
             background-color: rgba(27, 94, 32, 0.9);
             transform: scale(0.98);
         }
+
+        /* PWA Install Info Panel */
+        #pwa-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            background: rgba(0, 0, 0, 0.35);
+        }
+        #pwa-panel {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            background: rgba(15, 35, 15, 0.93);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 16px;
+            padding: 22px 22px 18px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.55);
+            max-width: 320px;
+            width: calc(100vw - 40px);
+            color: #fff;
+            text-align: left;
+        }
+        #pwa-panel h3 {
+            margin: 0 0 12px 0;
+            font-size: 16px;
+            padding-right: 24px;
+        }
+        #pwa-panel ol {
+            margin: 0;
+            padding-left: 18px;
+            font-size: 14px;
+            line-height: 1.7;
+            color: #e0f2f1;
+        }
+        #pwa-panel .pwa-note {
+            font-size: 12px;
+            color: #a8e6cf;
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+        #pwa-install-now {
+            display: none;
+            margin-top: 14px;
+            width: 100%;
+            background: rgba(46, 125, 50, 0.85);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.35);
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        #pwa-install-now:active { background: rgba(27, 94, 32, 0.95); }
+        #pwa-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 13px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.65);
+            font-size: 22px;
+            line-height: 1;
+            cursor: pointer;
+            padding: 0;
+        }
+        #pwa-close-btn:hover { color: #fff; }
     </style>
 </head>
 <body>
@@ -253,6 +329,9 @@
                 <button class="btn-glass" onclick="resetSort()" title="Clear Filters/Sort">
                     <span class="material-symbols-outlined" style="font-size:18px;">refresh</span> Reset
                 </button>
+                <button class="btn-glass" id="pwa-btn" onclick="showPwaInfo()" title="Add to Home Screen">
+                    <span class="material-symbols-outlined" style="font-size:18px;">download_for_offline</span> Install
+                </button>
             </div>
             <div id="status-msg"></div>
         </div>
@@ -260,6 +339,16 @@
         <div class="grid" id="trail-grid">
             <!-- Cards dynamically injected here -->
         </div>
+    </div>
+
+    <!-- PWA Install Info Panel (not a browser popup) -->
+    <div id="pwa-overlay" onclick="closePwaInfo()"></div>
+    <div id="pwa-panel" role="dialog" aria-modal="true" aria-labelledby="pwa-panel-title">
+        <button id="pwa-close-btn" onclick="closePwaInfo()" aria-label="Close">&#x2715;</button>
+        <h3 id="pwa-panel-title">📲 Add to Home Screen</h3>
+        <ol id="pwa-steps"></ol>
+        <p class="pwa-note" id="pwa-note"></p>
+        <button id="pwa-install-now" onclick="triggerInstall()">Install Now</button>
     </div>
 
     <script>
@@ -323,7 +412,7 @@
 
         function renderTrails() {
             const grid = document.getElementById('trail-grid');
-            grid.innerHTML = ''; 
+            let html = '';
 
             trails.forEach(trail => {
                 let distHtml = trail.driveTimeText 
@@ -332,7 +421,7 @@
                 
                 let imgHtml = trail.img ? `<img src="${trail.img}" alt="Trail Photo" loading="lazy">` : ``;
 
-                let cardHtml = `
+                html += `
                     <div class="card">
                         ${imgHtml}
                         <div class="card-content">
@@ -362,8 +451,9 @@
                         </div>
                     </div>
                 `;
-                grid.innerHTML += cardHtml;
             });
+
+            grid.innerHTML = html;
         }
 
         // Helper to format seconds into readable drive time
@@ -512,6 +602,113 @@
         })();
 
         window.onload = renderTrails;
+
+        // ── PWA Install Logic ──────────────────────────────────────────────
+        let _deferredInstallPrompt = null;
+
+        // Capture the browser's native install prompt (Chrome / Android / Edge)
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            _deferredInstallPrompt = e;
+        });
+
+        function showPwaInfo() {
+            // If already running as a standalone PWA, nothing to install
+            if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) {
+                alert('This app is already installed on your device!');
+                return;
+            }
+
+            const ua = navigator.userAgent;
+            const isIOS = /iPad|iPhone|iPod/.test(ua) ||
+                          (/Macintosh/i.test(ua) && navigator.maxTouchPoints > 1);
+            const isAndroid = /Android/.test(ua);
+            const isSafari = /Safari/.test(ua) && !/Chrome/.test(ua);
+            const isChrome = /Chrome/.test(ua) && !/Edg/.test(ua);
+            const isEdge   = /Edg/.test(ua);
+            const isFirefox = /Firefox/.test(ua);
+
+            const stepsEl = document.getElementById('pwa-steps');
+            const noteEl  = document.getElementById('pwa-note');
+            const installBtn = document.getElementById('pwa-install-now');
+            const titleEl = document.getElementById('pwa-panel-title');
+
+            installBtn.style.display = 'none';
+
+            if (isIOS && isSafari) {
+                titleEl.textContent = '📱 Install on iPhone / iPad';
+                stepsEl.innerHTML = `
+                    <li>Tap the <strong>Share</strong> button&nbsp;(&#x2b06;&#xfe0f; the box with an arrow) at the bottom of Safari.</li>
+                    <li>Scroll down and tap <strong>"Add to Home Screen"</strong>.</li>
+                    <li>Tap <strong>"Add"</strong> in the top-right corner.</li>`;
+                noteEl.textContent = '';
+            } else if (isIOS && !isSafari) {
+                titleEl.textContent = '📱 Install on iPhone / iPad';
+                stepsEl.innerHTML = '';
+                noteEl.innerHTML = '⚠️ PWA installation requires <strong>Safari</strong> on iOS. Open this page in Safari, then use Share → Add to Home Screen.';
+            } else if (isAndroid && _deferredInstallPrompt) {
+                titleEl.textContent = '📱 Install on Android';
+                stepsEl.innerHTML = `<li>Tap <strong>"Install Now"</strong> below to add the app to your home screen.</li>`;
+                noteEl.textContent = '';
+                installBtn.style.display = 'block';
+            } else if (isAndroid && isChrome) {
+                titleEl.textContent = '📱 Install on Android';
+                stepsEl.innerHTML = `
+                    <li>Tap the <strong>menu</strong> button (⋮) in Chrome.</li>
+                    <li>Tap <strong>"Add to Home Screen"</strong> or <strong>"Install app"</strong>.</li>
+                    <li>Tap <strong>"Install"</strong> to confirm.</li>`;
+                noteEl.textContent = '';
+            } else if (isAndroid && isFirefox) {
+                titleEl.textContent = '📱 Install on Android (Firefox)';
+                stepsEl.innerHTML = `
+                    <li>Tap the <strong>menu</strong> button (⋮) in Firefox.</li>
+                    <li>Tap <strong>"Install"</strong>.</li>`;
+                noteEl.textContent = '';
+            } else if (_deferredInstallPrompt) {
+                // Desktop Chrome / Edge with install prompt available
+                titleEl.textContent = '🖥️ Install on Desktop';
+                stepsEl.innerHTML = `<li>Tap <strong>"Install Now"</strong> below to install the app.</li>`;
+                noteEl.textContent = '';
+                installBtn.style.display = 'block';
+            } else if (isChrome || isEdge) {
+                titleEl.textContent = '🖥️ Install on Desktop';
+                stepsEl.innerHTML = `
+                    <li>Look for the <strong>install icon</strong> (⊕) in your browser's address bar.</li>
+                    <li>Click it, then click <strong>"Install"</strong>.</li>`;
+                noteEl.textContent = 'Tip: If you don\'t see the icon, try reloading the page.';
+            } else {
+                titleEl.textContent = '📲 Add to Home Screen';
+                stepsEl.innerHTML = `<li>Open your browser's <strong>menu</strong> and look for <strong>"Install"</strong> or <strong>"Add to Home Screen"</strong>.</li>`;
+                noteEl.textContent = 'For the best experience, use Chrome (Android / Desktop) or Safari (iPhone / iPad).';
+            }
+
+            document.getElementById('pwa-overlay').style.display = 'block';
+            document.getElementById('pwa-panel').style.display = 'block';
+        }
+
+        function closePwaInfo() {
+            document.getElementById('pwa-overlay').style.display = 'none';
+            document.getElementById('pwa-panel').style.display = 'none';
+        }
+
+        async function triggerInstall() {
+            if (!_deferredInstallPrompt) return;
+            _deferredInstallPrompt.prompt();
+            const choice = await _deferredInstallPrompt.userChoice;
+            _deferredInstallPrompt = null;
+            if (choice.outcome === 'accepted') {
+                closePwaInfo();
+                document.getElementById('pwa-btn').style.display = 'none';
+            }
+        }
+
+        // Hide install button if already running as standalone PWA
+        // (Script is inline at end of body so DOM is already available here)
+        if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) {
+            const btn = document.getElementById('pwa-btn');
+            if (btn) btn.style.display = 'none';
+        }
+        // ── End PWA Install Logic ──────────────────────────────────────────
 
         // Register Service Worker
         if ('serviceWorker' in navigator) {
