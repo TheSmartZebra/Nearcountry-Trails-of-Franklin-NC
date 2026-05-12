@@ -94,8 +94,7 @@ jobs:
 
       - name: Commit converted JPEG files
         run: |
-          git add -u -- '**/*.heic' '**/*.HEIC' '**/*.jpg' '**/*.JPG'
-          git add -- '**/*.jpg' '**/*.JPG'
+          git add -A
           if git diff --cached --quiet; then
             echo "No converted files to commit."
             exit 0
