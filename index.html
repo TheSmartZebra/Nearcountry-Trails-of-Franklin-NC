@@ -137,13 +137,6 @@
             text-align: left;
             transition: transform 0.3s ease;
         }
-        .card img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            display: block;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
         .card-content {
             padding: 16px;
         }
@@ -208,6 +201,31 @@
             margin-top: 0;
             padding-top: 10px;
             border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .trail-gallery {
+            margin: -4px 0 14px 0;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+        .trail-gallery-track {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            background: rgba(38, 38, 38, 0.2);
+        }
+        .trail-gallery-track img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+            flex: 0 0 100%;
+            scroll-snap-align: start;
+        }
+        .trail-gallery.single .trail-gallery-track {
+            overflow: hidden;
         }
         .map-btn {
             background-color: rgba(46, 125, 50, 0.8);
@@ -352,9 +370,10 @@
     </div>
 
     <script>
-        /* 
+        /*
            Trail Data populated directly from the pamphlet.
-           Images have been removed for now. When ready, add an `img: "filename.jpg"` property to any trail to make the image appear!
+           Trail photos are auto-discovered from `images/hikes/<trail-folder>/`.
+           `imgs` and legacy `img` remain supported for explicit overrides.
         */
         let trails = [
             { id: 1, name: "1. Bessie's Loop", category: "Bartram Trail", catColor: "#7fa838", lat: 35.18025, lng: -83.43328, length: "1.1 mi", elevation: "250 ft", typeText: "Loop", typeIcon: "loop", desc: "Short loop with native flora." },
@@ -385,6 +404,78 @@
             { id: 22, name: "22. Macon Middle Loop", category: "Schools", catColor: "#2729ab", lat: 35.16136, lng: -83.35739, length: "0.5 mi", elevation: "20 ft", typeText: "Loop", typeIcon: "loop", desc: "School walking path." },
             { id: 23, name: "23. South Macon Loop", category: "Schools", catColor: "#2729ab", lat: 35.11281, lng: -83.40003, length: "0.5 mi", elevation: "20 ft", typeText: "Loop", typeIcon: "loop", desc: "School walking path." },
         ];
+        const REPO_OWNER = 'TheSmartZebra';
+        const REPO_NAME = 'Nearcountry-Trails-of-Franklin-NC';
+        const REPO_BRANCH = 'main';
+        const HIKES_IMAGE_ROOT = 'images/hikes';
+        const WEB_IMAGE_PATTERN = /\.(jpe?g|png|webp|gif|avif)$/i;
+        const MIN_TRAIL_IMAGE_PATH_PARTS = 4;
+        const IMAGE_TREE_CACHE_KEY = 'trail-image-tree-v1';
+        const IMAGE_TREE_CACHE_TTL_MS = 60 * 60 * 1000;
+
+        function getTrailImageFolder(trail) {
+            if (trail.imageFolder) return trail.imageFolder;
+            const baseName = trail.name.replace(/^\s*\d+\.\s*/, '');
+            const slug = baseName
+                .normalize('NFKD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/['’`]/g, '')
+                .replace(/&/g, ' and ')
+                .replace(/[^a-zA-Z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '')
+                .toLowerCase();
+            return `${String(trail.id).padStart(2, '0')}-${slug}`;
+        }
+
+        async function loadTrailImagesFromRepository() {
+            try {
+                let treeEntries = null;
+                try {
+                    const cachedRaw = localStorage.getItem(IMAGE_TREE_CACHE_KEY);
+                    if (cachedRaw) {
+                        const cached = JSON.parse(cachedRaw);
+                        if (cached && Array.isArray(cached.tree) && typeof cached.cachedAt === 'number' && (Date.now() - cached.cachedAt) < IMAGE_TREE_CACHE_TTL_MS) {
+                            treeEntries = cached.tree;
+                        }
+                    }
+                } catch (_) {}
+
+                if (!treeEntries) {
+                    const treeUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/git/trees/${REPO_BRANCH}?recursive=1`;
+                    const response = await fetch(treeUrl);
+                    if (!response.ok) throw new Error(`Image tree fetch failed (${response.status} ${response.statusText})`);
+                    const data = await response.json();
+                    if (!Array.isArray(data.tree)) return;
+                    treeEntries = data.tree;
+                    try {
+                        localStorage.setItem(IMAGE_TREE_CACHE_KEY, JSON.stringify({ cachedAt: Date.now(), tree: treeEntries }));
+                    } catch (_) {}
+                }
+
+                const imagesByFolder = {};
+                treeEntries.forEach(item => {
+                    if (item.type !== 'blob' || !item.path.startsWith(`${HIKES_IMAGE_ROOT}/`)) return;
+                    if (!WEB_IMAGE_PATTERN.test(item.path)) return;
+                    const parts = item.path.split('/');
+                    if (parts.length < MIN_TRAIL_IMAGE_PATH_PARTS) return;
+                    const folderPath = parts.slice(0, 3).join('/');
+                    if (!imagesByFolder[folderPath]) imagesByFolder[folderPath] = [];
+                    imagesByFolder[folderPath].push(item.path);
+                });
+
+                Object.values(imagesByFolder).forEach(imagePaths => {
+                    imagePaths.sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
+                });
+
+                trails.forEach(trail => {
+                    if (Array.isArray(trail.imgs) && trail.imgs.length > 0) return;
+                    const folderPath = `${HIKES_IMAGE_ROOT}/${getTrailImageFolder(trail)}`;
+                    trail.imgs = imagesByFolder[folderPath] || [];
+                });
+            } catch (error) {
+                console.warn('Auto-loading trail images failed:', error);
+            }
+        }
 
         // Device routing logic
         function openMap(lat, lng) {
@@ -409,6 +500,22 @@
             }
             return '';
         }
+        function escapeHtmlAttr(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+        function sanitizeImageSrc(value) {
+            const src = String(value || '').trim();
+            if (!src || /^(javascript|data):/i.test(src)) return '';
+            const isHttp = /^https?:\/\//i.test(src);
+            const isRelativePath = /^(\/|\.\/|\.\.\/|images\/)/i.test(src);
+            if (!isHttp && !isRelativePath) return '';
+            return escapeHtmlAttr(encodeURI(src));
+        }
 
         function renderTrails() {
             const grid = document.getElementById('trail-grid');
@@ -419,11 +526,30 @@
                     ? `<span class="card-dist" title="Drive time from you"><span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle;">directions_car</span> ${trail.driveTimeText}</span>`
                     : ``;
                 
-                let imgHtml = trail.img ? `<img src="${trail.img}" alt="Trail Photo" loading="lazy">` : ``;
+                const trailImages = Array.isArray(trail.imgs)
+                    ? trail.imgs
+                    : (trail.img ? [trail.img] : []);
+                const safeTrailName = escapeHtmlAttr(trail.name);
+                let galleryHtml = ``;
+                if (trailImages.length > 0) {
+                    const galleryClass = trailImages.length === 1 ? 'trail-gallery single' : 'trail-gallery';
+                    const galleryImagesHtml = trailImages.map((img, idx) => {
+                        const safeImgSrc = sanitizeImageSrc(img);
+                        if (!safeImgSrc) return '';
+                        const altText = escapeHtmlAttr(`${trail.name} scenic trail view ${idx + 1}`);
+                        return `<img src="${safeImgSrc}" alt="${altText}" loading="lazy">`;
+                    }).join('');
+                    galleryHtml = `
+                        <div class="${galleryClass}" role="region" aria-label="${safeTrailName} photos">
+                            <div class="trail-gallery-track">
+                                ${galleryImagesHtml}
+                            </div>
+                        </div>
+                    `;
+                }
 
                 html += `
                     <div class="card">
-                        ${imgHtml}
                         <div class="card-content">
                             <div class="category-badge" style="background-color: ${trail.catColor}">${trail.category}</div>
                             <h2 class="card-title">
@@ -442,8 +568,9 @@
                                     ${getTypeIconHtml(trail.typeIcon)} ${trail.typeText}
                                 </div>
                             </div>
-                            
+
                             <p class="trail-desc">${trail.desc}</p>
+                            ${galleryHtml}
 
                             <button class="map-btn" onclick="openMap(${trail.lat}, ${trail.lng})">
                                 <span class="material-symbols-outlined">map</span> Navigate
@@ -588,7 +715,11 @@
             );
         }
 
-        window.onload = renderTrails;
+        async function initializeTrails() {
+            await loadTrailImagesFromRepository();
+            renderTrails();
+        }
+        window.addEventListener('load', initializeTrails);
 
         // ── PWA Install Logic ──────────────────────────────────────────────
         let _deferredInstallPrompt = null;

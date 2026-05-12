@@ -1,0 +1,68 @@
+name: Convert HEIC Hike Images
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'images/hikes/**/*.heic'
+      - 'images/hikes/**/*.HEIC'
+
+permissions:
+  contents: write
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install conversion dependencies
+        run: python -m pip install --upgrade pip pillow pillow-heif
+
+      - name: Convert HEIC files to JPEG
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import pillow_heif
+
+          pillow_heif.register_heif_opener()
+
+          converted = []
+          for source in Path('images/hikes').rglob('*'):
+              if source.suffix.lower() != '.heic' or not source.is_file():
+                  continue
+              target = source.with_suffix('.jpg')
+              try:
+                  with Image.open(source) as img:
+                      img.convert('RGB').save(target, format='JPEG', quality=90, optimize=True)
+                  converted.append((str(source), str(target)))
+              except Exception as exc:
+                  print(f'Failed to convert {source}: {exc}')
+
+          if not converted:
+              print('No HEIC files found to convert.')
+          else:
+              print('Converted HEIC files:')
+              for src, dst in converted:
+                  print(f'- {src} -> {dst}')
+          PY
+
+      - name: Commit converted JPEG files
+        run: |
+          git add images/hikes
+          if git diff --cached --quiet; then
+            echo "No converted files to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: auto-convert uploaded HEIC hike images to JPEG"
+          git push
