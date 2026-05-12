@@ -13,6 +13,7 @@ permissions:
 
 jobs:
   convert:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
@@ -40,13 +41,19 @@ jobs:
           converted = []
           failed = []
           try:
-              tracked_files = subprocess.check_output(['git', 'ls-files'], text=True).splitlines()
+              tracked_files = [
+                  path.decode('utf-8')
+                  for path in subprocess.check_output(
+                      ['git', 'ls-files', '-z', '--', ':(glob)**/*.heic', ':(glob)**/*.HEIC']
+                  ).split(b'\0')
+                  if path
+              ]
           except subprocess.CalledProcessError as exc:
               raise RuntimeError(f'Failed to list tracked HEIC files via git: {exc}') from exc
 
           for relpath in tracked_files:
               source = Path(relpath)
-              if source.suffix.lower() != '.heic' or not source.is_file():
+              if not source.is_file():
                   continue
               target = source.with_suffix('.jpg')
               try:
