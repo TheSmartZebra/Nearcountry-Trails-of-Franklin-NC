@@ -40,13 +40,13 @@ jobs:
           converted = []
           failed = []
           try:
-              tracked_files = subprocess.check_output(['git', 'ls-files', '--', '*.heic', '*.HEIC'], text=True).splitlines()
+              tracked_files = subprocess.check_output(['git', 'ls-files'], text=True).splitlines()
           except subprocess.CalledProcessError as exc:
               raise RuntimeError(f'Failed to list tracked HEIC files via git: {exc}') from exc
 
           for relpath in tracked_files:
               source = Path(relpath)
-              if not source.is_file():
+              if source.suffix.lower() != '.heic' or not source.is_file():
                   continue
               target = source.with_suffix('.jpg')
               try:
@@ -54,6 +54,8 @@ jobs:
                       img.convert('RGB').save(target, format='JPEG', quality=90, optimize=True)
                   if not target.exists() or target.stat().st_size == 0:
                       raise RuntimeError(f'JPEG output missing or empty: {target}')
+                  with Image.open(target) as converted_img:
+                      converted_img.verify()
                   try:
                       source.unlink()
                   except Exception as delete_exc:
@@ -66,8 +68,7 @@ jobs:
                   converted.append((str(source), str(target)))
               except Exception as exc:
                   print(f'Failed to convert {source}: {exc}')
-                  traceback.print_exc()
-                  failed.append((str(source), f'{type(exc).__name__}: {exc}'))
+                  failed.append((str(source), f'{type(exc).__name__}: {exc}', traceback.format_exc()))
 
           if not converted:
               print('No HEIC files found to convert.')
@@ -78,8 +79,9 @@ jobs:
 
           if failed:
               print('HEIC files that failed conversion:')
-              for path, err in failed:
+              for path, err, trace in failed:
                   print(f'- {path}: {err}')
+                  print(trace)
               raise SystemExit(1)
           PY
 
