@@ -422,7 +422,8 @@
         function toSiteAssetPath(path) {
             const cleanPath = String(path || '').replace(/^\/+/, '');
             if (!cleanPath) return '';
-            return `${SITE_BASE_PATH}/${cleanPath}`.replace(/\/{2,}/g, '/');
+            if (!SITE_BASE_PATH) return `/${cleanPath}`;
+            return `${SITE_BASE_PATH}/${cleanPath}`;
         }
 
         function getTrailImageFolder(trail) {
