@@ -410,6 +410,8 @@
         const HIKES_IMAGE_ROOT = 'images/hikes';
         const WEB_IMAGE_PATTERN = /\.(jpe?g|png|webp|gif|avif)$/i;
         const MIN_TRAIL_IMAGE_PATH_PARTS = 4;
+        const IMAGE_TREE_CACHE_KEY = 'trail-image-tree-v1';
+        const IMAGE_TREE_CACHE_TTL_MS = 60 * 60 * 1000;
 
         function getTrailImageFolder(trail) {
             if (trail.imageFolder) return trail.imageFolder;
@@ -427,14 +429,31 @@
 
         async function loadTrailImagesFromRepository() {
             try {
-                const treeUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/git/trees/${REPO_BRANCH}?recursive=1`;
-                const response = await fetch(treeUrl);
-                if (!response.ok) throw new Error(`Image tree fetch failed (${response.status} ${response.statusText})`);
-                const data = await response.json();
-                if (!Array.isArray(data.tree)) return;
+                let treeEntries = null;
+                try {
+                    const cachedRaw = localStorage.getItem(IMAGE_TREE_CACHE_KEY);
+                    if (cachedRaw) {
+                        const cached = JSON.parse(cachedRaw);
+                        if (cached && Array.isArray(cached.tree) && typeof cached.cachedAt === 'number' && (Date.now() - cached.cachedAt) < IMAGE_TREE_CACHE_TTL_MS) {
+                            treeEntries = cached.tree;
+                        }
+                    }
+                } catch (_) {}
+
+                if (!treeEntries) {
+                    const treeUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/git/trees/${REPO_BRANCH}?recursive=1`;
+                    const response = await fetch(treeUrl);
+                    if (!response.ok) throw new Error(`Image tree fetch failed (${response.status} ${response.statusText})`);
+                    const data = await response.json();
+                    if (!Array.isArray(data.tree)) return;
+                    treeEntries = data.tree;
+                    try {
+                        localStorage.setItem(IMAGE_TREE_CACHE_KEY, JSON.stringify({ cachedAt: Date.now(), tree: treeEntries }));
+                    } catch (_) {}
+                }
 
                 const imagesByFolder = {};
-                data.tree.forEach(item => {
+                treeEntries.forEach(item => {
                     if (item.type !== 'blob' || !item.path.startsWith(`${HIKES_IMAGE_ROOT}/`)) return;
                     if (!WEB_IMAGE_PATTERN.test(item.path)) return;
                     const parts = item.path.split('/');
@@ -492,6 +511,9 @@
         function sanitizeImageSrc(value) {
             const src = String(value || '').trim();
             if (!src || /^(javascript|data):/i.test(src)) return '';
+            const isHttp = /^https?:\/\//i.test(src);
+            const isRelativePath = /^(\/|\.\/|\.\.\/|images\/)/i.test(src);
+            if (!isHttp && !isRelativePath) return '';
             return escapeHtmlAttr(encodeURI(src));
         }
 
