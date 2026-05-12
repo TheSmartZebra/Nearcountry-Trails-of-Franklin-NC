@@ -445,9 +445,9 @@
                 if (trailImages.length > 0) {
                     const galleryClass = trailImages.length === 1 ? 'trail-gallery single' : 'trail-gallery';
                     galleryHtml = `
-                        <div class="${galleryClass}" aria-label="${trail.name} photos">
+                        <div class="${galleryClass}" role="region" aria-label="${trail.name} photos">
                             <div class="trail-gallery-track">
-                                ${trailImages.map((img, idx) => `<img src="${img}" alt="${trail.name} trail photo ${idx + 1} of ${trailImages.length}" loading="lazy">`).join('')}
+                                ${trailImages.map((img, idx) => `<img src="${img}" alt="${trail.name} scenic trail view ${idx + 1}" loading="lazy">`).join('')}
                             </div>
                         </div>
                     `;
