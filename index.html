@@ -409,6 +409,7 @@
         const REPO_BRANCH = 'main';
         const HIKES_IMAGE_ROOT = 'images/hikes';
         const WEB_IMAGE_PATTERN = /\.(jpe?g|png|webp|gif|avif)$/i;
+        const MIN_TRAIL_IMAGE_PATH_PARTS = 4;
 
         function getTrailImageFolder(trail) {
             if (trail.imageFolder) return trail.imageFolder;
@@ -428,7 +429,7 @@
             try {
                 const treeUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/git/trees/${REPO_BRANCH}?recursive=1`;
                 const response = await fetch(treeUrl);
-                if (!response.ok) throw new Error(`Image tree fetch failed (${response.status})`);
+                if (!response.ok) throw new Error(`Image tree fetch failed (${response.status} ${response.statusText})`);
                 const data = await response.json();
                 if (!Array.isArray(data.tree)) return;
 
@@ -437,7 +438,7 @@
                     if (item.type !== 'blob' || !item.path.startsWith(`${HIKES_IMAGE_ROOT}/`)) return;
                     if (!WEB_IMAGE_PATTERN.test(item.path)) return;
                     const parts = item.path.split('/');
-                    if (parts.length < 4) return;
+                    if (parts.length < MIN_TRAIL_IMAGE_PATH_PARTS) return;
                     const folderPath = parts.slice(0, 3).join('/');
                     if (!imagesByFolder[folderPath]) imagesByFolder[folderPath] = [];
                     imagesByFolder[folderPath].push(item.path);
@@ -491,7 +492,7 @@
         function sanitizeImageSrc(value) {
             const src = String(value || '').trim();
             if (!src || /^(javascript|data):/i.test(src)) return '';
-            return encodeURI(src);
+            return escapeHtmlAttr(encodeURI(src));
         }
 
         function renderTrails() {
