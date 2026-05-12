@@ -372,7 +372,8 @@
     <script>
         /*
            Trail Data populated directly from the pamphlet.
-           Add trail photos with `imgs: ["path/to/photo1.jpg", "path/to/photo2.jpg"]` (or `img` for a single photo).
+           Add trail photos with `imgs: ["path/to/photo1.jpg", "path/to/photo2.jpg"]`.
+           `img` is still accepted as a legacy single-photo fallback.
         */
         let trails = [
             { id: 1, name: "1. Bessie's Loop", category: "Bartram Trail", catColor: "#7fa838", lat: 35.18025, lng: -83.43328, length: "1.1 mi", elevation: "250 ft", typeText: "Loop", typeIcon: "loop", desc: "Short loop with native flora.", imgs: ["images/hikes/01-bessies-loop/IMG_3670.jpg", "images/hikes/01-bessies-loop/IMG_3679.jpg"] },
@@ -446,7 +447,7 @@
                     galleryHtml = `
                         <div class="${galleryClass}" aria-label="${trail.name} photos">
                             <div class="trail-gallery-track">
-                                ${trailImages.map((img, idx) => `<img src="${img}" alt="${trail.name} photo ${idx + 1}" loading="lazy">`).join('')}
+                                ${trailImages.map((img, idx) => `<img src="${img}" alt="${trail.name} trail photo ${idx + 1} of ${trailImages.length}" loading="lazy">`).join('')}
                             </div>
                         </div>
                     `;
