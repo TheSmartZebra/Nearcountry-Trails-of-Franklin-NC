@@ -137,13 +137,6 @@
             text-align: left;
             transition: transform 0.3s ease;
         }
-        .card img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-            display: block;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        }
         .card-content {
             padding: 16px;
         }
@@ -208,6 +201,31 @@
             margin-top: 0;
             padding-top: 10px;
             border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .trail-gallery {
+            margin: -4px 0 14px 0;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+        .trail-gallery-track {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            background: rgba(38, 38, 38, 0.2);
+        }
+        .trail-gallery-track img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+            flex: 0 0 100%;
+            scroll-snap-align: start;
+        }
+        .trail-gallery.single .trail-gallery-track {
+            overflow: hidden;
         }
         .map-btn {
             background-color: rgba(46, 125, 50, 0.8);
@@ -352,12 +370,12 @@
     </div>
 
     <script>
-        /* 
+        /*
            Trail Data populated directly from the pamphlet.
-           Images have been removed for now. When ready, add an `img: "filename.jpg"` property to any trail to make the image appear!
+           Add trail photos with `imgs: ["path/to/photo1.jpg", "path/to/photo2.jpg"]` (or `img` for a single photo).
         */
         let trails = [
-            { id: 1, name: "1. Bessie's Loop", category: "Bartram Trail", catColor: "#7fa838", lat: 35.18025, lng: -83.43328, length: "1.1 mi", elevation: "250 ft", typeText: "Loop", typeIcon: "loop", desc: "Short loop with native flora." },
+            { id: 1, name: "1. Bessie's Loop", category: "Bartram Trail", catColor: "#7fa838", lat: 35.18025, lng: -83.43328, length: "1.1 mi", elevation: "250 ft", typeText: "Loop", typeIcon: "loop", desc: "Short loop with native flora.", imgs: ["images/hikes/01-bessies-loop/IMG_3670.HEIC", "images/hikes/01-bessies-loop/IMG_3679.HEIC"] },
             { id: 2, name: "2. William’s Pulpit", category: "Bartram Trail", catColor: "#7fa838", lat: 35.18025, lng: -83.43328, length: "4.2 mi", elevation: "1,080 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Scenic overlook." },
             { id: 3, name: "3. Hickory Knoll Rd. to The Pinnacle", category: "Bartram Trail", catColor: "#7fa838", lat: 35.07975, lng: -83.37694, length: "4.5 mi", elevation: "1,340 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Highest elevation trail here." },
             { id: 4, name: "4. Mud Creek", category: "Old Road Bed", catColor: "#ab7d27", lat: 34.99242, lng: -83.34756, length: "2.3 mi", elevation: "240 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Follows an old road bed." },
@@ -419,11 +437,23 @@
                     ? `<span class="card-dist" title="Drive time from you"><span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle;">directions_car</span> ${trail.driveTimeText}</span>`
                     : ``;
                 
-                let imgHtml = trail.img ? `<img src="${trail.img}" alt="Trail Photo" loading="lazy">` : ``;
+                const trailImages = Array.isArray(trail.imgs)
+                    ? trail.imgs
+                    : (trail.img ? [trail.img] : []);
+                let galleryHtml = ``;
+                if (trailImages.length > 0) {
+                    const galleryClass = trailImages.length === 1 ? 'trail-gallery single' : 'trail-gallery';
+                    galleryHtml = `
+                        <div class="${galleryClass}" aria-label="${trail.name} photos">
+                            <div class="trail-gallery-track">
+                                ${trailImages.map((img, idx) => `<img src="${img}" alt="${trail.name} photo ${idx + 1}" loading="lazy">`).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
 
                 html += `
                     <div class="card">
-                        ${imgHtml}
                         <div class="card-content">
                             <div class="category-badge" style="background-color: ${trail.catColor}">${trail.category}</div>
                             <h2 class="card-title">
@@ -442,8 +472,9 @@
                                     ${getTypeIconHtml(trail.typeIcon)} ${trail.typeText}
                                 </div>
                             </div>
-                            
+
                             <p class="trail-desc">${trail.desc}</p>
+                            ${galleryHtml}
 
                             <button class="map-btn" onclick="openMap(${trail.lat}, ${trail.lng})">
                                 <span class="material-symbols-outlined">map</span> Navigate
