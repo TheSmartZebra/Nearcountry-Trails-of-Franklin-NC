@@ -38,25 +38,23 @@ jobs:
 
           converted = []
           failed = []
-          tracked_files = subprocess.check_output(['git', 'ls-files'], text=True).splitlines()
+          tracked_files = subprocess.check_output(['git', 'ls-files', '--', '*.heic', '*.HEIC'], text=True).splitlines()
 
           for relpath in tracked_files:
               source = Path(relpath)
-              if source.suffix.lower() != '.heic' or not source.is_file():
+              if not source.is_file():
                   continue
               target = source.with_suffix('.jpg')
               try:
                   with Image.open(source) as img:
                       img.convert('RGB').save(target, format='JPEG', quality=90, optimize=True)
-                  if not target.exists():
-                      raise RuntimeError(f'JPEG output was not created: {target}')
-                  if target.stat().st_size == 0:
-                      raise RuntimeError(f'JPEG output is empty: {target}')
+                  if (not target.exists()) or target.stat().st_size == 0:
+                      raise RuntimeError(f'JPEG output missing or empty: {target}')
                   try:
                       source.unlink()
                   except Exception as delete_exc:
                       target.unlink(missing_ok=True)
-                      raise RuntimeError(f'Converted JPEG was rolled back because HEIC deletion failed: {delete_exc}') from delete_exc
+                      raise RuntimeError(f'Failed to delete original HEIC file; rolling back by removing converted JPEG: {delete_exc}') from delete_exc
                   converted.append((str(source), str(target)))
               except Exception as exc:
                   print(f'Failed to convert {source}: {exc}')
