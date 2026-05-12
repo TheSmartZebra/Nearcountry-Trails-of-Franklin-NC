@@ -40,7 +40,7 @@ jobs:
           converted = []
           failed = []
           try:
-              tracked_files = subprocess.check_output(['git', 'ls-files', '--', '*.heic', '*.HEIC'], text=True).splitlines()
+              tracked_files = subprocess.check_output(['git', 'ls-files', '--', '**/*.heic', '**/*.HEIC'], text=True).splitlines()
           except subprocess.CalledProcessError as exc:
               raise RuntimeError(f'Failed to list tracked HEIC files via git: {exc}') from exc
 
@@ -87,8 +87,8 @@ jobs:
 
       - name: Commit converted JPEG files
         run: |
-          git add -u -- '*.heic' '*.HEIC' '*.jpg' '*.JPG'
-          git add -- '*.jpg' '*.JPG'
+          git add -u -- '**/*.heic' '**/*.HEIC' '**/*.jpg' '**/*.JPG'
+          git add -- '**/*.jpg' '**/*.JPG'
           if git diff --cached --quiet; then
             echo "No converted files to commit."
             exit 0
