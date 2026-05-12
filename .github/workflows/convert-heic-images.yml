@@ -1,12 +1,12 @@
-name: Convert HEIC Hike Images
+name: Convert HEIC Images
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'images/hikes/**/*.heic'
-      - 'images/hikes/**/*.HEIC'
+      - '**/*.heic'
+      - '**/*.HEIC'
 
 permissions:
   contents: write
@@ -26,7 +26,7 @@ jobs:
       - name: Install conversion dependencies
         run: python -m pip install --upgrade pip pillow pillow-heif
 
-      - name: Convert HEIC files to JPEG
+      - name: Convert HEIC files to JPEG and remove originals
         run: |
           python - <<'PY'
           from pathlib import Path
@@ -36,13 +36,14 @@ jobs:
           pillow_heif.register_heif_opener()
 
           converted = []
-          for source in Path('images/hikes').rglob('*'):
+          for source in Path('.').rglob('*'):
               if source.suffix.lower() != '.heic' or not source.is_file():
                   continue
               target = source.with_suffix('.jpg')
               try:
                   with Image.open(source) as img:
                       img.convert('RGB').save(target, format='JPEG', quality=90, optimize=True)
+                  source.unlink()
                   converted.append((str(source), str(target)))
               except Exception as exc:
                   print(f'Failed to convert {source}: {exc}')
@@ -57,7 +58,7 @@ jobs:
 
       - name: Commit converted JPEG files
         run: |
-          git add images/hikes
+          git add -A
           if git diff --cached --quiet; then
             echo "No converted files to commit."
             exit 0
