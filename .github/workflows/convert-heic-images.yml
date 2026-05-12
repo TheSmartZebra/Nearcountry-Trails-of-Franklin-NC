@@ -31,6 +31,7 @@ jobs:
           python - <<'PY'
           from pathlib import Path
           import subprocess
+          import traceback
           from PIL import Image
           import pillow_heif
 
@@ -57,11 +58,16 @@ jobs:
                       source.unlink()
                   except Exception as delete_exc:
                       target.unlink(missing_ok=True)
-                      raise RuntimeError(f'Failed to delete original HEIC file {source}; rolling back by removing converted JPEG: {delete_exc}') from delete_exc
+                      raise RuntimeError(
+                          f'Failed to delete original HEIC file {source}; '
+                          f'rolling back by removing converted JPEG. '
+                          f'{type(delete_exc).__name__}: {delete_exc}'
+                      ) from delete_exc
                   converted.append((str(source), str(target)))
               except Exception as exc:
                   print(f'Failed to convert {source}: {exc}')
-                  failed.append(str(source))
+                  traceback.print_exc()
+                  failed.append((str(source), f'{type(exc).__name__}: {exc}'))
 
           if not converted:
               print('No HEIC files found to convert.')
@@ -72,8 +78,8 @@ jobs:
 
           if failed:
               print('HEIC files that failed conversion:')
-              for path in failed:
-                  print(f'- {path}')
+              for path, err in failed:
+                  print(f'- {path}: {err}')
               raise SystemExit(1)
           PY
 
