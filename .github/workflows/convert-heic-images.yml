@@ -48,9 +48,15 @@ jobs:
               try:
                   with Image.open(source) as img:
                       img.convert('RGB').save(target, format='JPEG', quality=90, optimize=True)
-                  if not target.exists() or target.stat().st_size == 0:
-                      raise RuntimeError(f'JPEG output was not created correctly: {target}')
-                  source.unlink()
+                  if not target.exists():
+                      raise RuntimeError(f'JPEG output was not created: {target}')
+                  if target.stat().st_size == 0:
+                      raise RuntimeError(f'JPEG output is empty: {target}')
+                  try:
+                      source.unlink()
+                  except Exception as delete_exc:
+                      target.unlink(missing_ok=True)
+                      raise RuntimeError(f'Converted JPEG was rolled back because HEIC deletion failed: {delete_exc}') from delete_exc
                   converted.append((str(source), str(target)))
               except Exception as exc:
                   print(f'Failed to convert {source}: {exc}')
