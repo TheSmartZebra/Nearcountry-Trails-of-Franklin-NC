@@ -480,6 +480,19 @@
             }
             return '';
         }
+        function escapeHtmlAttr(value) {
+            return String(value)
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+        function sanitizeImageSrc(value) {
+            const src = String(value || '').trim();
+            if (!src || /^(javascript|data):/i.test(src)) return '';
+            return encodeURI(src);
+        }
 
         function renderTrails() {
             const grid = document.getElementById('trail-grid');
@@ -493,13 +506,20 @@
                 const trailImages = Array.isArray(trail.imgs)
                     ? trail.imgs
                     : (trail.img ? [trail.img] : []);
+                const safeTrailName = escapeHtmlAttr(trail.name);
                 let galleryHtml = ``;
                 if (trailImages.length > 0) {
                     const galleryClass = trailImages.length === 1 ? 'trail-gallery single' : 'trail-gallery';
+                    const galleryImagesHtml = trailImages.map((img, idx) => {
+                        const safeImgSrc = sanitizeImageSrc(img);
+                        if (!safeImgSrc) return '';
+                        const altText = escapeHtmlAttr(`${trail.name} scenic trail view ${idx + 1}`);
+                        return `<img src="${safeImgSrc}" alt="${altText}" loading="lazy">`;
+                    }).join('');
                     galleryHtml = `
-                        <div class="${galleryClass}" role="region" aria-label="${trail.name} photos">
+                        <div class="${galleryClass}" role="region" aria-label="${safeTrailName} photos">
                             <div class="trail-gallery-track">
-                                ${trailImages.map((img, idx) => `<img src="${img}" alt="${trail.name} scenic trail view ${idx + 1}" loading="lazy">`).join('')}
+                                ${galleryImagesHtml}
                             </div>
                         </div>
                     `;
@@ -673,7 +693,6 @@
         }
 
         async function initializeTrails() {
-            renderTrails();
             await loadTrailImagesFromRepository();
             renderTrails();
         }

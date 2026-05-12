@@ -40,9 +40,12 @@ jobs:
               if source.suffix.lower() != '.heic' or not source.is_file():
                   continue
               target = source.with_suffix('.jpg')
-              with Image.open(source) as img:
-                  img.convert('RGB').save(target, format='JPEG', quality=90, optimize=True)
-              converted.append((str(source), str(target)))
+              try:
+                  with Image.open(source) as img:
+                      img.convert('RGB').save(target, format='JPEG', quality=90, optimize=True)
+                  converted.append((str(source), str(target)))
+              except Exception as exc:
+                  print(f'Failed to convert {source}: {exc}')
 
           if not converted:
               print('No HEIC files found to convert.')
@@ -54,12 +57,12 @@ jobs:
 
       - name: Commit converted JPEG files
         run: |
-          if git diff --quiet; then
+          git add images/hikes
+          if git diff --cached --quiet; then
             echo "No converted files to commit."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add images/hikes
           git commit -m "chore: auto-convert uploaded HEIC hike images to JPEG"
           git push
