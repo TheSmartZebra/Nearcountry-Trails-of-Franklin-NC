@@ -40,13 +40,13 @@ jobs:
           converted = []
           failed = []
           try:
-              tracked_files = subprocess.check_output(['git', 'ls-files', '--', '**/*.heic', '**/*.HEIC'], text=True).splitlines()
+              tracked_files = subprocess.check_output(['git', 'ls-files'], text=True).splitlines()
           except subprocess.CalledProcessError as exc:
               raise RuntimeError(f'Failed to list tracked HEIC files via git: {exc}') from exc
 
           for relpath in tracked_files:
               source = Path(relpath)
-              if not source.is_file():
+              if source.suffix.lower() != '.heic' or not source.is_file():
                   continue
               target = source.with_suffix('.jpg')
               try:
