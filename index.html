@@ -372,11 +372,11 @@
     <script>
         /*
            Trail Data populated directly from the pamphlet.
-           Add trail photos with `imgs: ["path/to/photo1.jpg", "path/to/photo2.jpg"]`.
-           `img` is still accepted as a legacy single-photo fallback.
+           Trail photos are auto-discovered from `images/hikes/<trail-folder>/`.
+           `imgs` and legacy `img` remain supported for explicit overrides.
         */
         let trails = [
-            { id: 1, name: "1. Bessie's Loop", category: "Bartram Trail", catColor: "#7fa838", lat: 35.18025, lng: -83.43328, length: "1.1 mi", elevation: "250 ft", typeText: "Loop", typeIcon: "loop", desc: "Short loop with native flora.", imgs: ["images/hikes/01-bessies-loop/IMG_3670.jpg", "images/hikes/01-bessies-loop/IMG_3679.jpg"] },
+            { id: 1, name: "1. Bessie's Loop", category: "Bartram Trail", catColor: "#7fa838", lat: 35.18025, lng: -83.43328, length: "1.1 mi", elevation: "250 ft", typeText: "Loop", typeIcon: "loop", desc: "Short loop with native flora." },
             { id: 2, name: "2. William’s Pulpit", category: "Bartram Trail", catColor: "#7fa838", lat: 35.18025, lng: -83.43328, length: "4.2 mi", elevation: "1,080 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Scenic overlook." },
             { id: 3, name: "3. Hickory Knoll Rd. to The Pinnacle", category: "Bartram Trail", catColor: "#7fa838", lat: 35.07975, lng: -83.37694, length: "4.5 mi", elevation: "1,340 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Highest elevation trail here." },
             { id: 4, name: "4. Mud Creek", category: "Old Road Bed", catColor: "#ab7d27", lat: 34.99242, lng: -83.34756, length: "2.3 mi", elevation: "240 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Follows an old road bed." },
@@ -404,6 +404,58 @@
             { id: 22, name: "22. Macon Middle Loop", category: "Schools", catColor: "#2729ab", lat: 35.16136, lng: -83.35739, length: "0.5 mi", elevation: "20 ft", typeText: "Loop", typeIcon: "loop", desc: "School walking path." },
             { id: 23, name: "23. South Macon Loop", category: "Schools", catColor: "#2729ab", lat: 35.11281, lng: -83.40003, length: "0.5 mi", elevation: "20 ft", typeText: "Loop", typeIcon: "loop", desc: "School walking path." },
         ];
+        const REPO_OWNER = 'TheSmartZebra';
+        const REPO_NAME = 'Nearcountry-Trails-of-Franklin-NC';
+        const REPO_BRANCH = 'main';
+        const HIKES_IMAGE_ROOT = 'images/hikes';
+        const WEB_IMAGE_PATTERN = /\.(jpe?g|png|webp|gif|avif)$/i;
+
+        function getTrailImageFolder(trail) {
+            if (trail.imageFolder) return trail.imageFolder;
+            const baseName = trail.name.replace(/^\s*\d+\.\s*/, '');
+            const slug = baseName
+                .normalize('NFKD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/['’`]/g, '')
+                .replace(/&/g, ' and ')
+                .replace(/[^a-zA-Z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '')
+                .toLowerCase();
+            return `${String(trail.id).padStart(2, '0')}-${slug}`;
+        }
+
+        async function loadTrailImagesFromRepository() {
+            try {
+                const treeUrl = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/git/trees/${REPO_BRANCH}?recursive=1`;
+                const response = await fetch(treeUrl);
+                if (!response.ok) throw new Error(`Image tree fetch failed (${response.status})`);
+                const data = await response.json();
+                if (!Array.isArray(data.tree)) return;
+
+                const imagesByFolder = {};
+                data.tree.forEach(item => {
+                    if (item.type !== 'blob' || !item.path.startsWith(`${HIKES_IMAGE_ROOT}/`)) return;
+                    if (!WEB_IMAGE_PATTERN.test(item.path)) return;
+                    const parts = item.path.split('/');
+                    if (parts.length < 4) return;
+                    const folderPath = parts.slice(0, 3).join('/');
+                    if (!imagesByFolder[folderPath]) imagesByFolder[folderPath] = [];
+                    imagesByFolder[folderPath].push(item.path);
+                });
+
+                Object.values(imagesByFolder).forEach(imagePaths => {
+                    imagePaths.sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
+                });
+
+                trails.forEach(trail => {
+                    if (Array.isArray(trail.imgs) && trail.imgs.length > 0) return;
+                    const folderPath = `${HIKES_IMAGE_ROOT}/${getTrailImageFolder(trail)}`;
+                    trail.imgs = imagesByFolder[folderPath] || [];
+                });
+            } catch (error) {
+                console.warn('Auto-loading trail images failed:', error);
+            }
+        }
 
         // Device routing logic
         function openMap(lat, lng) {
@@ -620,7 +672,12 @@
             );
         }
 
-        window.onload = renderTrails;
+        async function initializeTrails() {
+            renderTrails();
+            await loadTrailImagesFromRepository();
+            renderTrails();
+        }
+        window.addEventListener('load', initializeTrails);
 
         // ── PWA Install Logic ──────────────────────────────────────────────
         let _deferredInstallPrompt = null;
