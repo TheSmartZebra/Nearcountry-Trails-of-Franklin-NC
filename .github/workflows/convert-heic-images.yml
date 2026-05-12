@@ -36,13 +36,15 @@ jobs:
           pillow_heif.register_heif_opener()
 
           converted = []
-          for source in Path('.').rglob('*'):
-              if source.suffix.lower() != '.heic' or not source.is_file():
+          for source in Path('.').rglob('*.[hH][eE][iI][cC]'):
+              if not source.is_file():
                   continue
               target = source.with_suffix('.jpg')
               try:
                   with Image.open(source) as img:
                       img.convert('RGB').save(target, format='JPEG', quality=90, optimize=True)
+                  if not target.exists() or target.stat().st_size == 0:
+                      raise RuntimeError(f'JPEG output was not created correctly: {target}')
                   source.unlink()
                   converted.append((str(source), str(target)))
               except Exception as exc:
@@ -65,5 +67,5 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "chore: auto-convert uploaded HEIC hike images to JPEG"
+          git commit -m "chore: auto-convert uploaded HEIC images to JPEG"
           git push
