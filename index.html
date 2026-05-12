@@ -412,6 +412,19 @@
         const MIN_TRAIL_IMAGE_PATH_PARTS = 4;
         const IMAGE_TREE_CACHE_KEY = 'trail-image-tree-v1';
         const IMAGE_TREE_CACHE_TTL_MS = 60 * 60 * 1000;
+        const SITE_BASE_PATH = (() => {
+            const repoPath = `/${REPO_NAME}`;
+            const path = window.location.pathname || '/';
+            if (path === repoPath || path.startsWith(`${repoPath}/`)) return repoPath;
+            return '';
+        })();
+
+        function toSiteAssetPath(path) {
+            const cleanPath = String(path || '').replace(/^\/+/, '');
+            if (!cleanPath) return '';
+            if (!SITE_BASE_PATH) return `/${cleanPath}`;
+            return `${SITE_BASE_PATH}/${cleanPath}`;
+        }
 
         function getTrailImageFolder(trail) {
             if (trail.imageFolder) return trail.imageFolder;
@@ -460,7 +473,7 @@
                     if (parts.length < MIN_TRAIL_IMAGE_PATH_PARTS) return;
                     const folderPath = parts.slice(0, 3).join('/');
                     if (!imagesByFolder[folderPath]) imagesByFolder[folderPath] = [];
-                    imagesByFolder[folderPath].push(item.path);
+                    imagesByFolder[folderPath].push(toSiteAssetPath(item.path));
                 });
 
                 Object.values(imagesByFolder).forEach(imagePaths => {
@@ -516,6 +529,11 @@
             if (!isHttp && !isRelativePath) return '';
             return escapeHtmlAttr(encodeURI(src));
         }
+        function resolveImageSrc(value) {
+            const src = String(value || '').trim();
+            if (/^images\//i.test(src)) return toSiteAssetPath(src);
+            return src;
+        }
 
         function renderTrails() {
             const grid = document.getElementById('trail-grid');
@@ -534,7 +552,7 @@
                 if (trailImages.length > 0) {
                     const galleryClass = trailImages.length === 1 ? 'trail-gallery single' : 'trail-gallery';
                     const galleryImagesHtml = trailImages.map((img, idx) => {
-                        const safeImgSrc = sanitizeImageSrc(img);
+                        const safeImgSrc = sanitizeImageSrc(resolveImageSrc(img));
                         if (!safeImgSrc) return '';
                         const altText = escapeHtmlAttr(`${trail.name} scenic trail view ${idx + 1}`);
                         return `<img src="${safeImgSrc}" alt="${altText}" loading="lazy">`;
