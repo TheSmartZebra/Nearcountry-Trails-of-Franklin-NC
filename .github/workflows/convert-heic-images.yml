@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'images/hikes/**'
+      - '**/*.[Hh][Ee][Ii][Cc]'
   workflow_dispatch:
 
 permissions:
