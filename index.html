@@ -6,7 +6,7 @@
     <title>Nearcountry Trails of Franklin, NC</title>
     
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#2E7D32">
+    <meta name="theme-color" content="#123126">
     <link rel="apple-touch-icon" href="background.jpg">
 
     <!-- Preconnect to Google Fonts to reduce latency on first visit -->
@@ -16,239 +16,444 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&display=swap" />
 
     <style>
-        /* Liquid Glass / Glassmorphism Design */
+        :root {
+            color-scheme: dark;
+            --page-bg: #081714;
+            --panel-bg: rgba(7, 24, 28, 0.74);
+            --panel-border: rgba(204, 241, 229, 0.12);
+            --panel-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+            --text-primary: #f4fbf8;
+            --text-secondary: rgba(234, 245, 240, 0.82);
+            --text-muted: rgba(207, 229, 220, 0.64);
+            --chip-bg: rgba(255, 255, 255, 0.08);
+            --chip-border: rgba(255, 255, 255, 0.11);
+            --control-bg: rgba(255, 255, 255, 0.08);
+            --control-border: rgba(255, 255, 255, 0.14);
+            --control-bg-hover: rgba(255, 255, 255, 0.16);
+            --status-color: #9be8be;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background: url('background.jpg') no-repeat center center fixed;
+            background:
+                linear-gradient(180deg, rgba(4, 14, 17, 0.22), rgba(4, 14, 17, 0.88)),
+                radial-gradient(circle at top left, rgba(95, 199, 158, 0.22), transparent 36%),
+                radial-gradient(circle at top right, rgba(53, 124, 170, 0.28), transparent 32%),
+                url('background.jpg') no-repeat center center fixed;
             background-size: cover;
-            color: #fff;
-            text-align: center;
-            padding: 20px 10px;
+            color: var(--text-primary);
             margin: 0;
             min-height: 100vh;
+            padding: 24px 12px 56px;
         }
-        /* Dark overlay */
-        body::before {
+
+        body::before,
+        body::after {
             content: '';
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(38, 38, 38, 0.4); 
+            inset: 0;
+            pointer-events: none;
             z-index: -1;
         }
+
+        body::before {
+            background: linear-gradient(180deg, rgba(5, 17, 20, 0.32) 0%, rgba(5, 17, 20, 0.72) 100%);
+        }
+
+        body::after {
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+            background-size: 32px 32px;
+            opacity: 0.12;
+        }
+
         .container {
             position: relative;
             z-index: 1;
-            max-width: 1400px;
+            max-width: 1340px;
             margin: 0 auto;
         }
-        
-        /* Glass Header */
+
         .header {
-            margin-bottom: 25px;
-            background: rgba(255, 255, 255, 0.1);
-            -webkit-backdrop-filter: blur(15px);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
+            display: grid;
+            gap: 18px;
+            margin-bottom: 24px;
             padding: 20px;
-            box-shadow: 0 8px 32px 0 rgba(38, 38, 38, 0.3);
-        }
-        h1 {
-            font-size: 26px;
-            margin: 0 0 5px 0;
-            text-shadow: 1px 1px 4px rgba(38, 38, 38, 0.5);
-        }
-        p {
-            font-size: 15px;
-            margin-top: 0;
-            opacity: 0.9;
+            border: 1px solid var(--panel-border);
+            border-radius: 28px;
+            background:
+                linear-gradient(135deg, rgba(20, 69, 63, 0.42), rgba(7, 24, 28, 0.78)),
+                var(--panel-bg);
+            -webkit-backdrop-filter: blur(22px);
+            backdrop-filter: blur(22px);
+            box-shadow: var(--panel-shadow);
+            text-align: left;
         }
 
-        /* Controls */
-        .controls {
-            margin-top: 15px;
-            display: flex;
+        .hero-copy {
+            display: grid;
+            gap: 12px;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
             gap: 8px;
-            justify-content: center;
+            width: fit-content;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: #d6f7df;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(32px, 6vw, 54px);
+            line-height: 1;
+            letter-spacing: -0.04em;
+        }
+
+        p {
+            margin: 0;
+            color: var(--text-secondary);
+        }
+
+        .hero-lead {
+            max-width: 680px;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+
+        .header-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .header-stat {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 12px;
+            border-radius: 999px;
+            background: var(--chip-bg);
+            border: 1px solid var(--chip-border);
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .header-panel {
+            display: grid;
+            gap: 12px;
+            align-content: start;
+            padding: 16px;
+            border-radius: 22px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+        }
+
+        .controls-title {
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
             flex-wrap: wrap;
         }
+
         .btn-glass {
-            background: rgba(255, 255, 255, 0.2);
-            color: #fff;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            padding: 8px 14px;
+            appearance: none;
+            background: var(--control-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--control-border);
+            padding: 10px 15px;
             font-size: 14px;
-            font-weight: 600;
-            border-radius: 20px;
+            font-weight: 700;
+            border-radius: 16px;
             cursor: pointer;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(38, 38, 38, 0.2);
-            display: flex;
+            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(8px);
+            transition: background 0.2s ease, transform 0.2s ease, border-color 0.2s ease, opacity 0.2s ease;
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+            display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
             white-space: nowrap;
         }
-        .btn-glass:hover, .btn-glass:active {
-            background: rgba(255, 255, 255, 0.35);
-            transform: translateY(-2px);
-        }
-        @media (min-width: 600px) {
-            .controls {
-                gap: 10px;
-            }
-            .btn-glass {
-                padding: 8px 16px;
-            }
-        }
-        #status-msg {
-            font-size: 14px;
-            margin-top: 10px;
-            color: #a8e6cf;
-            height: 20px;
-            font-weight: 600;
-            text-shadow: 1px 1px 2px rgba(38, 38, 38, 0.8);
+
+        .btn-glass:hover,
+        .btn-glass:focus-visible {
+            background: var(--control-bg-hover);
+            border-color: rgba(255, 255, 255, 0.26);
+            transform: translateY(-1px);
+            outline: none;
         }
 
-        /* Grid & Glass Cards */
+        .btn-glass:disabled {
+            cursor: wait;
+            opacity: 0.55;
+        }
+
+        #status-msg {
+            min-height: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--status-color);
+        }
+
+        .trail-section {
+            display: grid;
+            gap: 16px;
+        }
+
+        .section-heading {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 14px;
+            align-items: flex-end;
+            padding: 0 4px;
+            text-align: left;
+        }
+
+        .section-heading h2 {
+            margin: 0;
+            font-size: clamp(24px, 4vw, 34px);
+            letter-spacing: -0.03em;
+        }
+
+        .section-heading p {
+            max-width: 560px;
+            font-size: 15px;
+            line-height: 1.55;
+            color: var(--text-muted);
+        }
+
         .grid {
             display: grid;
             grid-template-columns: 1fr;
             gap: 20px;
         }
-        @media(min-width: 600px) {
-            .grid { grid-template-columns: 1fr 1fr; }
+
+        @media (min-width: 700px) {
+            .grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
         }
-        @media(min-width: 960px) {
-            .grid { grid-template-columns: 1fr 1fr 1fr; }
+
+        @media (min-width: 1040px) {
+            .header {
+                grid-template-columns: minmax(0, 1.5fr) minmax(320px, 0.9fr);
+                align-items: stretch;
+            }
+
+            .grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
         }
-        @media(min-width: 1280px) {
-            .grid { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+        @media (min-width: 1320px) {
+            .grid {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+            }
         }
+
         .card {
-            background: rgba(255, 255, 255, 0.1);
-            -webkit-backdrop-filter: blur(15px);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
-            box-shadow: 0 8px 32px 0 rgba(38, 38, 38, 0.3);
+            position: relative;
+            display: grid;
             overflow: hidden;
+            border-radius: 24px;
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(5, 18, 22, 0.82)),
+                rgba(6, 22, 27, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 42px rgba(0, 0, 0, 0.28);
             text-align: left;
-            transition: transform 0.3s ease;
         }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            inset: 0 auto auto 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--trail-color), rgba(255, 255, 255, 0.18));
+        }
+
         .card-content {
-            padding: 16px;
+            display: grid;
+            gap: 16px;
+            padding: 20px;
         }
+
         .category-badge {
-            display: inline-block;
-            padding: 3px 8px;
-            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: fit-content;
+            padding: 6px 11px;
+            border-radius: 999px;
             font-size: 11px;
-            font-weight: 700;
+            font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.08em;
             color: #fff;
-            margin-bottom: 8px;
-            box-shadow: 0 2px 4px rgba(38, 38, 38, 0.3);
+            background: var(--trail-color-soft);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
         }
+
         .card-title {
-            font-size: 18px;
-            font-weight: 700;
-            margin: 0 0 8px 0;
-            text-shadow: 1px 1px 3px rgba(38, 38, 38, 0.6);
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            gap: 10px;
-        }
-
-        /* Trail Stats (Icons & Info) */
-        .trail-stats {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
-        .stat-badge {
-            background: rgba(38, 38, 38, 0.3);
-            border: 1px solid rgba(255,255,255,0.15);
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            color: #e0f2f1;
-        }
-        .stat-badge .material-symbols-outlined {
-            font-size: 16px;
-            color: #a8e6cf;
+            gap: 12px;
+            margin: 0;
+            font-size: 21px;
+            line-height: 1.25;
+            letter-spacing: -0.03em;
         }
 
         .card-dist {
-            font-size: 13px;
-            color: #a8e6cf;
-            font-weight: 600;
-            text-align: right;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+            padding: 8px 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #a7f0c6;
+            font-size: 12px;
+            font-weight: 700;
             white-space: nowrap;
         }
+
+        .trail-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .stat-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 10px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .stat-badge .material-symbols-outlined,
+        .stat-badge svg {
+            color: var(--trail-color);
+            flex-shrink: 0;
+        }
+
         .trail-desc {
+            margin: 0;
+            padding-top: 14px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            color: var(--text-secondary);
             font-size: 14px;
-            color: #e0e0e0;
-            line-height: 1.4;
-            margin-bottom: 15px;
-            margin-top: 0;
-            padding-top: 10px;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            line-height: 1.6;
         }
+
         .trail-gallery {
-            margin: -4px 0 14px 0;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
             overflow: hidden;
+            border-radius: 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(4, 15, 17, 0.42);
         }
+
         .trail-gallery-track {
             display: flex;
             overflow-x: auto;
+            gap: 0;
             scroll-snap-type: x mandatory;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: thin;
-            background: rgba(38, 38, 38, 0.2);
         }
+
         .trail-gallery-track img {
             width: 100%;
-            height: 180px;
-            object-fit: cover;
-            display: block;
+            height: 220px;
             flex: 0 0 100%;
+            display: block;
+            object-fit: cover;
             scroll-snap-align: start;
+            background: rgba(255, 255, 255, 0.04);
         }
+
         .trail-gallery.single .trail-gallery-track {
             overflow: hidden;
         }
+
         .map-btn {
-            background-color: rgba(46, 125, 50, 0.8);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.4);
-            padding: 12px;
+            appearance: none;
             width: 100%;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 16px;
+            padding: 14px 16px;
+            margin-top: 2px;
             cursor: pointer;
-            transition: all 0.2s;
-            -webkit-tap-highlight-color: transparent;
-            backdrop-filter: blur(5px);
-            display: flex;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            margin-top: 5px;
+            background: linear-gradient(135deg, var(--trail-color), var(--trail-color-deep));
+            color: #fff;
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 0.01em;
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease, filter 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
         }
+
+        .map-btn:hover,
+        .map-btn:focus-visible {
+            transform: translateY(-1px);
+            filter: brightness(1.06);
+            outline: none;
+        }
+
         .map-btn:active {
-            background-color: rgba(27, 94, 32, 0.9);
-            transform: scale(0.98);
+            transform: translateY(1px) scale(0.99);
+        }
+
+        @media (max-width: 699px) {
+            body {
+                padding-top: 16px;
+            }
+
+            .header,
+            .card-content {
+                padding: 18px;
+            }
+
+            .trail-gallery-track img {
+                height: 200px;
+            }
         }
 
         /* PWA Install Info Panel */
@@ -329,34 +534,55 @@
 
     <div class="container">
         <div class="header">
-            <h1>Nearcountry Trails</h1>
-            <p>Franklin, NC • Select a trail to navigate</p>
-            <div class="controls">
-                <button class="btn-glass" onclick="sortByDistance()" title="Sort by Length">
-                    <span class="material-symbols-outlined" style="font-size:18px;">straighten</span> Length
-                </button>
-                <button class="btn-glass" onclick="sortByElevation()" title="Sort by Elevation Gain">
-                    <span class="material-symbols-outlined" style="font-size:18px;">terrain</span> Elevation
-                </button>
-                <button class="btn-glass" onclick="sortByType()" title="Group by Trail Type">
-                    <span class="material-symbols-outlined" style="font-size:18px;">category</span> Type
-                </button>
-                <button class="btn-glass" onclick="sortByDrivingTime()" id="sort-btn">
-                    <span class="material-symbols-outlined" style="font-size:18px;">directions_car</span> Nearest Drive
-                </button>
-                <button class="btn-glass" onclick="resetSort()" title="Clear Filters/Sort">
-                    <span class="material-symbols-outlined" style="font-size:18px;">refresh</span> Reset
-                </button>
-                <button class="btn-glass" id="pwa-btn" onclick="showPwaInfo()" title="Add to Home Screen">
-                    <span class="material-symbols-outlined" style="font-size:18px;">download_for_offline</span> Install
-                </button>
+            <div class="hero-copy">
+                <span class="eyebrow">Franklin, North Carolina</span>
+                <h1>Nearcountry Trails</h1>
+                <p class="hero-lead">A faster, cleaner guide to Franklin’s trail network—compare trail details, swipe through photos, and launch directions with one tap.</p>
+                <div class="header-stats">
+                    <span class="header-stat"><span class="material-symbols-outlined" style="font-size:16px;">route</span> 23 trail stops</span>
+                    <span class="header-stat"><span class="material-symbols-outlined" style="font-size:16px;">photo_library</span> Trail photo galleries</span>
+                    <span class="header-stat"><span class="material-symbols-outlined" style="font-size:16px;">near_me</span> Built for quick navigation</span>
+                </div>
             </div>
-            <div id="status-msg"></div>
+
+            <div class="header-panel">
+                <p class="controls-title">Browse smarter</p>
+                <div class="controls">
+                    <button class="btn-glass" onclick="sortByDistance()" title="Sort by Length">
+                        <span class="material-symbols-outlined" style="font-size:18px;">straighten</span> Length
+                    </button>
+                    <button class="btn-glass" onclick="sortByElevation()" title="Sort by Elevation Gain">
+                        <span class="material-symbols-outlined" style="font-size:18px;">terrain</span> Elevation
+                    </button>
+                    <button class="btn-glass" onclick="sortByType()" title="Group by Trail Type">
+                        <span class="material-symbols-outlined" style="font-size:18px;">category</span> Type
+                    </button>
+                    <button class="btn-glass" onclick="sortByDrivingTime()" id="sort-btn">
+                        <span class="material-symbols-outlined" style="font-size:18px;">directions_car</span> Nearest Drive
+                    </button>
+                    <button class="btn-glass" onclick="resetSort()" title="Clear Filters/Sort">
+                        <span class="material-symbols-outlined" style="font-size:18px;">refresh</span> Reset
+                    </button>
+                    <button class="btn-glass" id="pwa-btn" onclick="showPwaInfo()" title="Add to Home Screen">
+                        <span class="material-symbols-outlined" style="font-size:18px;">download_for_offline</span> Install
+                    </button>
+                </div>
+                <div id="status-msg" aria-live="polite"></div>
+            </div>
         </div>
 
-        <div class="grid" id="trail-grid">
-            <!-- Cards dynamically injected here -->
-        </div>
+        <section class="trail-section" aria-labelledby="trail-section-title">
+            <div class="section-heading">
+                <div>
+                    <h2 id="trail-section-title">Trail picks at a glance</h2>
+                    <p>Every card keeps the key stats, a quick description, swipeable photos, and a category-colored navigation button together in one place.</p>
+                </div>
+            </div>
+
+            <div class="grid" id="trail-grid">
+                <!-- Cards dynamically injected here -->
+            </div>
+        </section>
     </div>
 
     <!-- PWA Install Info Panel (not a browser popup) -->
@@ -384,7 +610,27 @@
             { id: 6, name: "6. Gibson Bottoms", category: "Mainspring", catColor: "#ab2c3f", lat: 35.23272, lng: -83.39133, length: "1.7 mi", elevation: "40-170 ft", typeText: "Network", typeIcon: "hub", desc: "Intersecting trails in bottoms." },
             { id: 7, name: "7. Onion Mtn. North", category: "Mainspring", catColor: "#ab2c3f", lat: 35.21131, lng: -83.29542, length: "2-5 mi", elevation: "490-1.6k ft", typeText: "Network", typeIcon: "hub", desc: "Steeper trail network." },
             { id: 8, name: "8. Onion Mtn. South", category: "Mainspring", catColor: "#ab2c3f", lat: 35.19019, lng: -83.28244, length: "2-5 mi", elevation: "600-1.6k ft", typeText: "Network", typeIcon: "hub", desc: "Connects with Onion Mtn North." },
-            { id: 9, name: "9. Tessentee Bottomland", category: "Mainspring", catColor: "#ab2c3f", lat: 35.06889, lng: -83.37997, length: "1-3 mi", elevation: "120 ft", typeText: "Network", typeIcon: "hub", desc: "Rich ecological bottomlands." },
+            {
+                id: 9,
+                name: "9. Tessentee Bottomland",
+                category: "Mainspring",
+                catColor: "#ab2c3f",
+                lat: 35.06889,
+                lng: -83.37997,
+                length: "1-3 mi",
+                elevation: "120 ft",
+                typeText: "Network",
+                typeIcon: "hub",
+                desc: "Rich ecological bottomlands.",
+                imgs: [
+                    'images/hikes/09-tessentee-bottomland/IMG_3722.jpg',
+                    'images/hikes/09-tessentee-bottomland/IMG_3726.jpg',
+                    'images/hikes/09-tessentee-bottomland/IMG_3727.jpg',
+                    'images/hikes/09-tessentee-bottomland/IMG_3731.jpg',
+                    'images/hikes/09-tessentee-bottomland/IMG_3735.jpg',
+                    'images/hikes/09-tessentee-bottomland/IMG_3737.jpg'
+                ]
+            },
             { id: 10, name: "10. Winding Stair Gap to Siler Bald", category: "Appalachian Trail", catColor: "#2b6e8c", lat: 35.12067, lng: -83.54708, length: "9 mi", elevation: "1,450 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Beautiful balds." },
             { id: 11, name: "11. Winding Stair Gap South", category: "Appalachian Trail", catColor: "#2b6e8c", lat: 35.11986, lng: -83.54797, length: "Varies", elevation: "Varies", typeText: "Out & Back", typeIcon: "timeline", desc: "Hike as far as you want." },
             { id: 12, name: "12. Parker Meadows", category: "Park", catColor: "#914b96", lat: 35.15472, lng: -83.45669, length: "1.1 mi", elevation: "250 ft", typeText: "Loop", typeIcon: "loop", desc: "Great family walking loop." },
@@ -410,7 +656,7 @@
         const HIKES_IMAGE_ROOT = 'images/hikes';
         const WEB_IMAGE_PATTERN = /\.(jpe?g|png|webp|gif|avif)$/i;
         const MIN_TRAIL_IMAGE_PATH_PARTS = 4;
-        const IMAGE_TREE_CACHE_KEY = 'trail-image-tree-v2';
+        const IMAGE_TREE_CACHE_KEY = 'trail-image-tree-v3';
         const IMAGE_TREE_CACHE_TTL_MS = 60 * 60 * 1000;
         const SITE_BASE_PATH = (() => {
             const repoPath = `/${REPO_NAME}`;
@@ -513,13 +759,16 @@
             }
             return '';
         }
-        function escapeHtmlAttr(value) {
+        function escapeHtml(value) {
             return String(value)
                 .replace(/&/g, '&amp;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;');
+        }
+        function escapeHtmlAttr(value) {
+            return escapeHtml(value)
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
         }
         function sanitizeImageSrc(value) {
             const src = String(value || '').trim();
@@ -534,71 +783,105 @@
             if (/^images\//i.test(src)) return toSiteAssetPath(src);
             return src;
         }
+        function hexToRgb(hex) {
+            const normalized = String(hex || '').trim().replace('#', '');
+            if (!/^[0-9a-f]{6}$/i.test(normalized)) return null;
+            return {
+                r: parseInt(normalized.slice(0, 2), 16),
+                g: parseInt(normalized.slice(2, 4), 16),
+                b: parseInt(normalized.slice(4, 6), 16)
+            };
+        }
+        function hexToRgba(hex, alpha) {
+            const rgb = hexToRgb(hex);
+            if (!rgb) return `rgba(255, 255, 255, ${alpha})`;
+            return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+        }
+        function adjustHex(hex, amount) {
+            const rgb = hexToRgb(hex);
+            if (!rgb) return hex;
+            const clamp = value => Math.max(0, Math.min(255, value));
+            const toHex = value => clamp(value).toString(16).padStart(2, '0');
+            return `#${toHex(rgb.r + amount)}${toHex(rgb.g + amount)}${toHex(rgb.b + amount)}`;
+        }
+        function getTrailThemeStyle(trail) {
+            return `--trail-color: ${trail.catColor}; --trail-color-soft: ${hexToRgba(trail.catColor, 0.24)}; --trail-color-deep: ${adjustHex(trail.catColor, -28)};`;
+        }
+        function getTrailImages(trail) {
+            return Array.isArray(trail.imgs)
+                ? trail.imgs
+                : (trail.img ? [trail.img] : []);
+        }
+        function renderTrailGallery(trail, trailImages) {
+            if (trailImages.length === 0) return '';
+            const safeTrailName = escapeHtmlAttr(trail.name);
+            const galleryClass = trailImages.length === 1 ? 'trail-gallery single' : 'trail-gallery';
+            const galleryImagesHtml = trailImages.map((img, idx) => {
+                const safeImgSrc = sanitizeImageSrc(resolveImageSrc(img));
+                if (!safeImgSrc) return '';
+                const altText = escapeHtmlAttr(`${trail.name} scenic trail view ${idx + 1}`);
+                const loadingMode = idx === 0 ? 'eager' : 'lazy';
+                return `<img src="${safeImgSrc}" alt="${altText}" loading="${loadingMode}" decoding="async">`;
+            }).join('');
+            if (!galleryImagesHtml) return '';
+            return `
+                <div class="${galleryClass}" role="region" aria-label="${safeTrailName} photos">
+                    <div class="trail-gallery-track">
+                        ${galleryImagesHtml}
+                    </div>
+                </div>
+            `;
+        }
+        function renderTrailStat(title, iconHtml, value) {
+            return `
+                <div class="stat-badge" title="${escapeHtmlAttr(title)}">
+                    ${iconHtml} ${escapeHtml(value)}
+                </div>
+            `;
+        }
+        function renderTrailCard(trail) {
+            const themeStyle = getTrailThemeStyle(trail);
+            const trailImages = getTrailImages(trail);
+            const distHtml = trail.driveTimeText
+                ? `<span class="card-dist" title="Drive time from you"><span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle;">directions_car</span> ${escapeHtml(trail.driveTimeText)}</span>`
+                : '';
+            const galleryHtml = renderTrailGallery(trail, trailImages);
+            return `
+                <article class="card" style="${themeStyle}">
+                    <div class="card-content">
+                        <div class="category-badge">${escapeHtml(trail.category)}</div>
+                        <h2 class="card-title">
+                            <span>${escapeHtml(trail.name)}</span>
+                            ${distHtml}
+                        </h2>
+
+                        <div class="trail-stats">
+                            ${renderTrailStat('Hike Length', '<span class="material-symbols-outlined">hiking</span>', trail.length)}
+                            ${renderTrailStat('Elevation Change', '<span class="material-symbols-outlined">landscape</span>', trail.elevation)}
+                            ${renderTrailStat('Trail Type', getTypeIconHtml(trail.typeIcon), trail.typeText)}
+                        </div>
+
+                        <p class="trail-desc">${escapeHtml(trail.desc)}</p>
+                        ${galleryHtml}
+
+                        <button class="map-btn" onclick="openMap(${trail.lat}, ${trail.lng})" style="${themeStyle}">
+                            <span class="material-symbols-outlined">map</span> Navigate
+                        </button>
+                    </div>
+                </article>
+            `;
+        }
+        function setStatusMessage(message) {
+            document.getElementById('status-msg').textContent = message;
+        }
+        function setDriveSortBusy(isBusy) {
+            const btn = document.getElementById('sort-btn');
+            btn.disabled = isBusy;
+        }
 
         function renderTrails() {
             const grid = document.getElementById('trail-grid');
-            let html = '';
-
-            trails.forEach(trail => {
-                let distHtml = trail.driveTimeText 
-                    ? `<span class="card-dist" title="Drive time from you"><span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle;">directions_car</span> ${trail.driveTimeText}</span>`
-                    : ``;
-                
-                const trailImages = Array.isArray(trail.imgs)
-                    ? trail.imgs
-                    : (trail.img ? [trail.img] : []);
-                const safeTrailName = escapeHtmlAttr(trail.name);
-                let galleryHtml = ``;
-                if (trailImages.length > 0) {
-                    const galleryClass = trailImages.length === 1 ? 'trail-gallery single' : 'trail-gallery';
-                    const galleryImagesHtml = trailImages.map((img, idx) => {
-                        const safeImgSrc = sanitizeImageSrc(resolveImageSrc(img));
-                        if (!safeImgSrc) return '';
-                        const altText = escapeHtmlAttr(`${trail.name} scenic trail view ${idx + 1}`);
-                        return `<img src="${safeImgSrc}" alt="${altText}" loading="lazy">`;
-                    }).join('');
-                    galleryHtml = `
-                        <div class="${galleryClass}" role="region" aria-label="${safeTrailName} photos">
-                            <div class="trail-gallery-track">
-                                ${galleryImagesHtml}
-                            </div>
-                        </div>
-                    `;
-                }
-
-                html += `
-                    <div class="card">
-                        <div class="card-content">
-                            <div class="category-badge" style="background-color: ${trail.catColor}">${trail.category}</div>
-                            <h2 class="card-title">
-                                <span>${trail.name}</span>
-                                ${distHtml}
-                            </h2>
-                            
-                            <div class="trail-stats">
-                                <div class="stat-badge" title="Hike Length">
-                                    <span class="material-symbols-outlined">hiking</span> ${trail.length}
-                                </div>
-                                <div class="stat-badge" title="Elevation Change">
-                                    <span class="material-symbols-outlined">landscape</span> ${trail.elevation}
-                                </div>
-                                <div class="stat-badge" title="Trail Type">
-                                    ${getTypeIconHtml(trail.typeIcon)} ${trail.typeText}
-                                </div>
-                            </div>
-
-                            <p class="trail-desc">${trail.desc}</p>
-                            ${galleryHtml}
-
-                            <button class="map-btn" onclick="openMap(${trail.lat}, ${trail.lng})">
-                                <span class="material-symbols-outlined">map</span> Navigate
-                            </button>
-                        </div>
-                    </div>
-                `;
-            });
-
-            grid.innerHTML = html;
+            grid.innerHTML = trails.map(renderTrailCard).join('');
         }
 
         // Helper to format seconds into readable drive time
@@ -632,25 +915,25 @@
         function sortByDistance() {
             trails.sort((a, b) => parseLength(a.length) - parseLength(b.length));
             renderTrails();
-            document.getElementById('status-msg').textContent = "Sorted by Length (Shortest to Longest)";
+            setStatusMessage("Sorted by length (shortest to longest)");
         }
 
         function sortByElevation() {
             trails.sort((a, b) => parseElevation(a.elevation) - parseElevation(b.elevation));
             renderTrails();
-            document.getElementById('status-msg').textContent = "Sorted by Elevation Gain (Lowest to Highest)";
+            setStatusMessage("Sorted by elevation gain (lowest to highest)");
         }
 
         function sortByType() {
             trails.sort((a, b) => a.typeText.localeCompare(b.typeText));
             renderTrails();
-            document.getElementById('status-msg').textContent = "Grouped by Trail Type";
+            setStatusMessage("Grouped by trail type");
         }
 
         function resetSort() {
             trails.sort((a, b) => a.id - b.id);
             renderTrails();
-            document.getElementById('status-msg').textContent = "Original Order Restored";
+            setStatusMessage("Original order restored");
         }
 
         // Haversine fallback if routing API fails
@@ -667,24 +950,20 @@
         function deg2rad(deg) { return deg * (Math.PI/180); }
 
         async function sortByDrivingTime() {
-            const statusMsg = document.getElementById('status-msg');
-            const btn = document.getElementById('sort-btn');
-            
             if (!navigator.geolocation) {
-                statusMsg.textContent = "Geolocation is not supported by your browser.";
+                setStatusMessage("Geolocation is not supported by your browser.");
                 return;
             }
 
-            statusMsg.textContent = "Locating you... (Please allow access)";
-            btn.disabled = true;
-            btn.style.opacity = '0.5';
+            setStatusMessage("Locating you… please allow access.");
+            setDriveSortBusy(true);
             
             navigator.geolocation.getCurrentPosition(
                 async function(position) {
                     const userLat = position.coords.latitude;
                     const userLng = position.coords.longitude;
                     
-                    statusMsg.textContent = "Calculating drive times...";
+                    setStatusMessage("Calculating drive times…");
 
                     // Build coordinate string for OSRM public API (format: lng,lat;lng,lat...)
                     // Index 0 is the user. Index 1+ are the trails.
@@ -720,14 +999,12 @@
                     trails.sort((a, b) => a.durationSec - b.durationSec);
 
                     renderTrails();
-                    statusMsg.textContent = "Sorted by shortest drive!";
-                    btn.disabled = false;
-                    btn.style.opacity = '1';
+                    setStatusMessage("Sorted by shortest drive");
+                    setDriveSortBusy(false);
                 },
                 function(error) {
-                    statusMsg.textContent = "Unable to get your location. Please check permissions.";
-                    btn.disabled = false;
-                    btn.style.opacity = '1';
+                    setStatusMessage("Unable to get your location. Please check permissions.");
+                    setDriveSortBusy(false);
                 },
                 { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
             );

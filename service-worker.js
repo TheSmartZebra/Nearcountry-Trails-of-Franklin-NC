@@ -1,4 +1,4 @@
-const CACHE_NAME = 'nearcountry-trails-v2';
+const CACHE_NAME = 'nearcountry-trails-v3';
 const ASSETS_TO_CACHE = [
   '/Nearcountry-Trails-of-Franklin-NC/',
   '/Nearcountry-Trails-of-Franklin-NC/index.html',
