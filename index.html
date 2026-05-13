@@ -658,7 +658,7 @@
         const MIN_TRAIL_IMAGE_PATH_PARTS = 4;
         const IMAGE_TREE_CACHE_KEY = 'trail-image-tree-v3';
         const IMAGE_TREE_CACHE_TTL_MS = 60 * 60 * 1000;
-        const FALLBACK_TRAIL_COLOR_RGB = { r: 22, g: 49, b: 38 };
+        const FALLBACK_TRAIL_COLOR_HEX = '#163126';
         const SITE_BASE_PATH = (() => {
             const repoPath = `/${REPO_NAME}`;
             const path = window.location.pathname || '/';
@@ -795,14 +795,19 @@
         }
         function hexToRgba(hex, alpha) {
             const rgb = hexToRgb(hex);
-            if (!rgb) return `rgba(${FALLBACK_TRAIL_COLOR_RGB.r}, ${FALLBACK_TRAIL_COLOR_RGB.g}, ${FALLBACK_TRAIL_COLOR_RGB.b}, ${alpha})`;
+            if (!rgb) return getFallbackRgba(alpha);
             return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+        }
+        function getFallbackRgba(alpha) {
+            const fallbackRgb = hexToRgb(FALLBACK_TRAIL_COLOR_HEX);
+            if (!fallbackRgb) return `rgba(22, 49, 38, ${alpha})`;
+            return `rgba(${fallbackRgb.r}, ${fallbackRgb.g}, ${fallbackRgb.b}, ${alpha})`;
         }
         function adjustHex(hex, amount) {
             const rgb = hexToRgb(hex);
             if (!rgb) return hex;
             const clamp = value => Math.max(0, Math.min(255, value));
-            const toHex = value => clamp(value).toString(16).padStart(2, '0');
+            const toHex = value => clamp(Math.round(value)).toString(16).padStart(2, '0');
             return `#${toHex(rgb.r + amount)}${toHex(rgb.g + amount)}${toHex(rgb.b + amount)}`;
         }
         function getTrailThemeStyle(trail) {
