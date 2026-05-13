@@ -44,7 +44,7 @@ jobs:
               tracked_files = [
                   path.decode('utf-8')
                   for path in subprocess.check_output(
-                      ['git', 'ls-files', '-z', '--', 'images/hikes']
+                      ['git', 'ls-files', '-z', '--', ':(glob)**/*.[Hh][Ee][Ii][Cc]']
                   ).split(b'\0')
                   if path
               ]
