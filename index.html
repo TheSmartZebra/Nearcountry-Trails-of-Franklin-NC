@@ -539,7 +539,7 @@
                 <h1>Nearcountry Trails</h1>
                 <p class="hero-lead">A faster, cleaner guide to Franklin’s trail network—compare trail details, swipe through photos, and launch directions with one tap.</p>
                 <div class="header-stats">
-                    <span class="header-stat"><span class="material-symbols-outlined" style="font-size:16px;">route</span> <span id="trail-count">23</span>&nbsp;trail stops</span>
+                    <span class="header-stat"><span class="material-symbols-outlined" style="font-size:16px;">route</span> <span id="trail-count-label">Curated trail stops</span></span>
                     <span class="header-stat"><span class="material-symbols-outlined" style="font-size:16px;">photo_library</span> Trail photo galleries</span>
                     <span class="header-stat"><span class="material-symbols-outlined" style="font-size:16px;">near_me</span> Built for quick navigation</span>
                 </div>
@@ -873,8 +873,10 @@
                 </article>
             `;
         }
-        function setStatusMessage(message) {
-            document.getElementById('status-msg').textContent = message;
+        function setStatusMessage(message, isError) {
+            const statusEl = document.getElementById('status-msg');
+            statusEl.textContent = message;
+            statusEl.setAttribute('aria-live', isError ? 'assertive' : 'polite');
         }
         function setDriveSortBusy(isBusy) {
             const btn = document.getElementById('sort-btn');
@@ -953,7 +955,7 @@
 
         async function sortByDrivingTime() {
             if (!navigator.geolocation) {
-                setStatusMessage("Geolocation is not supported by your browser.");
+                setStatusMessage("Geolocation is not supported by your browser.", true);
                 return;
             }
 
@@ -1005,7 +1007,7 @@
                     setDriveSortBusy(false);
                 },
                 function(error) {
-                    setStatusMessage("Unable to get your location. Please check permissions.");
+                    setStatusMessage("Unable to get your location. Please check permissions.", true);
                     setDriveSortBusy(false);
                 },
                 { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
@@ -1013,7 +1015,7 @@
         }
 
         async function initializeTrails() {
-            document.getElementById('trail-count').textContent = trails.length;
+            document.getElementById('trail-count-label').textContent = `${trails.length} trail stops`;
             await loadTrailImagesFromRepository();
             renderTrails();
         }
