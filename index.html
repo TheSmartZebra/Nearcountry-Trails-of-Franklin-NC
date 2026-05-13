@@ -567,7 +567,7 @@
                         <span class="material-symbols-outlined" style="font-size:18px;">download_for_offline</span> Install
                     </button>
                 </div>
-                <div id="status-msg" aria-live="polite"></div>
+                <div id="status-msg" role="status" aria-live="polite"></div>
             </div>
         </div>
 
@@ -794,7 +794,7 @@
         }
         function hexToRgba(hex, alpha) {
             const rgb = hexToRgb(hex);
-            if (!rgb) return `rgba(255, 255, 255, ${alpha})`;
+            if (!rgb) return `rgba(22, 49, 38, ${alpha})`;
             return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
         }
         function adjustHex(hex, amount) {
@@ -820,8 +820,7 @@
                 const safeImgSrc = sanitizeImageSrc(resolveImageSrc(img));
                 if (!safeImgSrc) return '';
                 const altText = escapeHtmlAttr(`${trail.name} scenic trail view ${idx + 1}`);
-                const loadingMode = idx === 0 ? 'eager' : 'lazy';
-                return `<img src="${safeImgSrc}" alt="${altText}" loading="${loadingMode}" decoding="async">`;
+                return `<img src="${safeImgSrc}" alt="${altText}" loading="lazy" decoding="async">`;
             }).join('');
             if (!galleryImagesHtml) return '';
             return `
@@ -842,15 +841,17 @@
         function renderTrailCard(trail) {
             const themeStyle = getTrailThemeStyle(trail);
             const trailImages = getTrailImages(trail);
+            const cardTitleId = `trail-title-${trail.id}`;
+            const navigateLabel = escapeHtmlAttr(`Open directions to ${trail.name}`);
             const distHtml = trail.driveTimeText
                 ? `<span class="card-dist" title="Drive time from you"><span class="material-symbols-outlined" style="font-size:14px; vertical-align:middle;">directions_car</span> ${escapeHtml(trail.driveTimeText)}</span>`
                 : '';
             const galleryHtml = renderTrailGallery(trail, trailImages);
             return `
-                <article class="card" style="${themeStyle}">
+                <article class="card" style="${themeStyle}" aria-labelledby="${cardTitleId}">
                     <div class="card-content">
                         <div class="category-badge">${escapeHtml(trail.category)}</div>
-                        <h2 class="card-title">
+                        <h2 class="card-title" id="${cardTitleId}">
                             <span>${escapeHtml(trail.name)}</span>
                             ${distHtml}
                         </h2>
@@ -864,7 +865,7 @@
                         <p class="trail-desc">${escapeHtml(trail.desc)}</p>
                         ${galleryHtml}
 
-                        <button class="map-btn" onclick="openMap(${trail.lat}, ${trail.lng})" style="${themeStyle}">
+                        <button class="map-btn" onclick="openMap(${trail.lat}, ${trail.lng})" style="${themeStyle}" aria-label="${navigateLabel}">
                             <span class="material-symbols-outlined">map</span> Navigate
                         </button>
                     </div>
@@ -955,7 +956,7 @@
                 return;
             }
 
-            setStatusMessage("Locating you… please allow access.");
+            setStatusMessage("Locating you... please allow access.");
             setDriveSortBusy(true);
             
             navigator.geolocation.getCurrentPosition(
@@ -963,7 +964,7 @@
                     const userLat = position.coords.latitude;
                     const userLng = position.coords.longitude;
                     
-                    setStatusMessage("Calculating drive times…");
+                    setStatusMessage("Calculating drive times...");
 
                     // Build coordinate string for OSRM public API (format: lng,lat;lng,lat...)
                     // Index 0 is the user. Index 1+ are the trails.
