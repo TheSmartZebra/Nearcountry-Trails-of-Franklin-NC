@@ -51,12 +51,12 @@ jobs:
           except subprocess.CalledProcessError as exc:
               raise RuntimeError(f'Failed to list tracked HEIC files via git: {exc}') from exc
 
-          tracked_files = [
+          heic_files = [
               path for path in tracked_files
               if Path(path).suffix.lower() == '.heic'
           ]
 
-          for relpath in tracked_files:
+          for relpath in heic_files:
               source = Path(relpath)
               if not source.is_file():
                   continue
