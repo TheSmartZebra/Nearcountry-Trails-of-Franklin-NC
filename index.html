@@ -539,7 +539,7 @@
                 <h1>Nearcountry Trails</h1>
                 <p class="hero-lead">A faster, cleaner guide to Franklin’s trail network—compare trail details, swipe through photos, and launch directions with one tap.</p>
                 <div class="header-stats">
-                    <span class="header-stat"><span class="material-symbols-outlined" style="font-size:16px;">route</span> 23 trail stops</span>
+                    <span class="header-stat"><span class="material-symbols-outlined" style="font-size:16px;">route</span> <span id="trail-count">23</span>&nbsp;trail stops</span>
                     <span class="header-stat"><span class="material-symbols-outlined" style="font-size:16px;">photo_library</span> Trail photo galleries</span>
                     <span class="header-stat"><span class="material-symbols-outlined" style="font-size:16px;">near_me</span> Built for quick navigation</span>
                 </div>
@@ -567,7 +567,7 @@
                         <span class="material-symbols-outlined" style="font-size:18px;">download_for_offline</span> Install
                     </button>
                 </div>
-                <div id="status-msg" role="status" aria-live="polite"></div>
+                <div id="status-msg" role="status" aria-live="polite" aria-atomic="true"></div>
             </div>
         </div>
 
@@ -658,6 +658,7 @@
         const MIN_TRAIL_IMAGE_PATH_PARTS = 4;
         const IMAGE_TREE_CACHE_KEY = 'trail-image-tree-v3';
         const IMAGE_TREE_CACHE_TTL_MS = 60 * 60 * 1000;
+        const FALLBACK_TRAIL_COLOR_RGB = { r: 22, g: 49, b: 38 };
         const SITE_BASE_PATH = (() => {
             const repoPath = `/${REPO_NAME}`;
             const path = window.location.pathname || '/';
@@ -794,7 +795,7 @@
         }
         function hexToRgba(hex, alpha) {
             const rgb = hexToRgb(hex);
-            if (!rgb) return `rgba(22, 49, 38, ${alpha})`;
+            if (!rgb) return `rgba(${FALLBACK_TRAIL_COLOR_RGB.r}, ${FALLBACK_TRAIL_COLOR_RGB.g}, ${FALLBACK_TRAIL_COLOR_RGB.b}, ${alpha})`;
             return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
         }
         function adjustHex(hex, amount) {
@@ -1012,6 +1013,7 @@
         }
 
         async function initializeTrails() {
+            document.getElementById('trail-count').textContent = trails.length;
             await loadTrailImagesFromRepository();
             renderTrails();
         }
