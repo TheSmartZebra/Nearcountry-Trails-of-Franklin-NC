@@ -5,8 +5,8 @@ on:
     branches:
       - main
     paths:
-      - '**/*.heic'
-      - '**/*.HEIC'
+      - '**/*.[Hh][Ee][Ii][Cc]'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -44,14 +44,19 @@ jobs:
               tracked_files = [
                   path.decode('utf-8')
                   for path in subprocess.check_output(
-                      ['git', 'ls-files', '-z', '--', ':(glob)**/*.heic', ':(glob)**/*.HEIC']
+                      ['git', 'ls-files', '-z', '--', ':(glob)**/*.[Hh][Ee][Ii][Cc]']
                   ).split(b'\0')
                   if path
               ]
           except subprocess.CalledProcessError as exc:
               raise RuntimeError(f'Failed to list tracked HEIC files via git: {exc}') from exc
 
-          for relpath in tracked_files:
+          heic_files = [
+              path for path in tracked_files
+              if Path(path).suffix.lower() == '.heic'
+          ]
+
+          for relpath in heic_files:
               source = Path(relpath)
               if not source.is_file():
                   continue
