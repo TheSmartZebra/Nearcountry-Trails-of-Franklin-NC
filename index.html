@@ -222,127 +222,6 @@
             gap: 16px;
         }
 
-        .guide-info {
-            display: grid;
-            gap: 24px;
-            margin: 0 auto 36px;
-            padding: 28px;
-            max-width: 1100px;
-            border-radius: 26px;
-            background:
-                linear-gradient(135deg, rgba(19, 49, 43, 0.55), rgba(8, 24, 27, 0.88)),
-                rgba(9, 24, 26, 0.82);
-            border: 1px solid rgba(160, 255, 193, 0.16);
-            box-shadow: var(--panel-shadow);
-        }
-
-        .guide-intro {
-            display: grid;
-            gap: 12px;
-        }
-
-        .guide-intro h2 {
-            margin: 0;
-            font-size: clamp(22px, 3.4vw, 32px);
-        }
-
-        .guide-eyebrow {
-            background: rgba(255, 255, 255, 0.12);
-        }
-
-        .guide-legend {
-            display: grid;
-            gap: 12px;
-        }
-
-        .legend-list {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: grid;
-            gap: 10px;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-        }
-
-        .legend-list li {
-            padding: 10px 12px;
-            border-radius: 14px;
-            background: var(--chip-bg);
-            border: 1px solid var(--chip-border);
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        .legend-list li strong {
-            color: var(--text-primary);
-        }
-
-        .guide-categories {
-            display: grid;
-            gap: 18px;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        }
-
-        .guide-category {
-            display: grid;
-            gap: 14px;
-            padding: 16px;
-            border-radius: 20px;
-            background: rgba(9, 26, 29, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .guide-category h3 {
-            margin: 0;
-            font-size: 18px;
-        }
-
-        .guide-item {
-            display: grid;
-            gap: 8px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        .guide-item:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-        }
-
-        .guide-item h4 {
-            margin: 0;
-            font-size: 15px;
-        }
-
-        .guide-meta {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: grid;
-            gap: 4px;
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        .guide-meta strong {
-            color: var(--text-secondary);
-        }
-
-        .guide-note {
-            margin: 0;
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        .guide-footer {
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding-top: 12px;
-            font-size: 13px;
-            color: var(--text-muted);
-            display: grid;
-            gap: 4px;
-        }
-
         .site-footer {
             margin-top: 32px;
             padding: 18px 8px 0;
@@ -580,14 +459,6 @@
                 padding: 18px;
             }
 
-            .guide-info {
-                padding: 20px;
-            }
-
-            .guide-categories {
-                grid-template-columns: 1fr;
-            }
-
             .trail-gallery-track img {
                 height: 200px;
             }
@@ -710,252 +581,6 @@
         </div>
 
 
-        <!-- Begin: Guide Content Integration -->
-        <section class="guide-info" aria-labelledby="guide-title">
-            <div class="guide-intro">
-                <span class="eyebrow guide-eyebrow">Trail Guide</span>
-                <h2 id="guide-title">Nearcountry Trails of Franklin, NC</h2>
-                <p>This guide identifies nature hiking opportunities within a 20-minute driving time of the Town of Franklin. Proximity is based on travel time rather than straight-line measurement to better account for mountain terrain and indirect access points when identifying nearby hikes. Whether you are looking for a short walk or a more adventurous hike, you can explore and experience nature close to home.</p>
-            </div>
-
-            <div class="guide-legend">
-                <h3>Hike Legend</h3>
-                <ul class="legend-list">
-                    <li><strong>Travel Time:</strong> Estimated driving time from Franklin.</li>
-                    <li><strong>Hike Length:</strong> Total distance in miles.</li>
-                    <li><strong>Elevation Change:</strong> Total feet of elevation change.</li>
-                    <li><strong>Route Types:</strong> Loop, Out and Back, or Trail Network.</li>
-                </ul>
-            </div>
-
-            <div class="guide-categories">
-                <article class="guide-category">
-                    <h3 style="color:#7fa838;">Bartram Trail</h3>
-                    <div class="guide-item">
-                        <h4>1) Bessie’s Loop</h4>
-                        <ul class="guide-meta">
-                            <li><strong>Travel Time:</strong> 6 minutes</li>
-                            <li><strong>Hike Length:</strong> 1.1 miles</li>
-                            <li><strong>Elevation Change:</strong> 250 feet</li>
-                            <li><strong>Route Type:</strong> Loop</li>
-                        </ul>
-                        <p>Start at the Wallace Branch Bartram Trail entrance at the end of Ray Cove Rd. This loop follows the trail to a Forest Service Road, then turns left to return toward the parking area. Along the way, you'll pass Ray Cove Falls and make several creek crossings.</p>
-                    </div>
-                    <div class="guide-item">
-                        <h4>2) William’s Pulpit</h4>
-                        <ul class="guide-meta">
-                            <li><strong>Travel Time:</strong> 6 minutes</li>
-                            <li><strong>Hike Length:</strong> 4.2 miles</li>
-                            <li><strong>Elevation Change:</strong> 1,080 feet</li>
-                            <li><strong>Route Type:</strong> Out and Back</li>
-                        </ul>
-                        <p>Start at the Wallace Branch Bartram Trail entrance at the end of Ray Cove Rd. The trail climbs to the ridgeline and continues to William's Pulpit, a steep rock outcropping with long-range mountain views, better in winter and early spring.</p>
-                    </div>
-                    <div class="guide-item">
-                        <h4>3) Hickory Knoll Rd. to The Pinnacle</h4>
-                        <ul class="guide-meta">
-                            <li><strong>Travel Time:</strong> 9 minutes</li>
-                            <li><strong>Hike Length:</strong> 4.5 miles</li>
-                            <li><strong>Elevation Change:</strong> 1,340 feet</li>
-                            <li><strong>Route Type:</strong> Out and Back</li>
-                        </ul>
-                        <p>Start at Hickory Knoll Rd on the Bartram Trail for a steady uphill hike through Nantahala National Forest. The route passes rocky, wooded terrain and ends at The Pinnacle, where a broad mountain view rewards the climb.</p>
-                    </div>
-                </article>
-
-                <article class="guide-category">
-                    <h3 style="color:#ab7d27;">Old Road Bed</h3>
-                    <div class="guide-item">
-                        <h4>4) Mud Creek</h4>
-                        <ul class="guide-meta">
-                            <li><strong>Travel Time:</strong> 19 minutes</li>
-                            <li><strong>Hike Length:</strong> 2.3 miles</li>
-                            <li><strong>Elevation Change:</strong> 240 feet</li>
-                            <li><strong>Route Type:</strong> Out and Back</li>
-                        </ul>
-                        <p>After admiring the view at Sky Valley Overlook, walk east behind the guard rail, passing the remnants of a bridge above Estatoah Falls before reaching an old road bed that leads into the woods. Follow the easy creekside walk to the cascading 100-foot Mud Creek Falls. Be mindful of private property.</p>
-                    </div>
-                </article>
-
-                <article class="guide-category">
-                    <h3 style="color:#ab2c3f;">Mainspring</h3>
-                    <div class="guide-item">
-                        <h4>5) Queen’s Branch</h4>
-                        <ul class="guide-meta">
-                            <li><strong>Travel Time:</strong> 15 minutes</li>
-                            <li><strong>Hike Length:</strong> 0.6 miles</li>
-                            <li><strong>Elevation Change:</strong> 50 feet</li>
-                            <li><strong>Route Type:</strong> Out and Back</li>
-                        </ul>
-                        <p>A beautiful trail off US-28 along the Little Tennessee River, popular for swimming.</p>
-                    </div>
-                    <div class="guide-item">
-                        <h4>6) Gibson Bottoms</h4>
-                        <ul class="guide-meta">
-                            <li><strong>Travel Time:</strong> 6 minutes</li>
-                            <li><strong>Hike Length:</strong> 1.7 miles</li>
-                            <li><strong>Elevation Change:</strong> 40-170 feet</li>
-                            <li><strong>Route Type:</strong> Trail Network</li>
-                        </ul>
-                        <p>Just off Sanderstown, down Rain Ridge Rd, this trail network hugs the Little Tennessee River, passes by cow pastures, and winds through wooded slopes.</p>
-                    </div>
-                    <div class="guide-item">
-                        <h4>7) Onion Mountain North</h4>
-                        <ul class="guide-meta">
-                            <li><strong>Travel Time:</strong> 14 minutes</li>
-                            <li><strong>Hike Length:</strong> 2-5 miles</li>
-                            <li><strong>Elevation Change:</strong> 490-1.6k feet</li>
-                            <li><strong>Route Type:</strong> Trail Network</li>
-                        </ul>
-                        <p>This entrance offers access to the higher northern side of the preserve by way of Onion Mtn. Rd. Don't miss the views from both sides of the ridge as you approach the peak by way of Jordan's Journey.</p>
-                    </div>
-                    <div class="guide-item">
-                        <h4>8) Onion Mountain South</h4>
-                        <ul class="guide-meta">
-                            <li><strong>Travel Time:</strong> 12 minutes</li>
-                            <li><strong>Hike Length:</strong> 2-5 miles</li>
-                            <li><strong>Elevation Change:</strong> 600-1.6k feet</li>
-                            <li><strong>Route Type:</strong> Trail Network</li>
-                        </ul>
-                        <p>Access from Elijay Rd begins with Kelder's Climb, which starts at a comfortable grade before rising steeply to the property's peak. A gentler spur, Sarah's Sojourn, turns around at a modest waterfall.</p>
-                    </div>
-                    <div class="guide-item">
-                        <h4>9) Tessentee Bottomland</h4>
-                        <ul class="guide-meta">
-                            <li><strong>Travel Time:</strong> 11 minutes</li>
-                            <li><strong>Hike Length:</strong> 1-3 miles</li>
-                            <li><strong>Elevation Change:</strong> 120 feet</li>
-                            <li><strong>Route Type:</strong> Trail Network</li>
-                        </ul>
-                        <p>Just south of the Bartram Trail on Hickory Knoll Rd, this trail network winds through bottomland forest, creekside pastures, and 100-year old farm buildings.</p>
-                    </div>
-                </article>
-
-                <article class="guide-category">
-                    <h3 style="color:#2b6e8c;">Appalachian Trail</h3>
-                    <div class="guide-item">
-                        <h4>10) Winding Stair Gap to Siler Bald</h4>
-                        <ul class="guide-meta">
-                            <li><strong>Travel Time:</strong> 12 minutes</li>
-                            <li><strong>Hike Length:</strong> 9 miles</li>
-                            <li><strong>Elevation Change:</strong> 1,790 feet</li>
-                            <li><strong>Route Type:</strong> Out and Back</li>
-                        </ul>
-                        <p>This trailhead doubles the hiking time to Siler Bald, but cuts the driving time in half. If you are looking for an uphill hike with spectacular views, this is it.</p>
-                    </div>
-                    <div class="guide-item">
-                        <h4>11) Winding Stair Gap South</h4>
-                        <ul class="guide-meta">
-                            <li><strong>Travel Time:</strong> 12 minutes</li>
-                            <li><strong>Hike Length:</strong> Varies</li>
-                            <li><strong>Elevation Change:</strong> Varies</li>
-                            <li><strong>Route Type:</strong> Out and Back</li>
-                        </ul>
-                        <p>Less majestic than its northern counterpart, this trail still offers wildflowers and some creek crossings.</p>
-                    </div>
-                </article>
-
-                <article class="guide-category">
-                    <h3 style="color:#914b96;">Park</h3>
-                    <div class="guide-item">
-                        <h4>12) Parker Meadows</h4>
-                        <ul class="guide-meta">
-                            <li><strong>Travel Time:</strong> 6 minutes</li>
-                            <li><strong>Hike Length:</strong> 1.1 miles</li>
-                            <li><strong>Elevation Change:</strong> 250 feet</li>
-                            <li><strong>Route Type:</strong> Loop</li>
-                        </ul>
-                        <p>Community park with a partially shaded walking loop that borders Cartoogechaye Creek.</p>
-                    </div>
-                </article>
-
-                <article class="guide-category">
-                    <h3 style="color:#24a688;">Greenway</h3>
-                    <p class="guide-note">All Greenway trails share these specifications: Travel Time 1 minute, Hike Length 1-5 miles, Elevation Change 190 feet, Route Type Out and Back.</p>
-                    <div class="guide-item">
-                        <h4>13) Suli Marsh</h4>
-                        <p>Path through swamp land featuring an old metal bridge and boardwalks. Access off US-28.</p>
-                    </div>
-                    <div class="guide-item">
-                        <h4>14) Big Bear Park</h4>
-                        <p>Park on Main St. with playground, dog park, and trails providing access to old beaver dam area.</p>
-                    </div>
-                    <div class="guide-item">
-                        <h4>15) Riverwalk</h4>
-                        <p>Entrance behind The Shops at Riverwalk with a shelter, butterfly garden, and 0.25-mile exercise loop.</p>
-                    </div>
-                    <div class="guide-item">
-                        <h4>16) Salali Ln</h4>
-                        <p>Entrance point off Fox Ridge Rd with soccer fields, a pavilion, and swings.</p>
-                    </div>
-                    <div class="guide-item">
-                        <h4>17) Tassee Park</h4>
-                        <p>Features a pavilion and a boat put-in area off Ulco Dr. There is a unique geocache in this area.</p>
-                    </div>
-                    <div class="guide-item">
-                        <h4>18) Southwestern Community College</h4>
-                        <p>Trail connecting SCC to the greenway, alongside community garden plots near Old Siler Rd.</p>
-                    </div>
-                    <div class="guide-item">
-                        <h4>19) Library</h4>
-                        <p>Dirt road access down to the greenway and bottomland loop from the library on Siler Farm Rd.</p>
-                    </div>
-                </article>
-
-                <article class="guide-category">
-                    <h3 style="color:#2729ab;">Schools</h3>
-                    <p class="guide-note">These trails should be reserved for times outside of normal school hours.</p>
-                    <div class="guide-item">
-                        <h4>20) Cartoogechaye Loop</h4>
-                        <ul class="guide-meta">
-                            <li><strong>Travel Time:</strong> 5 minutes</li>
-                            <li><strong>Hike Length:</strong> 0.25 miles</li>
-                            <li><strong>Elevation Change:</strong> 0 feet</li>
-                            <li><strong>Route Type:</strong> Loop</li>
-                        </ul>
-                        <p>A partially shaded loop with a pavilion uphill from Gibson Cove Branch.</p>
-                    </div>
-                    <div class="guide-item">
-                        <h4>21) Cove Branch (MVI)</h4>
-                        <ul class="guide-meta">
-                            <li><strong>Travel Time:</strong> 4 minutes</li>
-                            <li><strong>Hike Length:</strong> 0.3 miles</li>
-                            <li><strong>Elevation Change:</strong> 0 feet</li>
-                            <li><strong>Route Type:</strong> Out and Back</li>
-                        </ul>
-                        <p>A trail and restoration project at Macon Valley Intermediate School.</p>
-                    </div>
-                    <div class="guide-item">
-                        <h4>22) Macon Middle Loop</h4>
-                        <ul class="guide-meta">
-                            <li><strong>Travel Time:</strong> 4 minutes</li>
-                            <li><strong>Hike Length:</strong> 0.5 miles</li>
-                            <li><strong>Elevation Change:</strong> 20 feet</li>
-                            <li><strong>Route Type:</strong> Loop</li>
-                        </ul>
-                        <p>A cross country trail circling the school's fields. Perfect area for flying kites.</p>
-                    </div>
-                    <div class="guide-item">
-                        <h4>23) South Macon Loop</h4>
-                        <ul class="guide-meta">
-                            <li><strong>Travel Time:</strong> 4 minutes</li>
-                            <li><strong>Hike Length:</strong> 0.5 miles</li>
-                            <li><strong>Elevation Change:</strong> 20 feet</li>
-                            <li><strong>Route Type:</strong> Loop</li>
-                        </ul>
-                        <p>A paved loop with a spur trail that leads to a nice access on Skeenah Creek. Keep an eye out for birds, butterflies, and salamanders.</p>
-                    </div>
-                </article>
-            </div>
-
-            <div class="guide-footer">
-                <span>Trail Guide written and designed by Jack Moore.</span>
-                <span>Cartography by Angela Moore.</span>
-                <span>Date: April 2026.</span>
-            </div>
-        </section>
-        <!-- End: Guide Content Integration -->
-
         <section class="trail-section" aria-labelledby="trail-section-title">
             <div class="section-heading">
                 <div>
@@ -996,23 +621,23 @@
                 catColor: "#7fa838",
                 lat: 35.18025,
                 lng: -83.43328,
-                travelTime: "6 min",
-                length: "1.1 mi",
-                elevation: "250 ft",
+                travelTime: "6 Minutes",
+                length: "1.1 Miles",
+                elevation: "250 Feet",
                 typeText: "Loop",
                 typeIcon: "loop",
                 desc: "Start at the Wallace Branch Bartram Trail entrance at the end of Ray Cove Rd. This loop follows the trail to a Forest Service Road, then turns left to return toward the parking area. Along the way, you'll pass Ray Cove Falls and make several creek crossings."
             },
             {
                 id: 2,
-                name: "2. William’s Pulpit",
+                name: "2. William's Pulpit",
                 category: "Bartram Trail",
                 catColor: "#7fa838",
                 lat: 35.18025,
                 lng: -83.43328,
-                travelTime: "6 min",
-                length: "4.2 mi",
-                elevation: "1,080 ft",
+                travelTime: "6 Minutes",
+                length: "4.2 Miles",
+                elevation: "1080 Feet",
                 typeText: "Out and Back",
                 typeIcon: "timeline",
                 desc: "Start at the Wallace Branch Bartram Trail entrance at the end of Ray Cove Rd. The trail climbs to the ridgeline and continues to William's Pulpit, a steep rock outcropping with long-range mountain views, better in winter and early spring."
@@ -1024,9 +649,9 @@
                 catColor: "#7fa838",
                 lat: 35.07975,
                 lng: -83.37694,
-                travelTime: "9 min",
-                length: "4.5 mi",
-                elevation: "1,340 ft",
+                travelTime: "9 Minutes",
+                length: "4.5 Miles",
+                elevation: "1340 Feet",
                 typeText: "Out and Back",
                 typeIcon: "timeline",
                 desc: "Start at Hickory Knoll Rd on the Bartram Trail for a steady uphill hike through Nantahala National Forest. The route passes rocky, wooded terrain and ends at The Pinnacle, where a broad mountain view rewards the climb."
@@ -1038,23 +663,23 @@
                 catColor: "#ab7d27",
                 lat: 34.99242,
                 lng: -83.34756,
-                travelTime: "19 min",
-                length: "2.3 mi",
-                elevation: "240 ft",
+                travelTime: "19 Minutes",
+                length: "2.3 Miles",
+                elevation: "240 Feet",
                 typeText: "Out and Back",
                 typeIcon: "timeline",
                 desc: "After admiring the view at Sky Valley Overlook, walk east behind the guard rail, passing the remnants of a bridge above Estatoah Falls before reaching an old road bed that leads into the woods. Follow the easy creekside walk to the cascading 100-foot Mud Creek Falls. Be mindful of private property."
             },
             {
                 id: 5,
-                name: "5. Queen’s Branch",
+                name: "5. Queen's Branch",
                 category: "Mainspring",
                 catColor: "#ab2c3f",
                 lat: 35.28364,
                 lng: -83.46750,
-                travelTime: "15 min",
-                length: "0.6 mi",
-                elevation: "50 ft",
+                travelTime: "15 Minutes",
+                length: "0.6 Miles",
+                elevation: "50 Feet",
                 typeText: "Out and Back",
                 typeIcon: "timeline",
                 desc: "A beautiful trail off US-28 along the Little Tennessee River, popular for swimming."
@@ -1066,39 +691,41 @@
                 catColor: "#ab2c3f",
                 lat: 35.23272,
                 lng: -83.39133,
-                travelTime: "6 min",
-                length: "1.7 mi",
-                elevation: "40-170 ft",
+                travelTime: "6 Minutes",
+                length: "1.7 Miles",
+                elevation: "40-170 Ft",
                 typeText: "Trail Network",
                 typeIcon: "hub",
                 desc: "Just off Sanderstown, down Rain Ridge Rd, this trail network hugs the Little Tennessee River, passes by cow pastures, and winds through wooded slopes."
             },
             {
                 id: 7,
-                name: "7. Onion Mtn. North",
+                name: "7. Onion Mountain North",
                 category: "Mainspring",
                 catColor: "#ab2c3f",
                 lat: 35.21131,
                 lng: -83.29542,
-                travelTime: "14 min",
-                length: "2-5 mi",
-                elevation: "490-1.6k ft",
+                travelTime: "14 Minutes",
+                length: "2-5 Miles",
+                elevation: "490-1.6k Ft",
                 typeText: "Trail Network",
                 typeIcon: "hub",
+                imageFolder: "07-onion-mtn-north",
                 desc: "This entrance offers access to the higher northern side of the preserve by way of Onion Mtn. Rd. Don't miss the views from both sides of the ridge as you approach the peak by way of Jordan's Journey."
             },
             {
                 id: 8,
-                name: "8. Onion Mtn. South",
+                name: "8. Onion Mountain South",
                 category: "Mainspring",
                 catColor: "#ab2c3f",
                 lat: 35.19019,
                 lng: -83.28244,
-                travelTime: "12 min",
-                length: "2-5 mi",
-                elevation: "600-1.6k ft",
+                travelTime: "12 Minutes",
+                length: "2-5 Miles",
+                elevation: "600-1.6k Ft",
                 typeText: "Trail Network",
                 typeIcon: "hub",
+                imageFolder: "08-onion-mtn-south",
                 desc: "Access from Elijay Rd begins with Kelder's Climb, which starts at a comfortable grade before rising steeply to the property's peak. A gentler spur, Sarah's Sojourn, turns around at a modest waterfall."
             },
             {
@@ -1108,9 +735,9 @@
                 catColor: "#ab2c3f",
                 lat: 35.06889,
                 lng: -83.37997,
-                travelTime: "11 min",
-                length: "1-3 mi",
-                elevation: "120 ft",
+                travelTime: "11 Minutes",
+                length: "1-3 Miles",
+                elevation: "120 Ft",
                 typeText: "Trail Network",
                 typeIcon: "hub",
                 desc: "Just south of the Bartram Trail on Hickory Knoll Rd, this trail network winds through bottomland forest, creekside pastures, and 100-year old farm buildings.",
@@ -1130,12 +757,12 @@
                 catColor: "#2b6e8c",
                 lat: 35.12067,
                 lng: -83.54708,
-                travelTime: "12 min",
-                length: "9 mi",
-                elevation: "1,790 ft",
+                travelTime: "12 Minutes",
+                length: "9 Miles",
+                elevation: "1790 Feet",
                 typeText: "Out and Back",
                 typeIcon: "timeline",
-                desc: "This trailhead doubles the hiking time to Siler Bald, but cuts the driving time in half. If you are looking for an uphill hike with spectacular views, this is it."
+                desc: "This trailhead doubles the hiking time to Siler Bald, but cuts the driving time in half. If you are looking for an uphill hike with spectacular views. This is it."
             },
             {
                 id: 11,
@@ -1144,12 +771,12 @@
                 catColor: "#2b6e8c",
                 lat: 35.11986,
                 lng: -83.54797,
-                travelTime: "12 min",
+                travelTime: "12 Minutes",
                 length: "Varies",
                 elevation: "Varies",
                 typeText: "Out and Back",
                 typeIcon: "timeline",
-                desc: "Less majestic than its northern counterpart, this trail still offers wildflowers and some creek crossings."
+                desc: "Less majestic than its northern counter part this trail still offers wildflower, and some creek crossings."
             },
             {
                 id: 12,
@@ -1158,12 +785,12 @@
                 catColor: "#914b96",
                 lat: 35.15472,
                 lng: -83.45669,
-                travelTime: "6 min",
-                length: "1.1 mi",
-                elevation: "250 ft",
+                travelTime: "6 Minutes",
+                length: "1.1 Miles",
+                elevation: "250 Feet",
                 typeText: "Loop",
                 typeIcon: "loop",
-                desc: "Community park with a partially shaded walking loop that borders Cartoogechaye Creek."
+                desc: "Community park with a partially shaded walking loop the borders Cartoogechaye Creek."
             },
 
             // Greenways
@@ -1174,9 +801,9 @@
                 catColor: "#24a688",
                 lat: 35.19675,
                 lng: -83.38714,
-                travelTime: "1 min",
-                length: "1-5 mi",
-                elevation: "190 ft",
+                travelTime: "1 Min",
+                length: "1-5 Miles",
+                elevation: "190 Ft",
                 typeText: "Out and Back",
                 typeIcon: "timeline",
                 desc: "Path through swamp land featuring an old metal bridge and boardwalks. Access off US-28."
@@ -1188,9 +815,9 @@
                 catColor: "#24a688",
                 lat: 35.18686,
                 lng: -83.37392,
-                travelTime: "1 min",
-                length: "1-5 mi",
-                elevation: "190 ft",
+                travelTime: "1 Min",
+                length: "1-5 Miles",
+                elevation: "190 Ft",
                 typeText: "Out and Back",
                 typeIcon: "timeline",
                 desc: "Park on Main St. with playground, dog park, and trails providing access to old beaver dam area."
@@ -1202,12 +829,12 @@
                 catColor: "#24a688",
                 lat: 35.18533,
                 lng: -83.37094,
-                travelTime: "1 min",
-                length: "1-5 mi",
-                elevation: "190 ft",
+                travelTime: "1 Min",
+                length: "1-5 Miles",
+                elevation: "190 Ft",
                 typeText: "Out and Back",
                 typeIcon: "timeline",
-                desc: "Entrance behind The Shops at Riverwalk with a shelter, butterfly garden, and 0.25-mile exercise loop."
+                desc: "Entrance behind The Shops at Riverwalk with a shelter, butterfly garden and 0.25-mile exercise loop."
             },
             {
                 id: 16,
@@ -1216,12 +843,12 @@
                 catColor: "#24a688",
                 lat: 35.17558,
                 lng: -83.36992,
-                travelTime: "1 min",
-                length: "1-5 mi",
-                elevation: "190 ft",
+                travelTime: "1 Min",
+                length: "1-5 Miles",
+                elevation: "190 Ft",
                 typeText: "Out and Back",
                 typeIcon: "timeline",
-                desc: "Entrance point off Fox Ridge Rd with soccer fields, a pavilion, and swings."
+                desc: "Entrance point off Fox Ridge Rd with soccer fields a pavilion and swings."
             },
             {
                 id: 17,
@@ -1230,25 +857,26 @@
                 catColor: "#24a688",
                 lat: 35.17356,
                 lng: -83.37217,
-                travelTime: "1 min",
-                length: "1-5 mi",
-                elevation: "190 ft",
+                travelTime: "1 Min",
+                length: "1-5 Miles",
+                elevation: "190 Ft",
                 typeText: "Out and Back",
                 typeIcon: "timeline",
-                desc: "Features a pavilion and a boat put-in area off Ulco Dr. There is a unique geocache in this area."
+                desc: "Features a pavilion and a boat put-in area off of Ulco Dr. There is a unique geocache in this area."
             },
             {
                 id: 18,
-                name: "18. Southwestern CC",
+                name: "18. Southwestern Community College",
                 category: "Greenway",
                 catColor: "#24a688",
                 lat: 35.15967,
                 lng: -83.37922,
-                travelTime: "1 min",
-                length: "1-5 mi",
-                elevation: "190 ft",
+                travelTime: "1 Min",
+                length: "1-5 Miles",
+                elevation: "190 Ft",
                 typeText: "Out and Back",
                 typeIcon: "timeline",
+                imageFolder: "18-southwestern-cc",
                 desc: "Trail connecting SCC to the greenway, alongside community garden plots near Old Siler Rd."
             },
             {
@@ -1258,9 +886,9 @@
                 catColor: "#24a688",
                 lat: 35.15856,
                 lng: -83.38178,
-                travelTime: "1 min",
-                length: "1-5 mi",
-                elevation: "190 ft",
+                travelTime: "1 Min",
+                length: "1-5 Miles",
+                elevation: "190 Ft",
                 typeText: "Out and Back",
                 typeIcon: "timeline",
                 desc: "Dirt road access down to the greenway and bottomland loop from the library on Siler Farm Rd."
@@ -1274,12 +902,12 @@
                 catColor: "#2729ab",
                 lat: 35.16733,
                 lng: -83.43583,
-                travelTime: "5 min",
-                length: "0.25 mi",
-                elevation: "0 ft",
+                travelTime: "5 Minutes",
+                length: "0.25 Miles",
+                elevation: "0 Feet",
                 typeText: "Loop",
                 typeIcon: "loop",
-                desc: "A partially shaded loop with a pavilion uphill from Gibson Cove Branch. Visit outside of normal school hours."
+                desc: "A partially shaded loop with a pavilion uphill from Gibson Cove Branch."
             },
             {
                 id: 21,
@@ -1288,12 +916,12 @@
                 catColor: "#2729ab",
                 lat: 35.16383,
                 lng: -83.36111,
-                travelTime: "4 min",
-                length: "0.3 mi",
-                elevation: "0 ft",
+                travelTime: "4 Minutes",
+                length: "0.3 Miles",
+                elevation: "0 Feet",
                 typeText: "Out and Back",
                 typeIcon: "timeline",
-                desc: "A trail and restoration project at Macon Valley Intermediate School. Visit outside of normal school hours."
+                desc: "A trail and restoration project at Macon Valley Intermediate School."
             },
             {
                 id: 22,
@@ -1302,12 +930,12 @@
                 catColor: "#2729ab",
                 lat: 35.16136,
                 lng: -83.35739,
-                travelTime: "4 min",
-                length: "0.5 mi",
-                elevation: "20 ft",
+                travelTime: "4 Minutes",
+                length: "0.5 Miles",
+                elevation: "20 Feet",
                 typeText: "Loop",
                 typeIcon: "loop",
-                desc: "A cross country trail circling the school's fields. Perfect area for flying kites. Visit outside of normal school hours."
+                desc: "A cross country trail circling the school's fields. Perfect area for flying kites."
             },
             {
                 id: 23,
@@ -1316,12 +944,12 @@
                 catColor: "#2729ab",
                 lat: 35.11281,
                 lng: -83.40003,
-                travelTime: "4 min",
-                length: "0.5 mi",
-                elevation: "20 ft",
+                travelTime: "4 Minutes",
+                length: "0.5 Miles",
+                elevation: "20 Feet",
                 typeText: "Loop",
                 typeIcon: "loop",
-                desc: "A paved loop with a spur trail that leads to a nice access on Skeenah Creek. Keep an eye out for birds, butterflies, and salamanders. Visit outside of normal school hours."
+                desc: "A paved loop with a spur trail that leads to a nice access on Skeenah Creek. Keep an eye out for birds, butterflies, and salamanders."
             },
         ];
         const REPO_OWNER = 'TheSmartZebra';
