@@ -586,59 +586,6 @@
                 <li>➖ Trail</li>
                 <li>⬆️ Elevation Change</li>
             </ul>
-            <h3 style="margin-bottom:0.5em;">Trail Categories & Details</h3>
-            <div class="guide-categories" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:24px;">
-                <div>
-                    <h4 style="color:#7fa838;">Bartram Trail</h4>
-                    <ul>
-                        <li><b>Bessie’s Loop:</b> 6 min drive, 1.1 mi loop, 250 ft elev. Forest road, Ray Cove Falls, creek crossings.</li>
-                        <li><b>William’s Pulpit:</b> 6 min, 4.2 mi, 1080 ft. Climb ridge to rock overlook with broad mountain views.</li>
-                        <li><b>Hickory Knoll Rd. to the Pinnacle:</b> 9 min, 4.5 mi, 1340 ft. Uphill through forest, mountain vista at summit.</li>
-                    </ul>
-                    <h4 style="color:#ab7d27;">Old Road Bed</h4>
-                    <ul>
-                        <li><b>Mud Creek:</b> 19 min, 2.3 mi, 240 ft. Passes old railway, follows creek to Mud Creek Falls (check private property signage).</li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 style="color:#ab2c3f;">Mainspring</h4>
-                    <ul>
-                        <li><b>Queen’s Branch:</b> 15 min, 0.6 mi, 50 ft. Old US-28 bed along Little Tennessee River. Swimming possible.</li>
-                        <li><b>Gibson Bottoms:</b> 6 min, 1.7 mi, 40/170 ft. Riverside woods/floodplain trail.</li>
-                        <li><b>Onion Mountain North:</b> 14 min, 2-5 mi, 490/1.6k ft. Ridge access, dual-ridge views.</li>
-                        <li><b>Onion Mountain South:</b> 12 min, 2-5 mi, 600/1.6k ft. Begins Keller’s Climb; woods & pastures.</li>
-                        <li><b>Tessentee Bottomland:</b> 11 min, 1-3 mi, 120 ft. Bottomland woods, streams, old farm bldgs.</li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 style="color:#2b6e8c;">Appalachian Trail</h4>
-                    <ul>
-                        <li><b>Winding Stair Gap to Siler Bald:</b> 12 min, 9 mi, 1790 ft. Uphill climb with outstanding views from the Bald.</li>
-                        <li><b>Winding Stair Gap South:</b> 12 min, varies. Northern terminus, creek crossings, wildlife.</li>
-                    </ul>
-                    <h4 style="color:#914b96;">Park</h4>
-                    <ul><li><b>Parker Meadows:</b> 6 min, 1.1 mi, 250 ft. Community park, partially shaded walking loop by creek.</li></ul>
-                </div>
-                <div>
-                    <h4 style="color:#24a688;">Greenway</h4>
-                    <ul>
-                        <li><b>Suli Marsh:</b> 1 min, 1.5 mi, 190 ft. Swamp trail/boardwalk, old metal bridge. US-28 access.</li>
-                        <li><b>Big Bear Park:</b> Playground, dog park, beaver dam area walk.</li>
-                        <li><b>Riverwalk:</b> Behind Shops at Riverwalk—shelter, garden, 0.25mi exercise loop.</li>
-                        <li><b>Salali Ln:</b> River picnic point, soccer fields, swings.</li>
-                        <li><b>Tassee Park:</b> Pavilion, boat access, geocache spot.</li>
-                        <li><b>Southwestern Community College:</b> College trail to greenway & garden.</li>
-                        <li><b>Library:</b> Short access down to greenway and bottomland loop at Siler Farm Rd.</li>
-                    </ul>
-                    <h4 style="color:#2729ab;">Schools <span style="font-weight:400;font-size:0.92em;">(after school hours)</span></h4>
-                    <ul>
-                        <li><b>Cartoogechaye Loop:</b> 5 min, 0.25 mi, 0 ft. Paved loop, shaded pavilion.</li>
-                        <li><b>Cove Branch (MVI):</b> 4 min, 0.3 mi, 0 ft. School nature/restoration project.</li>
-                        <li><b>Macon Middle Loop:</b> 4 min, 0.5 mi, 20 ft. Nature trail, flying kites.</li>
-                        <li><b>South Macon Loop:</b> 4 min, 0.5 mi, 20 ft. Paved spur to creek overlook—look for birds/amphibians.</li>
-                    </ul>
-                </div>
-            </div>
             <small style="display:block;margin-top:2.5em;font-size:0.95em;color:#b2dfdb;">
                 Trail Guide written and designed by Jack Moore.<br>
                 Cartography: Angela Moore. April 2026.
@@ -677,14 +624,14 @@
            `imgs` and legacy `img` remain supported for explicit overrides.
         */
         let trails = [
-            { id: 1, name: "1. Bessie's Loop", category: "Bartram Trail", catColor: "#7fa838", lat: 35.18025, lng: -83.43328, length: "1.1 mi", elevation: "250 ft", typeText: "Loop", typeIcon: "loop", desc: "Forest road walk with Ray Cove Falls and creek crossings." },
-            { id: 2, name: "2. William’s Pulpit", category: "Bartram Trail", catColor: "#7fa838", lat: 35.18025, lng: -83.43328, length: "4.2 mi", elevation: "1,080 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Ridge climb to a rock overlook with broad mountain views." },
-            { id: 3, name: "3. Hickory Knoll Rd. to The Pinnacle", category: "Bartram Trail", catColor: "#7fa838", lat: 35.07975, lng: -83.37694, length: "4.5 mi", elevation: "1,340 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Uphill forest route leading to a mountain vista at the summit." },
-            { id: 4, name: "4. Mud Creek", category: "Old Road Bed", catColor: "#ab7d27", lat: 34.99242, lng: -83.34756, length: "2.3 mi", elevation: "240 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Old railway corridor along the creek to Mud Creek Falls; watch private property signage." },
-            { id: 5, name: "5. Queen’s Branch", category: "Mainspring", catColor: "#ab2c3f", lat: 35.28364, lng: -83.46750, length: "0.6 mi", elevation: "50 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Old US-28 roadbed beside the Little Tennessee River with swimming spots." },
-            { id: 6, name: "6. Gibson Bottoms", category: "Mainspring", catColor: "#ab2c3f", lat: 35.23272, lng: -83.39133, length: "1.7 mi", elevation: "40-170 ft", typeText: "Network", typeIcon: "hub", desc: "Riverside woods and floodplain network with multiple route options." },
-            { id: 7, name: "7. Onion Mtn. North", category: "Mainspring", catColor: "#ab2c3f", lat: 35.21131, lng: -83.29542, length: "2-5 mi", elevation: "490-1.6k ft", typeText: "Network", typeIcon: "hub", desc: "Ridge network with optional climbs and dual-ridge mountain views." },
-            { id: 8, name: "8. Onion Mtn. South", category: "Mainspring", catColor: "#ab2c3f", lat: 35.19019, lng: -83.28244, length: "2-5 mi", elevation: "600-1.6k ft", typeText: "Network", typeIcon: "hub", desc: "Begins with Keller’s Climb through woods and pastures into the ridge network." },
+            { id: 1, name: "1. Bessie's Loop", category: "Bartram Trail", catColor: "#7fa838", lat: 35.18025, lng: -83.43328, length: "1.1 mi", elevation: "250 ft", typeText: "Loop", typeIcon: "loop", desc: "Forest road, Ray Cove Falls, creek crossings." },
+            { id: 2, name: "2. William’s Pulpit", category: "Bartram Trail", catColor: "#7fa838", lat: 35.18025, lng: -83.43328, length: "4.2 mi", elevation: "1,080 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Climb ridge to rock overlook with broad mountain views." },
+            { id: 3, name: "3. Hickory Knoll Rd. to The Pinnacle", category: "Bartram Trail", catColor: "#7fa838", lat: 35.07975, lng: -83.37694, length: "4.5 mi", elevation: "1,340 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Uphill through forest, mountain vista at summit." },
+            { id: 4, name: "4. Mud Creek", category: "Old Road Bed", catColor: "#ab7d27", lat: 34.99242, lng: -83.34756, length: "2.3 mi", elevation: "240 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Passes old railway, follows creek to Mud Creek Falls (check private property signage)." },
+            { id: 5, name: "5. Queen’s Branch", category: "Mainspring", catColor: "#ab2c3f", lat: 35.28364, lng: -83.46750, length: "0.6 mi", elevation: "50 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Old US-28 bed along Little Tennessee River. Swimming possible." },
+            { id: 6, name: "6. Gibson Bottoms", category: "Mainspring", catColor: "#ab2c3f", lat: 35.23272, lng: -83.39133, length: "1.7 mi", elevation: "40-170 ft", typeText: "Network", typeIcon: "hub", desc: "Riverside woods/floodplain trail." },
+            { id: 7, name: "7. Onion Mtn. North", category: "Mainspring", catColor: "#ab2c3f", lat: 35.21131, lng: -83.29542, length: "2-5 mi", elevation: "490-1.6k ft", typeText: "Network", typeIcon: "hub", desc: "Ridge access, dual-ridge views." },
+            { id: 8, name: "8. Onion Mtn. South", category: "Mainspring", catColor: "#ab2c3f", lat: 35.19019, lng: -83.28244, length: "2-5 mi", elevation: "600-1.6k ft", typeText: "Network", typeIcon: "hub", desc: "Begins Keller’s Climb; woods & pastures." },
             {
                 id: 9,
                 name: "9. Tessentee Bottomland",
@@ -696,7 +643,7 @@
                 elevation: "120 ft",
                 typeText: "Network",
                 typeIcon: "hub",
-                desc: "Bottomland woods with streams and historic farm building remnants.",
+                desc: "Bottomland woods, streams, old farm bldgs.",
                 imgs: [
                     'images/hikes/09-tessentee-bottomland/IMG_3722.jpg',
                     'images/hikes/09-tessentee-bottomland/IMG_3726.jpg',
@@ -706,24 +653,24 @@
                     'images/hikes/09-tessentee-bottomland/IMG_3737.jpg'
                 ]
             },
-            { id: 10, name: "10. Winding Stair Gap to Siler Bald", category: "Appalachian Trail", catColor: "#2b6e8c", lat: 35.12067, lng: -83.54708, length: "9 mi", elevation: "1,790 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Steady climb to Siler Bald with outstanding panoramic views." },
-            { id: 11, name: "11. Winding Stair Gap South", category: "Appalachian Trail", catColor: "#2b6e8c", lat: 35.11986, lng: -83.54797, length: "Varies", elevation: "Varies", typeText: "Out & Back", typeIcon: "timeline", desc: "Southern approach from Winding Stair Gap with creek crossings and wildlife." },
-            { id: 12, name: "12. Parker Meadows", category: "Park", catColor: "#914b96", lat: 35.15472, lng: -83.45669, length: "1.1 mi", elevation: "250 ft", typeText: "Loop", typeIcon: "loop", desc: "Community park loop with partial shade and creekside walking." },
+            { id: 10, name: "10. Winding Stair Gap to Siler Bald", category: "Appalachian Trail", catColor: "#2b6e8c", lat: 35.12067, lng: -83.54708, length: "9 mi", elevation: "1,790 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Uphill climb with outstanding views from the Bald." },
+            { id: 11, name: "11. Winding Stair Gap South", category: "Appalachian Trail", catColor: "#2b6e8c", lat: 35.11986, lng: -83.54797, length: "Varies", elevation: "Varies", typeText: "Out & Back", typeIcon: "timeline", desc: "Northern terminus, creek crossings, wildlife." },
+            { id: 12, name: "12. Parker Meadows", category: "Park", catColor: "#914b96", lat: 35.15472, lng: -83.45669, length: "1.1 mi", elevation: "250 ft", typeText: "Loop", typeIcon: "loop", desc: "Community park, partially shaded walking loop by creek." },
             
             // Greenways (pamphlet includes specific mileage only for Suli Marsh)
-            { id: 13, name: "13. Suli Marsh", category: "Greenway", catColor: "#24a688", lat: 35.19675, lng: -83.38714, length: "1.5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Swamp trail and boardwalk with an old metal bridge and US-28 access." },
-            { id: 14, name: "14. Big Bear Park", category: "Greenway", catColor: "#24a688", lat: 35.18686, lng: -83.37392, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Family stop with playground, dog park, and beaver-dam area walk." },
-            { id: 15, name: "15. Riverwalk", category: "Greenway", catColor: "#24a688", lat: 35.18533, lng: -83.37094, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Riverwalk access behind Shops at Riverwalk with shelter, garden, and exercise loop." },
-            { id: 16, name: "16. Salali Ln", category: "Greenway", catColor: "#24a688", lat: 35.17558, lng: -83.36992, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Greenway access point near picnic spots, soccer fields, and swings." },
-            { id: 17, name: "17. Tassee Park", category: "Greenway", catColor: "#24a688", lat: 35.17356, lng: -83.37217, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Pavilion, boat access, and geocache-friendly greenway stop." },
-            { id: 18, name: "18. Southwestern CC", category: "Greenway", catColor: "#24a688", lat: 35.15967, lng: -83.37922, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Campus connector trail to the greenway and garden." },
-            { id: 19, name: "19. Library", category: "Greenway", catColor: "#24a688", lat: 35.15856, lng: -83.38178, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Short library access down to the greenway and Siler Farm bottomland loop." },
+            { id: 13, name: "13. Suli Marsh", category: "Greenway", catColor: "#24a688", lat: 35.19675, lng: -83.38714, length: "1.5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Swamp trail/boardwalk, old metal bridge. US-28 access." },
+            { id: 14, name: "14. Big Bear Park", category: "Greenway", catColor: "#24a688", lat: 35.18686, lng: -83.37392, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Playground, dog park, beaver dam area walk." },
+            { id: 15, name: "15. Riverwalk", category: "Greenway", catColor: "#24a688", lat: 35.18533, lng: -83.37094, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Behind Shops at Riverwalk—shelter, garden, 0.25mi exercise loop." },
+            { id: 16, name: "16. Salali Ln", category: "Greenway", catColor: "#24a688", lat: 35.17558, lng: -83.36992, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "River picnic point, soccer fields, swings." },
+            { id: 17, name: "17. Tassee Park", category: "Greenway", catColor: "#24a688", lat: 35.17356, lng: -83.37217, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Pavilion, boat access, geocache spot." },
+            { id: 18, name: "18. Southwestern CC", category: "Greenway", catColor: "#24a688", lat: 35.15967, lng: -83.37922, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "College trail to greenway & garden." },
+            { id: 19, name: "19. Library", category: "Greenway", catColor: "#24a688", lat: 35.15856, lng: -83.38178, length: "1-5 mi", elevation: "190 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "Short access down to greenway and bottomland loop at Siler Farm Rd." },
             
             // Schools
-            { id: 20, name: "20. Cartoogechaye Loop", category: "Schools", catColor: "#2729ab", lat: 35.16733, lng: -83.43583, length: "0.25 mi", elevation: "0 ft", typeText: "Loop", typeIcon: "loop", desc: "Paved school loop with a shaded pavilion (after school hours)." },
-            { id: 21, name: "21. Cove Branch (MVI)", category: "Schools", catColor: "#2729ab", lat: 35.16383, lng: -83.36111, length: "0.3 mi", elevation: "0 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "School nature and restoration trail (after school hours)." },
-            { id: 22, name: "22. Macon Middle Loop", category: "Schools", catColor: "#2729ab", lat: 35.16136, lng: -83.35739, length: "0.5 mi", elevation: "20 ft", typeText: "Loop", typeIcon: "loop", desc: "School nature loop suited for easy walking and kite flying (after hours)." },
-            { id: 23, name: "23. South Macon Loop", category: "Schools", catColor: "#2729ab", lat: 35.11281, lng: -83.40003, length: "0.5 mi", elevation: "20 ft", typeText: "Loop", typeIcon: "loop", desc: "Paved spur to a creek overlook with strong bird and amphibian habitat (after hours)." },
+            { id: 20, name: "20. Cartoogechaye Loop", category: "Schools", catColor: "#2729ab", lat: 35.16733, lng: -83.43583, length: "0.25 mi", elevation: "0 ft", typeText: "Loop", typeIcon: "loop", desc: "Paved loop, shaded pavilion (after school hours)." },
+            { id: 21, name: "21. Cove Branch (MVI)", category: "Schools", catColor: "#2729ab", lat: 35.16383, lng: -83.36111, length: "0.3 mi", elevation: "0 ft", typeText: "Out & Back", typeIcon: "timeline", desc: "School nature/restoration project (after school hours)." },
+            { id: 22, name: "22. Macon Middle Loop", category: "Schools", catColor: "#2729ab", lat: 35.16136, lng: -83.35739, length: "0.5 mi", elevation: "20 ft", typeText: "Loop", typeIcon: "loop", desc: "Nature trail, flying kites (after school hours)." },
+            { id: 23, name: "23. South Macon Loop", category: "Schools", catColor: "#2729ab", lat: 35.11281, lng: -83.40003, length: "0.5 mi", elevation: "20 ft", typeText: "Loop", typeIcon: "loop", desc: "Paved spur to creek overlook—look for birds/amphibians (after school hours)." },
         ];
         const REPO_OWNER = 'TheSmartZebra';
         const REPO_NAME = 'Nearcountry-Trails-of-Franklin-NC';
